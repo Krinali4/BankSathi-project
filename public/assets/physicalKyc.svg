@@ -1,0 +1,19 @@
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="60" height="60" fill="#333333"/>
+<g id="Physical Kyc">
+<rect width="1440" height="750" transform="translate(-395 -40)" fill="#F4F8FB"/>
+<g id="Group 2611052">
+<circle id="Ellipse 1148" opacity="0.2" cx="30" cy="30" r="30" fill="#49D49D"/>
+<g id="ri-shield-check-line" clip-path="url(#clip0_52_4467)">
+<g id="Group">
+<path id="Vector" d="M30 13.5L42.3255 16.239C43.011 16.392 43.5 16.9995 43.5 17.703V32.6835C43.5 35.6925 41.9955 38.5035 39.492 40.1715L30 46.5L20.508 40.1715C18.003 38.502 16.5 35.6925 16.5 32.685V17.703C16.5 16.9995 16.989 16.392 17.6745 16.239L30 13.5ZM30 16.5735L19.5 18.906V32.6835C19.5 34.689 20.502 36.5625 22.1715 37.6755L30 42.8955L37.8285 37.6755C39.498 36.5625 40.5 34.6905 40.5 32.685V18.906L30 16.5735ZM36.678 24.333L38.8005 26.454L29.2545 36L22.89 29.6355L25.011 27.5145L29.253 31.7565L36.678 24.3315V24.333Z" fill="#49D49D"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_52_4467">
+<rect width="36" height="36" fill="white" transform="translate(12 12)"/>
+</clipPath>
+</defs>
+</svg>
