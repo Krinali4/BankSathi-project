@@ -1,0 +1,126 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import "rsuite/dist/rsuite.css";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "react-input-range/lib/css/index.css";
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #f4f8fb;
+}
+.container {
+  max-width: 1280px;
+}
+/* --------------------------------- eligible card listing features class for dangerously html and other -------------------------------- */
+.eligibleCards:hover {
+  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.1);
+  /* cursor: pointer; */
+}
+.cardsFeatures ul {
+  list-style: disc;
+  padding-left: 2%;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.cardsFeatures ul li {
+  margin-bottom: 8px !important;
+  margin-top: 0 !important;
+}
+
+.cardsFeatures div div {
+  padding: 0 !important;
+}
+.cardsFeatures div ul li::marker {
+  color: #c2cacf;
+}
+.cardsFeatures .list-disc {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.form-radio input[type="radio"] {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-content: center;
+}
+
+.form-radio input[type="radio"]::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  color: #000;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+}
+
+.form-radio input[type="radio"]:checked::before {
+  transform: scale(1);
+  background-color: #fff !important;
+  border: 5px solid #49d49d !important;
+}
+.datepicker .react-datepicker-wrapper {
+  width: 100%;
+}
+.datepicker .react-datepicker__input-container {
+  position: relative;
+  width: 100%;
+  bottom: 25px;
+}
+.datepicker
+  .react-datepicker__input-container
+  .react-datepicker__calendar-icon {
+  position: relative;
+  top: 44px;
+  left: 92%;
+}
+.dropdown .rw-dropdown-list-input {
+  padding: 15px;
+}
+.dropdown .rw-widget-picker {
+  border-radius: 8px;
+}
+.chooseOption {
+  position: relative;
+  left: 21%;
+}
+.aadharUpload{
+  position: relative;
+  left: 17%;
+}
+.dropdown.rw-list-option.rw-state-selected,
+.rw-state-selected.rw-list-option-create {
+  background-color: "#ECDEFF";
+  border-color: "#844FCF";
+}
+
+/* ....................................... MOBILE SCREENS  --- FOR 576PX    .................................................. */
+@media (max-width: 576px) {
+  .datepicker
+    .react-datepicker__input-container
+    .react-datepicker__calendar-icon {
+    position: relative;
+    top: 44px;
+    left: 84%;
+  }
+}
