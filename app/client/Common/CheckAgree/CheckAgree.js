@@ -5,7 +5,7 @@ import React from "react";
 const CheckAgree = ({ setCheckAgree, checkAgree, setTermsModal }) => {
   return (
     <div>
-      <div className="flex items-center mt-[24px] gap-2">
+      <div className="flex items-center mt-[24px] max-sm:mt-0 gap-2">
         <input
           className="mr-1  w-4 h-4  max-sm:w-8 max-sm:h-8 text-white accent-[#49D49D] "
           type="checkbox"

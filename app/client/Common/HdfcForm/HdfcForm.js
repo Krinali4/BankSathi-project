@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import BankBanner from "../Common/BankBanner/BankBanner";
-import HDFC from "../../../public/assets/HDFC.svg";
-import CommonInputLabel from "../Common/CommonInputComponents/CommonInputLabel";
-import CommonEmailInput from "../Common/CommonInputComponents/CommonEmailInput";
-import PincodeInput from "../Common/CommonInputComponents/PinCodeInput";
+import BankBanner from "../BankBanner/BankBanner";
+import HDFC from "../../../../public/assets/HDFC.svg";
+import CommonInputLabel from "../CommonInputComponents/CommonInputLabel";
+import CommonEmailInput from "../CommonInputComponents/CommonEmailInput";
+import PincodeInput from "../CommonInputComponents/PinCodeInput";
 import { DropdownList } from "react-widgets";
-import CommonNextButton from "../Common/Button/Button";
-import CongratulationsScreen from "../Common/CongratulationsScreen/CongratulationsScreen";
+import CommonNextButton from "../Button/Button";
+import CongratulationsScreen from "../CongratulationsScreen/CongratulationsScreen";
 import Image from "next/image";
-import QuestionModal from "../Common/Modal/QuestionModal";
-import PhysicalKycComp from "../PhysicalKycComp/PhysicalKycComp";
+import QuestionModal from "../Modal/QuestionModal";
+import PhysicalKycComp from "../../PhysicalKycComp/PhysicalKycComp";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 
 const HdfcForm = () => {

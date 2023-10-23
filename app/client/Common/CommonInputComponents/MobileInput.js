@@ -46,8 +46,8 @@ const MobileInput = ({
       <div
         className={
           errMsg || zeroNumberValidation
-            ? "flex items-center gap-[18px] h-[48px] bg-white rounded-lg border border-[#FF000F] mt-1"
-            : "flex items-center gap-[18px] h-[48px] bg-white rounded-lg border border-neutral-300 mt-1"
+            ? "flex items-center gap-[18px] h-[45px] bg-white rounded-lg border border-[#FF000F] mt-[3px]"
+            : "flex items-center gap-[18px] h-[45px] bg-white rounded-lg border border-neutral-300 mt-[3px]"
         }
       >
         <div>
@@ -58,7 +58,7 @@ const MobileInput = ({
           name="mobile"
           id="mobile"
           pattern="[0-9]*"
-          className="text-[#212529] border-none  outline-none "
+          className="text-[#212529] border-none text-[12px] outline-none "
           placeholder="Enter Your Number"
           onChange={(e) => handleChangeNumber(e)}
           value={mobile || userInputData?.mobile}

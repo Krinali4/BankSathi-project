@@ -1,7 +1,7 @@
 import React from "react";
 import CommonInputLabel from "../../Common/CommonInputComponents/CommonInputLabel";
 import CommonNextButton from "../../Common/Button/Button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 
 const ItrDetailsForm = ({
@@ -93,7 +93,7 @@ const ItrDetailsForm = ({
         title="Submit"
         handleSubmit={() =>
           // to navigate to eligible products
-          router?.push({ pathname: "/hdfc/eligible-products" })
+          router.push("/hdfc/eligible-products")
         }
       />
     </div>
