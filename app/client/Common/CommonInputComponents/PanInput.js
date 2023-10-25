@@ -88,7 +88,7 @@ const PanInput = ({ setUserInputData, userInputData, headers }) => {
           {staticLabels?.panCard}
         </label>
         <input
-          className={`shadow border rounded-lg w-full py-[14px] px-4 text-[#212529] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline mt-1 
+          className={`shadow border rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline 
           ${
             pancardError === true || userInputData?.is_pan_verified === "1"
               ? "border-green-300"

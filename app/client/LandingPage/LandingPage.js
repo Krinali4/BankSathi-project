@@ -62,16 +62,13 @@ const LandingPage = () => {
     const handleSendOtp = () => setLoginStepper(1);
     return (
       <>
-        <div className="mt-[30px]">
+        <div className="mt-[20px] max-sm:hidden">
           <Image src={banksathiLogo} height={150} width={90} alt="logo" />
         </div>
-        <div className="text-center text-neutral-800 text-2xl font-medium font-['Poppins']">
-          Hello!
-        </div>
-        <div className="text-center text-neutral-800 text-[15px] font-normal font-['Poppins'] mt-[20px]">
+        <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[20px]">
           Hey, Please enter your details to login
         </div>
-        <div className="mt-[30px] w-[620px] mb-[200px] max-sm:w-full">
+        <div className="mt-[15px] w-[620px] mb-[200px] max-sm:w-full">
           <form onSubmit={() => {}}>
             <div className="lg:grid lg:grid-cols-3 lg:gap-[20px]">
               <div className="mt-0">
@@ -87,7 +84,7 @@ const LandingPage = () => {
                   type="text"
                   required
                   placeholder="First Name"
-                  className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 ${
+                  className={`shadow border rounded-lg w-full py-[14px] px-4 text-[12px] text-[#212529] leading-tight focus:outline-none focus:shadow-outline  mt-[3px] ${
                     firstNameError ? "border-red-500" : "border-neutral-300"
                   }`}
                   onChange={(e) =>
@@ -103,7 +100,7 @@ const LandingPage = () => {
                   <ErrorComponent errorTitle="This Field is required" />
                 )}
               </div>
-              <div className="max-[768px]:mt-[20px]">
+              <div className="max-[768px]:mt-[10px]">
                 <label
                   className="text-[13px] font-normal text-[#212529] "
                   htmlFor="firstName"
@@ -116,7 +113,7 @@ const LandingPage = () => {
                   type="text"
                   required
                   placeholder="Middle Name"
-                  className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 ${
+                  className={`shadow border rounded-lg w-full  py-[14px] px-4 text-[12px] text-[#212529] leading-tight focus:outline-none focus:shadow-outline  mt-[3px] ${
                     firstNameError ? "border-red-500" : "border-neutral-300"
                   }`}
                   onChange={(e) =>
@@ -132,7 +129,7 @@ const LandingPage = () => {
                   <ErrorComponent errorTitle="This Field is required" />
                 )}
               </div>
-              <div className="max-[768px]:mt-[20px]">
+              <div className="max-[768px]:mt-[10px]">
                 <label
                   className="text-[13px] font-normal text-[#212529] "
                   htmlFor="firstName"
@@ -145,7 +142,7 @@ const LandingPage = () => {
                   type="text"
                   required
                   placeholder="Last Name"
-                  className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 ${
+                  className={`shadow border rounded-lg w-full py-[14px] px-4 text-[12px] text-[#212529] leading-tight focus:outline-none focus:shadow-outline  mt-[3px] ${
                     firstNameError ? "border-red-500" : "border-neutral-300"
                   }`}
                   onChange={(e) =>
@@ -154,7 +151,7 @@ const LandingPage = () => {
                       firstName: e?.target?.value,
                     })
                   }
-                  value={userInputData?.firstName}
+                  value={userInputData?.lastName}
                   maxLength={20}
                 />
                 {firstNameError && (
@@ -163,7 +160,7 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="lg:grid lg:grid-cols-2 lg:gap-[20px]">
-              <div className="mt-[20px]">
+              <div className="mt-[20px] max-sm:mt-[10px]">
                 <MobileInput
                   mobile={mobile}
                   setMobile={setMobile}
@@ -171,7 +168,7 @@ const LandingPage = () => {
                   userInputData={userInputData}
                 />
               </div>
-              <div className="mt-[20px]">
+              <div className="mt-[20px] max-sm:mt-[10px]">
                 <PanInput
                   setUserInputData={setUserInputData}
                   userInputData={userInputData}
@@ -179,19 +176,19 @@ const LandingPage = () => {
                 />
               </div>
             </div>
-            <div className="mt-[24px]">
+            <div className="mt-[24px] max-sm:mt-0">
               <CheckAgree
                 checkAgree={checkAgree}
                 setCheckAgree={setCheckAgree}
                 setTermsModal={setTermsModal}
               />
             </div>
-            <div className="mt-[30px]">
+            <div className="mt-[20px] max-sm:mt-[10px]">
               <button
                 onClick={() => {
                   handleSendOtp();
                 }}
-                className="head-text font-[faktum] w-[200px] max-sm:w-[160px] rounded-lg text-center bg-[#49D49D] !text-[#212529] px-[24px] py-[18.5px] text-[15px] mx-auto flex items-center justify-center md:text-[12px]"
+                className="head-text font-[faktum] w-[200px] max-sm:w-[160px] rounded-lg text-center bg-[#49D49D] !text-[#212529] px-[24px] py-[14.5px] max-sm:py-[12px] text-[15px] mx-auto flex items-center justify-center md:text-[12px]"
               >
                 Send OTP
               </button>

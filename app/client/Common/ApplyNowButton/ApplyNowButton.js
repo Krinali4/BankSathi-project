@@ -1,11 +1,11 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const ApplyNowButton = ({ data, addMargin }) => {
   const router = useRouter();
 
   const handleApplyNow = () => {
-    router?.push({ pathname: "/form" });
+    router.push("/form");
   };
   return (
     <div>
