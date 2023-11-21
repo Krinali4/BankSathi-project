@@ -14,52 +14,52 @@ const PanInput = ({ setUserInputData, userInputData, headers }) => {
   const [panStatus, setPanStatus] = useState(false);
 
   // PAN VERIFY API CALL
-  const PanVerify = async () => {
-    await axios
-      .post(
-        BASE_URL + COMMON?.panVerify,
-        {
-          pan_no: userInputData?.pan_no?.toUpperCase(),
-        },
-        { headers: headers }
-      )
-      .then((response) => {
-        setIsLoadingCheck(false);
-        if (response) {
-          setPanVerifyCard(false);
-          setPancardError(true);
-        }
-        if (response?.data?.message == "success") {
-          setPanVerifyName(response?.data?.data?.name);
-          setUserInputData({
-            ...userInputData,
-            full_name: response?.data?.data?.name,
-          });
-        }
-        if (response?.data?.message == "success") {
-          setIsLoadingCheck(true);
-          setPanVerifyCard(true);
-          setPancardError(true);
-          setPanStatus(response?.data?.data?.pan_status);
-        }
-        if (response?.data?.message == "failed") {
-          setPancardError(false);
-          setIsLoadingCheck(false);
-          setPanStatus(response?.data?.data?.pan_status);
-          setPanVerifyName(response?.data?.data?.name);
-          setPanVerifyCard(false);
-        }
-      })
-      .catch((error) => {
-        if (error?.response?.data?.message == "failed") {
-          setPanVerifyCard(false);
-          toast.error(error?.response?.data?.reason);
-        } else if (error?.response?.status === 422) {
-          setPancardError(false);
-          setPanVerifyCard(false);
-        }
-      });
-  };
+  // const PanVerify = async () => {
+  //   await axios
+  //     .post(
+  //       BASE_URL + COMMON?.panVerify,
+  //       {
+  //         pan_no: userInputData?.pan_no?.toUpperCase(),
+  //       },
+  //       { headers: headers }
+  //     )
+  //     .then((response) => {
+  //       setIsLoadingCheck(false);
+  //       if (response) {
+  //         setPanVerifyCard(false);
+  //         setPancardError(true);
+  //       }
+  //       if (response?.data?.message == "success") {
+  //         setPanVerifyName(response?.data?.data?.name);
+  //         setUserInputData({
+  //           ...userInputData,
+  //           full_name: response?.data?.data?.name,
+  //         });
+  //       }
+  //       if (response?.data?.message == "success") {
+  //         setIsLoadingCheck(true);
+  //         setPanVerifyCard(true);
+  //         setPancardError(true);
+  //         setPanStatus(response?.data?.data?.pan_status);
+  //       }
+  //       if (response?.data?.message == "failed") {
+  //         setPancardError(false);
+  //         setIsLoadingCheck(false);
+  //         setPanStatus(response?.data?.data?.pan_status);
+  //         setPanVerifyName(response?.data?.data?.name);
+  //         setPanVerifyCard(false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error?.response?.data?.message == "failed") {
+  //         setPanVerifyCard(false);
+  //         toast.error(error?.response?.data?.reason);
+  //       } else if (error?.response?.status === 422) {
+  //         setPancardError(false);
+  //         setPanVerifyCard(false);
+  //       }
+  //     });
+  // };
 
   const handleChange = (event) => {
     setUserInputData({
