@@ -24,14 +24,12 @@ const QuestionModal = (props) => {
                 <p className=" py-1 text-[24px] max-smtext-[15px] font-semibold max-[479px]:text-[13px] text-[#212529] max-[479px]:text-center">
                   {props?.question}
                 </p>
-                <div className=" mt-[5px] text-center text-black text-[13px] font-normal font-['Poppins'] leading-[20.80px]">
+                <div className=" mt-[5px] text-center text-black text-[14px] font-normal font-['Poppins'] leading-[20.80px]">
                   {props?.message}
                 </div>
                 <div className="max-[479px]:text-center py-[40px] flex gap-[16px] items-center justify-center">
                   <button
-                    onClick={() => {
-                      props?.handleNo();
-                    }}
+                    onClick={props?.handleNo}
                     className="text-[#212529] border w-[160px] font-semibold max-sm:w-[135px] max-[375px]:w-[120px] h-[48px] px-[24px] py-[14px] border-[#212529] rounded-md cursor-pointer ps-2 text-[15px] max-[479px]:text-[13px]"
                   >
                     {props?.noText}

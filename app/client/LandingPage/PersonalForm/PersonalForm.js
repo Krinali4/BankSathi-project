@@ -1,26 +1,118 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonEmailInput from "../../Common/CommonInputComponents/CommonEmailInput";
 import CommonNextButton from "../../Common/Button/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
+import PanInput from "../../Common/CommonInputComponents/PanInput";
+import FullName from "../../Common/CommonInputComponents/FullName";
+import { dateFormatRegex, getName } from "@/commonUtils/util";
+import moment from "moment";
+
+export const etbData = {
+  CUSTOMER_ID: "XXXXX7419",
+  ACCOUNTID: "XXXXXXXXXX8266",
+  SOURCE_ID: "FINWARE",
+  FW_CUST_ID: "",
+  FW_ACCNT_NUM: "XXXXXXXXXX8266",
+  V_D_CUST_FIRST_NAME: "",
+  V_D_CUST_MIDDLE_NAME: "",
+  V_D_CUST_LAST_NAME: "",
+  D_D_CUST_DATE_OF_BIRTH: "1986-06-02 00:00:00",
+  V_D_CUST_GENDER: "M",
+  V_D_CUST_ADD1: "$160/2 VENKATESHWARA APARTMENT",
+  V_D_CUST_ADD2: "NEXT TO *RANGANATHALAYOUT",
+  V_D_CUST_ADD3: "OUTER # RING ROAD MAHADEVAPURA",
+  V_D_CUST_ZIP_CODE: "403705",
+  V_D_CUST_ADD4: "",
+  V_D_CUST_CITY: "PANAJI",
+  V_D_CUST_STATE: "GOA",
+  V_D_CUST_EMAIL_ADD: "EAFCCE@EFFDF.com",
+  V_D_CUST_MOBILE_PHONE: "918908849306",
+  V_D_CUST_IT_NBR: "LSNPD4704T",
+  V_D_CUST_FULL_NAME: "Smith",
+  V_D_CUST_NAME_SHORT: "James",
+  V_D_CUST_TYPE: "I",
+  MASKED_CARD_NO: "",
+  BRANCH_CODE: "3782",
+};
+export const userData = {
+  firstName: "Ravi",
+  middleName: "KUMAR",
+  lastName: "REDDY",
+  mobile: "8908849306",
+  pan_no: "LSNPD4704T",
+};
 
 const PersonalForm = ({
   userInputData,
   handleChange,
+  setUserInputData,
+  loginStepper,
+  detailsFormStepper,
   setDetailsFormStepper,
+  etbCustomerData,
 }) => {
-  const disable = false; // put condition here
+  const [startDate, setStartDate] = useState(null);
+  const [buttonDisable, setButtonDisable] = useState(true);
 
-  const [startDate, setStartDate] = useState(new Date());
+  const male =
+    etbCustomerData?.V_D_CUST_GENDER === "M" ||
+    userInputData?.gender === "Male";
+  const female =
+    etbCustomerData?.V_D_CUST_GENDER === "F" ||
+    userInputData?.gender === "Female";
+  const others =
+    etbCustomerData?.V_D_CUST_GENDER === "O" ||
+    userInputData?.gender === "Other";
+
+  const hasNumber = userInputData?.mobile && userInputData?.mobile !== "";
+  const date = etbCustomerData?.D_D_CUST_DATE_OF_BIRTH;
+  const dob = date ? moment(date).format("DD-MM-YYYY") : false;
+  const name = getName(userInputData);
+
+  const disable = (!male && !female && !others) || !dob || !hasNumber || !name;
 
   const handlePersonalSubmit = () => {
     setDetailsFormStepper(1);
   };
+
+  const handleDateChange = (date) => {
+    const dateConvert = moment(date).format("DD-MM-YYYY");
+    if (dateConvert) {
+      const isValid = dateFormatRegex.test(dateConvert);
+      console.log(isValid);
+      if (isValid) {
+        setStartDate(date);
+        setUserInputData({ ...userInputData, dob: date });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (male || female || others) {
+      console.log(hasNumber, dob, name);
+      if (hasNumber && dob && name !== "") {
+        setButtonDisable(false);
+      }
+    }
+  }, [etbCustomerData, userInputData]);
   return (
     <>
       <div className="mb-4">
-        <p className="pt-[10px] text-[#212529]  max-[1200px]:!pt-0">
+        <PanInput
+          setUserInputData={setUserInputData}
+          userInputData={userInputData}
+          isPanVerified={!!userInputData?.pan_no}
+          loginStepper={loginStepper}
+        />
+        <FullName
+          setUserInputData={setUserInputData}
+          userInputData={userInputData}
+          hasFullName={name && name !== ""}
+          fullName={name}
+        />
+        <p className="pt-[20px] text-[#212529]  max-[1200px]:!pt-4">
           {staticLabels?.gender}
         </p>
         <div className="flex pt-[10px] gap-4 ">
@@ -28,21 +120,19 @@ const PersonalForm = ({
             <label
               htmlFor="gender"
               className={`form-radio flex gap-2 items-center ${
-                userInputData?.gender === "Male"
-                  ? "text-[#212529]"
-                  : "text-[#808080]"
+                male ? "text-[#212529]" : "text-[#808080]"
               }`}
             >
               <input
                 type="radio"
                 name="gender"
-                value={
-                  userInputData?.gender === "Male"
-                    ? userInputData?.gender === "Male"
-                    : "Male"
-                }
-                checked={userInputData?.gender === "Male"}
+                value={"Male"}
+                checked={male}
                 onChange={(e) => {
+                  setUserInputData({
+                    ...userInputData,
+                    gender: e.target.value,
+                  });
                   handleChange(e);
                 }}
               />
@@ -53,21 +143,19 @@ const PersonalForm = ({
             <label
               htmlFor="gender"
               className={`form-radio flex gap-2 items-center  ${
-                userInputData?.gender === "Female"
-                  ? "text-[#212529]"
-                  : "text-[#808080]"
+                female ? "text-[#212529]" : "text-[#808080]"
               }`}
             >
               <input
                 type="radio"
                 name="gender"
-                value={
-                  userInputData?.gender === "Female"
-                    ? userInputData?.gender === "Female"
-                    : "Female"
-                }
-                checked={userInputData?.gender === "Female"}
+                value={"Female"}
+                checked={female}
                 onChange={(e) => {
+                  setUserInputData({
+                    ...userInputData,
+                    gender: e.target.value,
+                  });
                   handleChange(e);
                 }}
               />
@@ -78,21 +166,19 @@ const PersonalForm = ({
             <label
               htmlFor="gender"
               className={`form-radio flex gap-2 items-center ${
-                userInputData?.gender === "Other"
-                  ? "text-[#212529]"
-                  : "text-[#808080]"
+                others ? "text-[#212529]" : "text-[#808080]"
               } `}
             >
               <input
                 type="radio"
                 name="gender"
-                value={
-                  userInputData?.gender === "Other"
-                    ? userInputData?.gender === "Other"
-                    : "Other"
-                }
-                checked={userInputData?.gender === "Other"}
+                value={"Other"}
+                checked={others}
                 onChange={(e) => {
+                  setUserInputData({
+                    ...userInputData,
+                    gender: e.target.value,
+                  });
                   handleChange(e);
                 }}
               />
@@ -117,14 +203,18 @@ const PersonalForm = ({
             placeholderText="DD-MM-YYYY"
             name="dob"
             id="dob"
-            className="shadow border rounded-lg w-full !py-4 px-4 text-[#212529] text-[14px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]"
+            className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${
+              dob
+                ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
+                : "bg-white text-[#212529]"
+            }`}
             selected={startDate}
             onChange={(date) => {
-              setStartDate(date);
-              handleChange(date);
+              handleDateChange(date);
             }}
+            // disabled={!!dob}
             maxDate={startDate}
-            // value={userInputData?.dob ? formatDateTime : "DD/MM/YYYY"}
+            value={dob}
             required
             todayButton={"Today"}
             showIcon
@@ -133,9 +223,40 @@ const PersonalForm = ({
       </div>
       <div className="">
         <CommonEmailInput
-          value={userInputData?.email}
+          value={etbCustomerData?.V_D_CUST_EMAIL_ADD}
           handleChange={handleChange}
+          disabled={false}
         />
+      </div>
+      <div className="mt-[20px]">
+        <label
+          className="text-[13px] font-normal text-[#212529]"
+          htmlFor="email"
+        >
+          {staticLabels?.mobileNumber}
+        </label>
+        <div
+          className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] flex items-center focus:outline-none focus:shadow-outline ${
+            hasNumber
+              ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
+              : "bg-white text-[#212529]"
+          }`}
+        >
+          <p className="text-[12px]">+91-</p>
+          <input
+            type="tel"
+            name="mobile"
+            id="mobile"
+            pattern="[0-9]*"
+            disabled={hasNumber}
+            className="border-none text-[12px] outline-none"
+            placeholder="Enter Your Number"
+            onChange={(e) => handleChange(e)}
+            value={userInputData?.mobile}
+            required
+            maxLength={10}
+          />
+        </div>
       </div>
       <CommonNextButton
         title="Next"

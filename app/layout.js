@@ -3,6 +3,9 @@ import "@/styles/style.css";
 import "@/styles/leadsStyle.css";
 import "react-widgets/styles.css";
 import { Poppins } from "next/font/google";
+import { v4 as uuidv4 } from "uuid";
+import ClientApplication from "@/core/ClientApplication/ClientApplication";
+import { Toaster } from "react-hot-toast";
 // import ErrorBoundary from "@/core/ErrorBoundary/ErrorBoundary";
 
 const poppins = Poppins({
@@ -16,9 +19,27 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  let deviceId = typeof window !== "undefined" && Cookies.get("deviceId");
+  if (!deviceId) {
+    deviceId = uuidv4();
+    if (typeof window !== "undefined") {
+      Cookies.set("deviceId", deviceId, {
+        expires: 365, // Set to 365 days (one year)
+        secure: true,
+      });
+    }
+  }
+
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <ClientApplication>
+        <body className={poppins.className}>
+          {/* <HeaderComp /> */}
+          <Toaster reverseOrder={false} />
+          {children}
+          {/* <Footer /> */}
+        </body>
+      </ClientApplication>
     </html>
   );
 }

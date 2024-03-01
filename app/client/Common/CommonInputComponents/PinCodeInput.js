@@ -41,7 +41,7 @@ const PincodeInput = ({
         className={
           className
             ? className
-            : "shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]"
+            : "shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] text-[12px]"
         }
         placeholder={placeholder ? placeholder : staticLabels?.pinCode}
         autoComplete="off"

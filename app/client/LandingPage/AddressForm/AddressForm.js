@@ -5,12 +5,14 @@ import PincodeInput from "../../Common/CommonInputComponents/PinCodeInput";
 import CommonNextButton from "../../Common/Button/Button";
 import CommonInputLabel from "../../Common/CommonInputComponents/CommonInputLabel";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
+import ResidencyAddressForm from "./ResidencyAddressForm/ResidencyAddressForm";
 
 const AddressForm = ({
   userInputData,
   handleChange,
   setDetailsFormStepper,
   setUserInputData,
+  etbCustomerData,
 }) => {
   const wrapperRef = useRef(null);
 
@@ -18,48 +20,135 @@ const AddressForm = ({
   const [pincodeNumber, setPincodeNumber] = useState();
   const [pinCodeList, setPinCodeList] = useState([]);
   const [visibility, setVisibility] = useState(false);
+  const [isAadharAddress, setIsAadharAddress] = useState(true);
 
   const [residenceAddress, setResidenceAddress] = useState("Family Owned");
   const [residenceAddressList, setResidenceAddressList] = useState([
     "Self owned",
   ]);
 
-  const getAadharAddressComponent = () => {
-    //PINCODE
-    const handlePincodeChange = (event) => {
-      setVisibility(true);
-      const PincodeErr = event?.target?.value.replace(
-        /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/g,
-        ""
-      );
-      if (!PincodeErr) {
-        setErrorPinCode(false);
-      } else {
-        setErrorPinCode(true);
-      }
-    };
+  // const getAadharAddressComponent = () => {
+  //   //PINCODE
+  const handlePincodeChange = (event) => {
+    setVisibility(true);
+    const PincodeErr = event?.target?.value.replace(
+      /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/g,
+      ""
+    );
+    if (!PincodeErr) {
+      setErrorPinCode(false);
+    } else {
+      setErrorPinCode(true);
+    }
+  };
 
-    const getPinCodeList = () => {
-      // api call here
-    };
+  const getPinCodeList = () => {};
 
-    // useOutsideAlerter(wrapperRef);
-    return (
-      <>
-        <div className="grid grid-cols-2 gap-[20.5px] max-[567px]:grid-cols-1 mt-[20px]">
-          <div>
-            <CommonInputLabel labelTitle={staticLabels?.residenceType} />
-            <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
-              <DropdownList
-                value={residenceAddress}
-                onChange={(nextValue) => setResidenceAddress(nextValue)}
-                data={residenceAddressList}
-              />
-            </div>
+  const address1 = etbCustomerData?.V_D_CUST_ADD1 || userInputData?.address1;
+  const address2 = etbCustomerData?.V_D_CUST_ADD2 || userInputData?.address2;
+  const address3 = etbCustomerData?.V_D_CUST_ADD3 || userInputData?.address3;
+  const state = etbCustomerData?.V_D_CUST_STATE || userInputData?.state;
+  const city = etbCustomerData?.V_D_CUST_CITY || userInputData?.city;
+  const pincode = etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code;
+
+  const addressDisable =
+    !address1 || !address2 || !address3 || !state || !city || !pincode;
+
+  console.log(addressDisable);
+  
+  return (
+    <div>
+      {/* <div className="mt-[20px]">
+        <InfoComponent
+          informationText="Your card will be delivered at your address. Incomplete address may lead
+        to rejection of application."
+        />
+        <div className="text-gray-400 text-[13px] font-normal font-['Poppins'] mt-[20px]">
+          I hereby self declare my current address as stated below.
+        </div>
+      </div> */}
+      {/* {getAadharAddressComponent()} */}
+      {isAadharAddress ? (
+        <>
+          <div className="mt-[20px]">
+            <CommonInputLabel labelTitle={staticLabels?.address1} />
+            <input
+              id="address1"
+              name="address1"
+              type="text"
+              required
+              placeholder="Enter your address #1"
+              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
+              onChange={(e) =>
+                setUserInputData({
+                  ...userInputData,
+                  address1: e?.target?.value,
+                })
+              }
+              value={address1}
+              maxLength={20}
+            />
           </div>
-          <div className="relative">
+          <div className="mt-[20px]">
+            <CommonInputLabel labelTitle={staticLabels?.address2} />
+            <input
+              id="address2"
+              name="address2"
+              type="text"
+              required
+              placeholder="Enter your address #2"
+              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
+              onChange={(e) =>
+                setUserInputData({
+                  ...userInputData,
+                  address2: e?.target?.value,
+                })
+              }
+              value={address2}
+              maxLength={20}
+            />
+          </div>
+          <div className="mt-[20px]">
+            <CommonInputLabel labelTitle={staticLabels?.address3} />
+            <input
+              id="address2"
+              name="address2"
+              type="text"
+              required
+              placeholder="Enter your address #3"
+              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
+              onChange={(e) =>
+                setUserInputData({
+                  ...userInputData,
+                  address2: e?.target?.value,
+                })
+              }
+              value={address3}
+              maxLength={20}
+            />
+          </div>
+          <div className="mt-[20px]">
+            <CommonInputLabel labelTitle={staticLabels?.landMark} />
+            <input
+              id="landMark"
+              name="landMark"
+              type="text"
+              required
+              placeholder="Enter your landmark"
+              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
+              onChange={(e) =>
+                setUserInputData({
+                  ...userInputData,
+                  landMark: e?.target?.value,
+                })
+              }
+              value={userInputData?.landMark}
+              maxLength={20}
+            />
+          </div>
+          <div className="relative mt-[20px]">
             <PincodeInput
-              value={userInputData?.pin_code}
+              value={pincode}
               getData={getPinCodeList}
               handleChange={handleChange}
               handlePincodeChange={handlePincodeChange}
@@ -84,190 +173,129 @@ const AddressForm = ({
               </ul>
             )}
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-[20.5px] max-[567px]:grid-cols-1 mt-[20px]">
-          <div className="flex flex-col gap-[5px]">
-            <CommonInputLabel labelTitle={staticLabels?.flatHouseAppartment} />
-            <input
-              id="flataddress"
-              name="flataddress"
-              type="text"
-              required
-              placeholder="111"
-              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
-              `}
-              onChange={(e) =>
-                setUserInputData({
-                  ...userInputData,
-                  flatNo: e?.target?.value,
-                })
-              }
-              value={userInputData?.flatNo}
-              maxLength={20}
-            />
-          </div>
-          <div className="flex flex-col gap-[5px]">
-            <CommonInputLabel labelTitle={staticLabels?.localitySociety} />
-            <input
-              id="locality"
-              name="locality"
-              type="text"
-              required
-              placeholder="jayanagar"
-              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
-              `}
-              onChange={(e) =>
-                setUserInputData({
-                  ...userInputData,
-                  locality: e?.target?.value,
-                })
-              }
-              value={userInputData?.flatNo}
-              maxLength={20}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-[5px] mt-[20px]">
-          <CommonInputLabel labelTitle=" Landmark" />
-          <input
-            id="landmark"
-            name="landmark"
-            type="text"
-            required
-            placeholder="near cred office"
-            className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
-              `}
-            onChange={(e) =>
-              setUserInputData({
-                ...userInputData,
-                landmark: e?.target?.value,
-              })
-            }
-            value={userInputData?.landmark}
-            maxLength={50}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-[20.5px] max-[567px]:grid-cols-1 mt-[20px]">
-          <div className="flex flex-col gap-[5px]">
+          <div className="mt-[20px]">
             <CommonInputLabel labelTitle={staticLabels?.state} />
             <input
               id="state"
               name="state"
               type="text"
               required
-              placeholder="karnataka"
-              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
-              `}
+              placeholder="State"
+              className={`text-[12px] shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]
+               `}
               onChange={(e) =>
                 setUserInputData({
                   ...userInputData,
                   state: e?.target?.value,
                 })
               }
-              value={userInputData?.state}
+              value={state}
               maxLength={20}
             />
           </div>
-          <div className="flex flex-col gap-[5px]">
+          <div className="mt-[20px]">
             <CommonInputLabel labelTitle={staticLabels?.city} />
             <input
               id="city"
               name="city"
               type="text"
               required
-              placeholder="bangalore"
-              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
-              `}
+              placeholder="City"
+              className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] text-[12px]`}
               onChange={(e) =>
                 setUserInputData({
                   ...userInputData,
                   city: e?.target?.value,
                 })
               }
-              value={userInputData?.city}
+              value={city}
               maxLength={20}
             />
           </div>
-        </div>
-        <div className="mt-[30px]">
-          <CommonNextButton
-            title="Save Aadhaar Address"
-            width="w-[222px]"
-            mobileWidth="max-sm:w-full"
-            handleSubmit={() => setDetailsFormStepper(2)}
+          <p className="pt-[20px] text-[#212529] text-[13px]">
+            {staticLabels?.aadharQuestion}
+          </p>
+          <div className="flex pt-[10px] gap-4">
+            <div>
+              <label
+                htmlFor="adhar-address"
+                className={`form-radio flex gap-2 items-center ${
+                  userInputData?.aadharAddress === "Yes"
+                    ? "text-[#212529]"
+                    : "text-[#808080]"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="aadharAddress"
+                  value={
+                    userInputData?.aadharAddress === "Yes"
+                      ? userInputData?.aadharAddress === "Yes"
+                      : "Yes"
+                  }
+                  checked={userInputData?.aadharAddress === "Yes"}
+                  onChange={(e) => {
+                    setIsAadharAddress(true);
+                    handleChange(e);
+                  }}
+                />
+                Yes
+              </label>
+            </div>
+            <div>
+              <label
+                htmlFor="adhar-address"
+                className={`form-radio flex gap-2 items-center  ${
+                  userInputData?.aadharAddress === "No"
+                    ? "text-[#212529]"
+                    : "text-[#808080]"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="aadharAddress"
+                  value={
+                    userInputData?.aadharAddress === "No"
+                      ? userInputData?.aadharAddress === "No"
+                      : "No"
+                  }
+                  checked={userInputData?.aadharAddress === "No"}
+                  onChange={(e) => {
+                    setIsAadharAddress(false);
+                    handleChange(e);
+                  }}
+                />
+                No
+              </label>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <ResidencyAddressForm
+            userInputData={userInputData}
+            setUserInputData={setUserInputData}
+            handleChange={handleChange}
+            setDetailsFormStepper={setDetailsFormStepper}
+            etbCustomerData={etbCustomerData}
+            getPinCodeList={getPinCodeList}
+            handlePincodeChange={handlePincodeChange}
+            pinCodeList={pinCodeList}
+            setVisibility={setVisibility}
+            visibility={visibility}
+            wrapperRef={wrapperRef}
           />
-        </div>
-      </>
-    );
-  };
-
-  return (
-    <div>
-      <p className="pt-[10px] text-[#212529] text-[13px]  max-[1200px]:!pt-0">
-        {staticLabels?.aadharQuestion}
-      </p>
-      <div className="flex pt-[10px] gap-4 ">
-        <div>
-          <label
-            htmlFor="adhar-address"
-            className={`form-radio flex gap-2 items-center ${
-              userInputData?.aadharAddress === "Yes"
-                ? "text-[#212529]"
-                : "text-[#808080]"
-            }`}
-          >
-            <input
-              type="radio"
-              name="aadharAddress"
-              value={
-                userInputData?.aadharAddress === "Yes"
-                  ? userInputData?.aadharAddress === "Yes"
-                  : "Yes"
-              }
-              checked={userInputData?.aadharAddress === "Yes"}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-            />
-            Yes
-          </label>
-        </div>
-        <div>
-          <label
-            htmlFor="adhar-address"
-            className={`form-radio flex gap-2 items-center  ${
-              userInputData?.aadharAddress === "No"
-                ? "text-[#212529]"
-                : "text-[#808080]"
-            }`}
-          >
-            <input
-              type="radio"
-              name="aadharAddress"
-              value={
-                userInputData?.aadharAddress === "No"
-                  ? userInputData?.aadharAddress === "No"
-                  : "No"
-              }
-              checked={userInputData?.aadharAddress === "No"}
-              onChange={(e) => {
-                handleChange(e);
-              }}
-            />
-            No
-          </label>
-        </div>
-      </div>
-      <div className="mt-[20px]">
-        <InfoComponent
-          informationText="Your card will be delivered at your address. Incomplete address may lead
-        to rejection of application."
+        </>
+      )}
+      <div className="mt-[30px]">
+        <CommonNextButton
+          title="Save Aadhaar Address"
+          width="w-[222px]"
+          mobileWidth="max-sm:w-full"
+          disable={addressDisable}
+          handleSubmit={() => setDetailsFormStepper(2)}
         />
-        <div className="text-gray-400 text-[13px] font-normal font-['Poppins'] mt-[20px]">
-          I hereby self declare my current address as stated below.
-        </div>
       </div>
-      {userInputData?.aadharAddress && getAadharAddressComponent()}
     </div>
   );
 };

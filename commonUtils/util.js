@@ -1,6 +1,11 @@
 import toast from "react-hot-toast";
-import { ApiMessage } from "./alljsonfile/apimessage";
+import Cookies from "js-cookie";
+import { apiMessages } from "./StaticContent/errorMessages";
 const HOSTNAME = process.env.NEXT_PUBLIC_WEBSITE_URL;
+
+export const nameRegex = "/^[a-zA-Z]*$/";
+export const dateFormatRegex =
+  /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
 
 export const getRandomColor = () => {
   let letters = "0123456789ABCDEF";
@@ -87,7 +92,7 @@ export const errorHandling = (error) => {
       toast.error(error?.response?.data?.message?.panNo[0]);
     }
   } else if (error?.response?.status == 500) {
-    toast.error(ApiMessage?.internalServerError);
+    toast.error(apiMessages?.internalServerError);
   }
 };
 
@@ -142,4 +147,29 @@ export const checkIfHasAllMandatoryFields = (params) => {
     company_name &&
     monthly_salary;
   return !!fieldMandatory;
+};
+
+export const getCookieValue = (key) => {
+  if (typeof window !== "undefined") {
+    return Cookies.get(key);
+  } else return "";
+};
+export const getName = (userInputData) => {
+  const firstNsecond = userInputData?.firstName && userInputData?.lastName;
+  if (firstNsecond && userInputData?.middleName) {
+    return (
+      userInputData?.firstName +
+      " " +
+      userInputData?.middleName +
+      " " +
+      userInputData?.lastName
+    )?.toUpperCase();
+  }
+  if (firstNsecond) {
+    return (
+      userInputData?.firstName +
+      " " +
+      userInputData?.lastName
+    )?.toUpperCase();
+  }
 };

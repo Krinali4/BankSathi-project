@@ -40,7 +40,11 @@ const CommonEmailInput = ({
           className={
             className
               ? className
-              : "shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]"
+              : `shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] text-[12px] ${
+                  disabled
+                    ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
+                    : "text-[#212529]"
+                }`
           }
           alt={alt}
           id="email"
@@ -55,7 +59,7 @@ const CommonEmailInput = ({
           }}
         />
         {errorHrefEmail && (
-          <p className="text-[12px] text-[#FF000F] font-no  mt-2">
+          <p className="text-[12px] text-[#FF000F] font-no mt-2">
             {errorMessages?.linkError}
           </p>
         )}

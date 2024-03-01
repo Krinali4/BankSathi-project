@@ -75,8 +75,8 @@ const ItrDetailsForm = ({
       <div className="flex flex-col mt-[20px]">
         <CommonInputLabel labelTitle={staticLabels?.proofOfIncome} />
         <label
-          for="dropzone-file"
-          class="flex mt-[5px] flex-col items-end justify-center w-full h-[52px] border-2 border-gray-300 rounded-lg cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 mb-[3px]"
+          htmlFor="dropzone-file"
+          className="flex mt-[5px] flex-col items-end justify-center w-full h-[52px] border-2 border-gray-300 rounded-lg cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 mb-[3px]"
         >
           <input
             type="file"
