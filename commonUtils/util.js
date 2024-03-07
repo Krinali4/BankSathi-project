@@ -1,6 +1,9 @@
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { apiMessages } from "./StaticContent/errorMessages";
+
+export const ImageBaseUrl = process.env.NEXT_PUBLIC_BASE_IMG_CDN_URL;
+
 const HOSTNAME = process.env.NEXT_PUBLIC_WEBSITE_URL;
 
 export const nameRegex = "/^[a-zA-Z]*$/";

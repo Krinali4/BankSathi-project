@@ -9,7 +9,7 @@ const InfoModal = ({ data }) => {
         alt="image"
         height={data?.height}
         width={data?.width}
-        className="mt-10 md:mt-20"
+        className="mt-10 md:mt-10"
       />
       {data?.title1 && (
         <div className="text-center text-neutral-800 text-xl font-semibold font-['Faktum'] md:mt-[35px] mt-[10px]">

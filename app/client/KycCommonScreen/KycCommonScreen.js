@@ -6,7 +6,6 @@ import CommonCheckAgree from "../Common/CommonCheckAgree/CommonCheckAgree";
 import CommonNextButton from "../Common/Button/Button";
 
 const KycCommonScreen = ({ data, handleSubmit }) => {
-  console.log(data);
   const [aadharNumber, setAadharNumber] = useState("");
   const [error, setError] = useState("");
   const [isAgree, setIsAgree] = useState(true);

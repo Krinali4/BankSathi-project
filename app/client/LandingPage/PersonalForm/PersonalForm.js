@@ -66,12 +66,13 @@ const PersonalForm = ({
     etbCustomerData?.V_D_CUST_GENDER === "O" ||
     userInputData?.gender === "Other";
 
+  const hasGender = male || female || others;
   const hasNumber = userInputData?.mobile && userInputData?.mobile !== "";
-  const date = etbCustomerData?.D_D_CUST_DATE_OF_BIRTH;
+  const date = etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || userInputData?.dob;
   const dob = date ? moment(date).format("DD-MM-YYYY") : false;
   const name = getName(userInputData);
 
-  const disable = (!male && !female && !others) || !dob || !hasNumber || !name;
+  const disable = !hasGender || !dob || !hasNumber || !name;
 
   const handlePersonalSubmit = () => {
     setDetailsFormStepper(1);
@@ -81,7 +82,6 @@ const PersonalForm = ({
     const dateConvert = moment(date).format("DD-MM-YYYY");
     if (dateConvert) {
       const isValid = dateFormatRegex.test(dateConvert);
-      console.log(isValid);
       if (isValid) {
         setStartDate(date);
         setUserInputData({ ...userInputData, dob: date });
@@ -91,7 +91,6 @@ const PersonalForm = ({
 
   useEffect(() => {
     if (male || female || others) {
-      console.log(hasNumber, dob, name);
       if (hasNumber && dob && name !== "") {
         setButtonDisable(false);
       }

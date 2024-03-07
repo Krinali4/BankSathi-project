@@ -5,7 +5,7 @@ const ApplyNowButton = ({ data, addMargin }) => {
   const router = useRouter();
 
   const handleApplyNow = () => {
-    router.push("/form");
+    router.push("/application-form");
   };
   return (
     <div>

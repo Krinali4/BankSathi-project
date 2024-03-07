@@ -31,7 +31,6 @@ const CongratulationsScreen = ({
       </button>
     );
   };
-  console.log(showTermsAndCondtionModal);
   return (
     <>
       <div className="mt-[40px] flex flex-col justify-center items-center">

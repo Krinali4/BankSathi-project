@@ -26,7 +26,6 @@ const MobileInput = ({
       } else setErrorMsg(false);
     }
     if (extractedNumber == "0000000000") {
-      console.log("zxero no");
       setZeroNumberValidation(true);
     }
     if (extractedNumber !== "0000000000") {

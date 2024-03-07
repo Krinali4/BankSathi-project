@@ -22,6 +22,7 @@ const ApplicationForm = () => {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
+  const token = typeof window !== "undefined" && localStorage.getItem("token");
 
   const wrapperRef = useRef(null);
 
@@ -33,11 +34,12 @@ const ApplicationForm = () => {
   const [pinCode, setPinCode] = useState([]);
   const [visible, setVisible] = useState(false);
   const [pinCodeError, setPinCodeError] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
   const [isAgree, setIsAgree] = useState(true);
   const [screensStepper, setScreenStepper] = useState(0);
   const [time, setTime] = useState(60);
   const [resendOtp, setResendOtp] = useState(false);
+  const [etbCustomerData, setEtbCustomerData] = useState();
 
   const handlePincodeChange = () => {
     setVisible(true);
@@ -144,11 +146,25 @@ const ApplicationForm = () => {
       </div>
     );
   };
+
   useEffect(() => {
     if (userInfo?.pin_code?.length === 6) {
       getPinCodes();
     }
   }, [userInfo?.pin_code?.length]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const etb = localStorage.getItem("etbCustomerData")
+        ? JSON.parse(localStorage.getItem("etbCustomerData"))
+        : null;
+      const user = localStorage.getItem("customerData")
+        ? JSON.parse(localStorage.getItem("etbCustomerData"))
+        : null;
+      if (etb) setEtbCustomerData(etb);
+      if (user) setEtbCustomerData(user);
+    }
+  }, []);
 
   return (
     <>

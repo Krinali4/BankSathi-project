@@ -3,7 +3,7 @@ import React from "react";
 
 const HdfcHeader = () => {
   return (
-    <div className="w-full bg-[#ffff] shadow-md mb-[24px] flex items-center h-[50px]">
+    <div className="w-[100vw] bg-[#ffff] shadow-md mb-[24px] flex items-center h-[50px]">
       <div className="flex items-center container mx-auto ">
         <Image
           src="/assets/mobile-logo-sticky.svg"

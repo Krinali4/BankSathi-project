@@ -28,7 +28,7 @@ import {
   INTERNAL_INITIATE_API,
   USERINFO,
 } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import axios from "axios";
 import Loader from "../Common/Loader/Loader";
 import QuestionModal from "../Common/Modal/QuestionModal";
@@ -203,15 +203,14 @@ const LandingPage = ({ ipAddress }) => {
           response?.data?.data?.FintechDemographicDetailsResponse
             ?.FintechDemographicDetails?.[0]?.CIFResponse;
         setEtbCustomerData(etbRes);
-        if (typeof window !== "undefined" && etbRes) {
-          localStorage.setItem("etbCustomerData", JSON.stringify(etbRes));
-        }
-        setShowLoader(false);
-        setTime(0);
         if (typeof window !== "undefined") {
+          if (etbRes)
+            localStorage.setItem("etbCustomerData", JSON.stringify(etbRes));
           localStorage.setItem("customerData", JSON.stringify(userInputData));
           localStorage.setItem("token", response?.data?.data?.token);
         }
+        setShowLoader(false);
+        setTime(0);
         toast.success(apiMessages?.verifyotp);
         if (
           response?.data?.data?.FintechDemographicDetailsResponse
@@ -580,10 +579,18 @@ const LandingPage = ({ ipAddress }) => {
     }
   }, [time, loginStepper]);
 
+  useEffect(() => {
+    if (localStorage.getItem("etbCustomerData"))
+      localStorage.removeItem("etbCustomerData");
+    if (localStorage.getItem("customerData"))
+      localStorage.removeItem("customerData");
+    if (localStorage.getItem("token")) localStorage.removeItem("token");
+  }, []);
+
   return (
     <>
       <div
-        className={`flex flex-col items-center justify-center h-full max-sm:w-auto max-sm:px-[32px] mx-auto ${
+        className={`flex flex-col items-center justify-center h-full max-sm:w-full max-sm:px-[20px] container mx-auto w-full md:px-20 lg:px-14 ${
           loginStepper >= 2 ? "" : "md:mt-14"
         }`}
       >
@@ -611,7 +618,7 @@ const LandingPage = ({ ipAddress }) => {
           />
         )}
         {loginStepper === 2 && (
-          <div className="w-auto mx-auto h-auto bg-white rounded-[14px] shadow-sm max-[576px]:shadow-none mt-[60px] max-sm:mt-[20px] pt-[40px] px-[60px] pb-[40px] max-[1024px]:px-[50px] max-[834px]:p-[30px] max-[479px]:py-[20px] max-sm:px-[20px]">
+          <div className="lg:w-[52vw] w-auto mx-auto h-auto bg-white rounded-[14px] shadow-sm max-[576px]:shadow-none mt-[60px] max-sm:mt-[20px] pt-[40px] px-[60px] pb-[40px] max-[1024px]:px-[50px] max-[834px]:p-[30px] max-[479px]:py-[20px] max-sm:px-[20px]">
             <div className="flex flex-col">
               <div className="text-center max-sm:pt-[20px]text-neutral-800 text-2xl font-medium font-['Poppins'] mb-[20px] max-sm:mb-0 max-sm:text-[18px]">
                 {getFormTitle()}
@@ -663,10 +670,12 @@ const LandingPage = ({ ipAddress }) => {
                       setDetailsFormStepper={setDetailsFormStepper}
                       deviceId={deviceId}
                       ipAddress={ipAddress}
+                      setShowLoader={setShowLoader}
                       setEpfNumber={setEpfNumber}
                       setApplicationRefNo={setApplicationRefNo}
                       setRejectionScreen={setRejectionScreen}
                       setShowCongratsScreen={setShowCongratsScreen}
+                      setLoginStepper={setLoginStepper}
                     />
                   </div>
                 )}

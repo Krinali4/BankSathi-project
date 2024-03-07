@@ -4,6 +4,7 @@ import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 
 const PincodeInput = ({
   onChange,
+  labelTitle,
   value,
   disabled,
   placeholder,
@@ -12,7 +13,8 @@ const PincodeInput = ({
   handleChange,
   handlePincodeChange,
   defaultValue,
-  labelTitle,
+  onFocus,
+  pinCodeError = false,
 }) => {
   return (
     <>
@@ -30,22 +32,36 @@ const PincodeInput = ({
           onChange
             ? onChange
             : (e) => {
-                e.target.value = e.target.value.replace(/\D/g, "");
-                if (e.target.value?.length > 3) {
-                  getData(e?.target?.value);
+                const cleanedValue = e.target.value
+                  .replace(/\D/g, "")
+                  .slice(0, 6);
+                if (getData && cleanedValue.length > 3) {
+                  getData(cleanedValue);
                 }
-                handleChange(e);
-                handlePincodeChange(e);
+                if (handleChange) {
+                  handleChange(e);
+                }
+                if (handlePincodeChange) {
+                  handlePincodeChange(e);
+                }
               }
         }
+        onFocus={onFocus}
         className={
           className
             ? className
-            : "shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] text-[12px]"
+            : `shadow border rounded-lg w-full py-4 px-4 text-[12px] text-[#212529] leading-tight focus:outline-none focus:shadow-outline mt-1 ${
+                pinCodeError ? "border-[#FF000F]" : ""
+              } border-[#C2CACF]`
         }
-        placeholder={placeholder ? placeholder : staticLabels?.pinCode}
+        placeholder={placeholder ? placeholder : "Pin Code"}
         autoComplete="off"
       />
+      {pinCodeError && (
+        <p className="text-[12px] text-[#FF000F] font-no mt-2">
+          Please enter a valid pin code
+        </p>
+      )}
     </>
   );
 };

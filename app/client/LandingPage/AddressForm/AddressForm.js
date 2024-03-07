@@ -1,11 +1,14 @@
-import React, { useRef, useState } from "react";
-import InfoComponent from "../../Common/InfoComponent/InfoComponent";
-import DropdownList from "react-widgets/DropdownList";
+import React, { useEffect, useRef, useState } from "react";
 import PincodeInput from "../../Common/CommonInputComponents/PinCodeInput";
 import CommonNextButton from "../../Common/Button/Button";
 import CommonInputLabel from "../../Common/CommonInputComponents/CommonInputLabel";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 import ResidencyAddressForm from "./ResidencyAddressForm/ResidencyAddressForm";
+import {
+  BS_BASE_URL,
+  BS_COMMON,
+} from "@/commonUtils/ApiEndPoints/ApiEndPoints";
+import axios from "axios";
 
 const AddressForm = ({
   userInputData,
@@ -18,56 +21,71 @@ const AddressForm = ({
 
   const [errorPincode, setErrorPinCode] = useState(false);
   const [pincodeNumber, setPincodeNumber] = useState();
+  const [stateCity, setStateCity] = useState({ city: null, state: null });
   const [pinCodeList, setPinCodeList] = useState([]);
   const [visibility, setVisibility] = useState(false);
+  const [pinCodeError, setPinCodeError] = useState(false);
   const [isAadharAddress, setIsAadharAddress] = useState(true);
-
   const [residenceAddress, setResidenceAddress] = useState("Family Owned");
   const [residenceAddressList, setResidenceAddressList] = useState([
     "Self owned",
   ]);
-
+  const headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
   // const getAadharAddressComponent = () => {
   //   //PINCODE
-  const handlePincodeChange = (event) => {
+
+  const handlePincodeChange = () => {
     setVisibility(true);
-    const PincodeErr = event?.target?.value.replace(
-      /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/g,
-      ""
-    );
-    if (!PincodeErr) {
-      setErrorPinCode(false);
-    } else {
-      setErrorPinCode(true);
-    }
   };
 
-  const getPinCodeList = () => {};
+  const getPinCodeList = async (searchPin) => {
+    let url = BS_BASE_URL + BS_COMMON.pinCodeVerify;
+    await axios
+      .post(
+        url,
+        {
+          pin_code: searchPin,
+        },
+        { headers: headers }
+      )
+      .then((response) => {
+        if (response?.data?.message == "success") {
+          setStateCity({
+            city: response?.data?.data?.pincode_data?.cities?.[0],
+            state: response?.data?.data?.pincode_data?.states?.[0],
+          });
+          setPinCodeError(false);
+          setPinCodeList(response.data.data.pincode_data?.pincodes);
+        }
+      })
+      .catch((error) => {
+        setPinCodeList([]);
+      });
+  };
 
   const address1 = etbCustomerData?.V_D_CUST_ADD1 || userInputData?.address1;
   const address2 = etbCustomerData?.V_D_CUST_ADD2 || userInputData?.address2;
   const address3 = etbCustomerData?.V_D_CUST_ADD3 || userInputData?.address3;
-  const state = etbCustomerData?.V_D_CUST_STATE || userInputData?.state;
-  const city = etbCustomerData?.V_D_CUST_CITY || userInputData?.city;
+  const state =
+    etbCustomerData?.V_D_CUST_STATE || userInputData?.state || stateCity?.state;
+  const city =
+    etbCustomerData?.V_D_CUST_CITY || userInputData?.city || stateCity?.city;
   const pincode = etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code;
 
   const addressDisable =
     !address1 || !address2 || !address3 || !state || !city || !pincode;
 
-  console.log(addressDisable);
-  
+    useEffect(() => {
+    if (userInputData?.pin_code?.length === 6) {
+      getPinCodeList();
+    }
+  }, [userInputData?.pin_code?.length]);
+
   return (
     <div>
-      {/* <div className="mt-[20px]">
-        <InfoComponent
-          informationText="Your card will be delivered at your address. Incomplete address may lead
-        to rejection of application."
-        />
-        <div className="text-gray-400 text-[13px] font-normal font-['Poppins'] mt-[20px]">
-          I hereby self declare my current address as stated below.
-        </div>
-      </div> */}
-      {/* {getAadharAddressComponent()} */}
       {isAadharAddress ? (
         <>
           <div className="mt-[20px]">
@@ -111,8 +129,8 @@ const AddressForm = ({
           <div className="mt-[20px]">
             <CommonInputLabel labelTitle={staticLabels?.address3} />
             <input
-              id="address2"
-              name="address2"
+              id="address3"
+              name="address3"
               type="text"
               required
               placeholder="Enter your address #3"
@@ -120,7 +138,7 @@ const AddressForm = ({
               onChange={(e) =>
                 setUserInputData({
                   ...userInputData,
-                  address2: e?.target?.value,
+                  address3: e?.target?.value,
                 })
               }
               value={address3}
@@ -148,10 +166,16 @@ const AddressForm = ({
           </div>
           <div className="relative mt-[20px]">
             <PincodeInput
-              value={pincode}
+              value={
+                etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code
+              }
               getData={getPinCodeList}
+              defaultValue={
+                etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code
+              }
               handleChange={handleChange}
               handlePincodeChange={handlePincodeChange}
+              pinCodeError={pinCodeError}
             />
             {visibility && (
               <ul
@@ -164,7 +188,7 @@ const AddressForm = ({
                     key={v}
                     onClick={() => {
                       setUserInputData({ ...userInputData, pin_code: i });
-                      setVisibility(!visible);
+                      setVisibility(!visibility);
                     }}
                   >
                     {i}
@@ -189,7 +213,7 @@ const AddressForm = ({
                   state: e?.target?.value,
                 })
               }
-              value={state}
+              value={state || stateCity?.state}
               maxLength={20}
             />
           </div>
@@ -208,26 +232,27 @@ const AddressForm = ({
                   city: e?.target?.value,
                 })
               }
-              value={city}
+              value={city || stateCity?.city}
               maxLength={20}
             />
           </div>
           <p className="pt-[20px] text-[#212529] text-[13px]">
             {staticLabels?.aadharQuestion}
           </p>
-          <div className="flex pt-[10px] gap-4">
+          <div className="flex flex-col pt-[10px] gap-2">
             <div>
               <label
                 htmlFor="adhar-address"
-                className={`form-radio flex gap-2 items-center ${
+                className={`form-radio text-[14px] flex gap-2 items-center ${
                   userInputData?.aadharAddress === "Yes"
                     ? "text-[#212529]"
-                    : "text-[#808080]"
+                    : "text-[#212529]"
                 }`}
               >
                 <input
                   type="radio"
                   name="aadharAddress"
+                  className="text-[14px] form-radio flex gap-2 items-center text-[#212529]"
                   value={
                     userInputData?.aadharAddress === "Yes"
                       ? userInputData?.aadharAddress === "Yes"
@@ -239,21 +264,22 @@ const AddressForm = ({
                     handleChange(e);
                   }}
                 />
-                Yes
+                Yes, My Current Address is same as permanent address
               </label>
             </div>
             <div>
               <label
                 htmlFor="adhar-address"
-                className={`form-radio flex gap-2 items-center  ${
+                className={`form-radio text-[14px] flex gap-2 items-center  ${
                   userInputData?.aadharAddress === "No"
                     ? "text-[#212529]"
-                    : "text-[#808080]"
+                    : "text-[#212529]"
                 }`}
               >
                 <input
                   type="radio"
                   name="aadharAddress"
+                  className="text-[14px] form-radio flex gap-2 items-center text-[#212529] w-[288px]"
                   value={
                     userInputData?.aadharAddress === "No"
                       ? userInputData?.aadharAddress === "No"
@@ -265,7 +291,8 @@ const AddressForm = ({
                     handleChange(e);
                   }}
                 />
-                No
+                No, My Current Address is different from the Aadhar Address, And
+                I Here by Self-Declare my current as Stated as below
               </label>
             </div>
           </div>

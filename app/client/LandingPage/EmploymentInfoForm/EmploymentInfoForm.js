@@ -22,6 +22,8 @@ const EmploymentInfoForm = ({
   setEpfNumber,
   setShowCongratsScreen,
   setRejectionScreen,
+  setShowLoader,
+  setLoginStepper,
 }) => {
   const router = useRouter();
 
@@ -44,12 +46,7 @@ const EmploymentInfoForm = ({
 
   const [showLoaderModal, setShowLoaderModal] = useState(false);
 
-  console.log(userInputData, etbCustomerData);
-
-  const inPrincipleApprovalApi = (
-    id = "AB3012022011",
-    refNo = "22G28001562110DE"
-  ) => {
+  const inPrincipleApprovalApi = (id, refNo, token) => {
     setShowLoaderModal(true);
     const enpoint = BASE_URL + USERINFO?.inPrincipleApproval;
     const params = {
@@ -62,17 +59,27 @@ const EmploymentInfoForm = ({
     axios
       .post(enpoint, params, { header: headers })
       .then((res) => {
-        const hasProducts = true; // to map on the basis of response
         setShowLoaderModal(false);
-        const ipaRes =
-          res?.data?.data?.executeIPARequestResponse?.executeIPARequestReturn
-            ?.APS_IPA_RESULT;
+        const resObj =
+          res?.data?.data?.executeIPARequestResponse?.executeIPARequestReturn;
+        const ipaRes = resObj?.APS_IPA_RESULT;
 
+        const filler1 = resObj?.FILLER1; // OR ["HDFCREG", "HDFCREGB"]; // to use - dynamic:  resObj?.FILLER1
+        const filler6 = resObj?.FILLER6; // OR "resObj?.FILLER6"; // to use - dynamic:  resObj?.FILLER6 which will have array of credit limits
+
+        if (typeof window !== "undefined") {
+          const objToStore = { productIds: filler1, creditLimits: filler6 };
+          localStorage.setItem("productsInfo", JSON.stringify(objToStore));
+        }
+        const hasProducts =
+          filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
+
+        setLoginStepper(4);
         // in response - there will be 3 scenarios - to check on the basis of res data
-        if (ipaRes === "Y") setShowCongratsScreen(true);
-        if (ipaRes === "N") setRejectionScreen(true);
-        if (ipaRes === "Y" && hasProducts)
+        if (ipaRes === "Y") setRejectionScreen(true);
+        if (ipaRes === "N" && hasProducts)
           router.push("/hdfc/eligible-products");
+        if (ipaRes === "N") setShowCongratsScreen(true);
       })
       .catch((error) => {
         setShowLoaderModal(false);
@@ -80,18 +87,32 @@ const EmploymentInfoForm = ({
       });
   };
 
+  const removeSpecialCharacters = (str) => {
+    return str?.replace(/[^\w\s]/gi, "");
+  };
+
   // EXECUTE INTERFACE API CALL
   const handleSubmitForm = async () => {
     const name = getName(userInputData);
-    // EXECUTE INTERFACE API CALL
+    setShowLoader(true);
     const params = {
       bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
-      address_line_1: etbCustomerData?.V_D_CUST_ADD1 || userInputData?.address1,
-      address_line_2: etbCustomerData?.V_D_CUST_ADD2 || userInputData?.address2,
+      adress_edit_flag: "N",
+      customer_id: etbCustomerData?.CUSTOMER_ID,
+      auth_mode: etbCustomerData?.CUSTOMER_ID ? "IDCOM" : "OTP",
+      address_line_1:
+        removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD1) ||
+        userInputData?.address1,
+      address_line_2:
+        removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD2) ||
+        userInputData?.address2,
+      address_line_3:
+        removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
+        userInputData?.address3,
       city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city,
       mobile_no: userInputData?.mobile,
       dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH,
-      name: etbCustomerData?.V_D_CUST_FULL_NAME || name,
+      name: name,
       ip: ipAddress,
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || userInputData?.email,
       pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code,
@@ -105,28 +126,27 @@ const EmploymentInfoForm = ({
         headers: headers,
       })
       .then((response) => {
-        console.log("execute ref res", response?.data);
+        setShowLoader(false);
         const epf =
-          response?.data?.executeInterfaceRequestResponse
+          response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_E_REF_NUM;
         const applicationRef =
-          response?.data?.executeInterfaceRequestResponse
+          response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_APPL_REF_NUM;
-
+        const token = response?.data?.data?.token;
         setApplicationRefNo(
-          response?.data?.executeInterfaceRequestResponse
+          response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_APPL_REF_NUM
         );
         setEpfNumber(
-          response?.data?.executeInterfaceRequestResponse
+          response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_E_REF_NUM
         );
         // CALL IN PRINCIPLE INTERFACE API
-        inPrincipleApprovalApi(epf, applicationRef);
+        inPrincipleApprovalApi(epf, applicationRef, token);
       })
       .catch((error) => {
-        inPrincipleApprovalApi("AB3012022011", "22G28001562110DE");
-        console.log(error);
+        setShowLoader(false);
         toast.error(error?.message || error?.res?.data?.detail);
       });
   };

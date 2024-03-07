@@ -11,11 +11,12 @@ export const USERINFO = {
   executeDedupe: "api/v1/hdfc/execute_dedupe",
   executeInterface: "api/v1/hdfc/execute_interface",
   inPrincipleApproval: "api/v1/hdfc/in_principle_approval",
+  productDetailsApi: "api/v1/hdfc/get_product_details_on_hdfc_code",
 };
 export const BS_COMMON = {
   panVerify: "api/v1/common/pan_verify",
-  pinCodeVerify: "api/v1/common/get_pincode_list",
   panMobValidation: "api/v1/common/mobile_pan_relation",
+  pinCodeVerify: "api/v1/common/get_pincode_list",
 };
 export const INTERNAL_INITIATE_API = {
   initiate: "api/v1/hdfc/initiate_api",
