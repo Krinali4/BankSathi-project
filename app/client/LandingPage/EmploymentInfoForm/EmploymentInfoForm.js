@@ -174,7 +174,7 @@ const EmploymentInfoForm = ({
               <input
                 type="radio"
                 name="occupationType"
-                value={isSalaried ? isSalaried : "Salaried"}
+                value={isSalaried || "Salaried"}
                 checked={isSalaried}
                 onChange={(e) => {
                   handleChange(e);
@@ -193,7 +193,7 @@ const EmploymentInfoForm = ({
               <input
                 type="radio"
                 name="occupationType"
-                value={selfEmployed ? selfEmployed : "Self employed"}
+                value={selfEmployed || "Self employed"}
                 checked={selfEmployed}
                 onChange={(e) => {
                   handleChange(e);
