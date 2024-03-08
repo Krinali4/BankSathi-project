@@ -5,7 +5,7 @@ import EligibleProductCards from "../Common/EligibleProductCards/EligibleProduct
 
 const HdfcEligibleProducts = () => {
   return (
-    <div className="flex flex-col container mx-auto lg:mx-[80px] md:px-[8px] mb-4">
+    <div className="flex flex-col container mx-auto lg:px-10 md:px-[8px] mb-4">
       <div className="max-sm:mx-[20px] md:mx-[12px]">
         <BankBanner bankImage={HDFC} />
       </div>

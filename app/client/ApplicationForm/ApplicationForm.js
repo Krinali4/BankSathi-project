@@ -1,3 +1,4 @@
+"use client";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 import React, { useEffect, useRef, useState } from "react";
 import CommonInputLabel from "../Common/CommonInputComponents/CommonInputLabel";
@@ -5,8 +6,10 @@ import { DropdownList } from "react-widgets";
 import Image from "next/image";
 import PincodeInput from "../Common/CommonInputComponents/PinCodeInput";
 import {
+  BASE_URL,
   BS_BASE_URL,
   BS_COMMON,
+  USERINFO,
 } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
 import CommonCheckAgree from "../Common/CommonCheckAgree/CommonCheckAgree";
 import { consentMessages } from "@/commonUtils/StaticContent/consentMessages";
@@ -16,8 +19,17 @@ import { ekycList } from "@/commonUtils/staticInfos";
 import OTPInput from "react-otp-input";
 import { errorMessages } from "@/commonUtils/StaticContent/errorMessages";
 import LoginOptions from "./LoginOptions/LoginOptions";
+import FullName from "../Common/CommonInputComponents/FullName";
+import {
+  getCookieValue,
+  getName,
+  removeSpecialCharacters,
+} from "@/commonUtils/util";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Loader from "../Common/Loader/Loader";
 
-const ApplicationForm = () => {
+const ApplicationForm = ({ ipAddress }) => {
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
@@ -25,6 +37,7 @@ const ApplicationForm = () => {
   const token = typeof window !== "undefined" && localStorage.getItem("token");
 
   const wrapperRef = useRef(null);
+  const deviceId = getCookieValue("deviceId");
 
   const [activeBank, setActiveBank] = useState("HDFC Bank");
   const [banks, setBanks] = useState("Name on card");
@@ -34,12 +47,27 @@ const ApplicationForm = () => {
   const [pinCode, setPinCode] = useState([]);
   const [visible, setVisible] = useState(false);
   const [pinCodeError, setPinCodeError] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
+  const [customerData, setCustomerData] = useState({});
   const [isAgree, setIsAgree] = useState(true);
   const [screensStepper, setScreenStepper] = useState(0);
   const [time, setTime] = useState(60);
   const [resendOtp, setResendOtp] = useState(false);
-  const [etbCustomerData, setEtbCustomerData] = useState();
+  const [showLoader, setShowLoader] = useState(false);
+  const [stateCity, setStateCity] = useState({ city: null, state: null });
+  const [etbCustomerData, setEtbCustomerData] = useState({});
+
+  // CONSTANTS
+  const address1 = customerData?.office_address_line_1;
+  const address2 = customerData?.office_address_line_2;
+  const address3 = customerData?.office_address_line_3;
+  const state = customerData?.office_address_state || stateCity?.state;
+  const city = customerData?.office_address_city || stateCity?.city;
+  const pincode = customerData?.office_address_pincode;
+
+  const buttonDisable =
+    !address1 || !address2 || !address3 || !state || !city || !pinCode;
+
+  const name = getName(customerData);
 
   const handlePincodeChange = () => {
     setVisible(true);
@@ -51,30 +79,32 @@ const ApplicationForm = () => {
       .post(
         url,
         {
-          pin_code: userInfo?.pin_code,
+          pin_code:
+            customerData?.pin_code || etbCustomerData?.V_D_CUST_ZIP_CODE,
         },
         { headers: headers }
       )
       .then((response) => {
-        if (response?.data?.data?.pincode_data?.pincodes?.length <= 0) {
-          setPinCode([]);
-          setCity("");
-          setVisible(false);
-          setPinCodeError(true);
-        } else {
-          setCity(response?.data?.data?.pincode_data?.cities?.[0]);
+        if (response?.data?.message == "success") {
+          setStateCity({
+            city: response?.data?.data?.pincode_data?.cities?.[0],
+            state: response?.data?.data?.pincode_data?.states?.[0],
+          });
           setPinCodeError(false);
           setPinCode(response.data.data.pincode_data?.pincodes);
         }
       })
       .catch((error) => {
-        console.error(error);
         setPinCode([]);
-        setCity("");
       });
   };
 
-  const handleChange = () => {};
+  const handleChange = (event) => {
+    setCustomerData({
+      ...customerData,
+      [event?.target?.name]: event?.target?.value,
+    });
+  };
 
   const handleOtpChange = (e) => {
     const valueotp = e;
@@ -86,9 +116,7 @@ const ApplicationForm = () => {
     //   setErrorOtp(false);
     // } else setErrorOtp(true);
   };
-  const handleOTPSubmit = () => {
-    setScreenStepper(3);
-  };
+  const handleOTPSubmit = () => setScreenStepper(3);
 
   const getOtpComp = () => {
     return (
@@ -147,11 +175,59 @@ const ApplicationForm = () => {
     );
   };
 
+  const handlSubmitClick = async () => {
+    setShowLoader(true);
+    const params = {
+      bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
+      adress_edit_flag: "N",
+      customer_id: etbCustomerData?.CUSTOMER_ID,
+      auth_mode: etbCustomerData?.CUSTOMER_ID ? "IDCOM" : "OTP",
+      address_line_1:
+        removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD1) ||
+        customerData?.address1,
+      address_line_2:
+        removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD2) ||
+        customerData?.address2,
+      address_line_3:
+        removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
+        customerData?.address3,
+      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city,
+      mobile_no: customerData?.mobile,
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH,
+      name: name,
+      ip: ipAddress,
+      email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email,
+      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || customerData?.pin_code,
+      company_name: customerData?.companyName,
+      pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no,
+      device_id: deviceId,
+      jwt_token: token,
+      office_address_line_1: address1,
+      office_address_line_2: address2,
+      office_address_line_3: address3,
+      office_address_city: city,
+      office_address_state: state,
+      office_address_pincode: pincode,
+      office_address_email: customerData?.office_email_address,
+    };
+    await axios
+      .post(BASE_URL + USERINFO.executeInterface, params, {
+        headers: headers,
+      })
+      .then((response) => {
+        setShowLoader(false);
+      })
+      .catch((error) => {
+        setShowLoader(false);
+        toast.error(error?.message || error?.res?.data?.detail);
+      });
+  };
+
   useEffect(() => {
-    if (userInfo?.pin_code?.length === 6) {
+    if (customerData?.pin_code?.length === 6) {
       getPinCodes();
     }
-  }, [userInfo?.pin_code?.length]);
+  }, [customerData?.pin_code?.length]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -159,18 +235,19 @@ const ApplicationForm = () => {
         ? JSON.parse(localStorage.getItem("etbCustomerData"))
         : null;
       const user = localStorage.getItem("customerData")
-        ? JSON.parse(localStorage.getItem("etbCustomerData"))
+        ? JSON.parse(localStorage.getItem("customerData"))
         : null;
       if (etb) setEtbCustomerData(etb);
-      if (user) setEtbCustomerData(user);
+      if (user) setCustomerData(user);
     }
   }, []);
 
   return (
     <>
+      {showLoader && <Loader />}
       {screensStepper === 0 && (
         <div className="container mx-auto md:px-12 px-4 flex flex-col items-center justify-center mt-20">
-          <div className="mt-10 bg-white lg:w-[40rem] px-[40px] h-auto p-[20px] !rounded-xl shadow-md flex items-center flex-col">
+          <div className="mt-10 bg-white lg:w-[48rem] px-[40px] h-auto p-[20px] !rounded-xl shadow-md flex items-center flex-col">
             <div className="flex flex-row !justify-between gap-4 lg:gap-40 items-center">
               <div className="text-neutral-700 text-base font-medium font-['Poppins'] leading-snug">
                 Additional Details
@@ -181,13 +258,21 @@ const ApplicationForm = () => {
             </div>
             <div className="flex flex-col items-start justify-center mt-4 w-full">
               <CommonInputLabel labelTitle={staticLabels?.nameOnCard} />
-              <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
+              <div className="mt-[19px] w-full grid grid-cols-1 gap-4">
+                <FullName
+                  setUserInputData={setCustomerData}
+                  userInputData={customerData}
+                  hasFullName={name && name !== ""}
+                  fullName={name}
+                />
+              </div>
+              {/* <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
                 <DropdownList
                   value={banks}
                   onChange={(nextValue) => setBanks(nextValue)}
                   data={banksList}
                 />
-              </div>
+              </div>   ------- TO BE USED IN FUTURE WHEN THERE WILL BE MULTIPLE COMBINATIONS OF NAMES */}
             </div>
             <div className="text-zinc-950 text-xs font-normal font-['Poppins'] mt-[19px]">
               limit exceed 19 Character
@@ -212,15 +297,20 @@ const ApplicationForm = () => {
             <div className="w-full mt-[19px]">
               <CommonInputLabel labelTitle={staticLabels?.officeAddress} />
               <input
-                id="officeAddress"
-                name="officeAddress"
-                type="text"
+                id="office_email_address"
+                name="office_email_address"
+                type="email"
                 required
-                placeholder="officeAddress"
+                placeholder="office email address"
                 className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
               `}
-                onChange={(e) => () => {}}
-                value={""}
+                onChange={(e) => {
+                  setCustomerData({
+                    ...customerData,
+                    office_email_address: e?.target?.value,
+                  });
+                }}
+                value={customerData?.office_email_address}
                 maxLength={20}
               />
             </div>
@@ -233,9 +323,15 @@ const ApplicationForm = () => {
                   type="text"
                   required
                   placeholder="Enter your address #1"
+                  // disabled={etbCustomerData?.V_D_CUST_ADD1}
                   className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
-                  onChange={(e) => () => {}}
-                  value={""}
+                  onChange={(e) => {
+                    setCustomerData({
+                      ...customerData,
+                      office_address_line_1: e?.target?.value,
+                    });
+                  }}
+                  value={address1}
                   maxLength={20}
                 />
               </div>
@@ -248,8 +344,13 @@ const ApplicationForm = () => {
                   required
                   placeholder="Enter your address #2"
                   className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
-                  onChange={(e) => () => {}}
-                  value={""}
+                  onChange={(e) => {
+                    setCustomerData({
+                      ...customerData,
+                      office_address_line_2: e?.target?.value,
+                    });
+                  }}
+                  value={address2}
                   maxLength={20}
                 />
               </div>
@@ -258,20 +359,25 @@ const ApplicationForm = () => {
               <div className="">
                 <CommonInputLabel labelTitle={staticLabels?.address3} />
                 <input
-                  id="address2"
-                  name="address2"
+                  id="address3"
+                  name="address3"
                   type="text"
                   required
                   placeholder="Enter your address #3"
                   className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
-                  onChange={(e) => () => {}}
-                  value={""}
+                  onChange={(e) => {
+                    setCustomerData({
+                      ...customerData,
+                      office_address_line_3: e?.target?.value,
+                    });
+                  }}
+                  value={address3}
                   maxLength={20}
                 />
               </div>
               <div className="relative ">
                 <PincodeInput
-                  value={pinCode}
+                  value={pincode || customerData?.pin_code}
                   getData={getPinCodes}
                   handleChange={handleChange}
                   handlePincodeChange={handlePincodeChange}
@@ -286,7 +392,10 @@ const ApplicationForm = () => {
                         className={""}
                         key={v}
                         onClick={() => {
-                          setUserInfo({ ...userInfo, pin_code: i });
+                          setCustomerData({
+                            ...customerData,
+                            office_address_pincode: i,
+                          });
                           setVisible(!visible);
                         }}
                       >
@@ -309,12 +418,12 @@ const ApplicationForm = () => {
                   className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight text-[12px] focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
               `}
                   onChange={(e) =>
-                    setUserInfo({
-                      ...userInfo,
-                      city: e?.target?.value,
+                    setCustomerData({
+                      ...customerData,
+                      office_address_city: e?.target?.value,
                     })
                   }
-                  value={userInfo?.city}
+                  value={city}
                   maxLength={20}
                 />
               </div>
@@ -329,12 +438,12 @@ const ApplicationForm = () => {
                   className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] leading-tight text-[12px] focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF] 
               `}
                   onChange={(e) =>
-                    setUserInfo({
-                      ...userInfo,
-                      state: e?.target?.value,
+                    setCustomerData({
+                      ...customerData,
+                      office_address_state: e?.target?.value,
                     })
                   }
-                  value={userInfo?.state}
+                  value={state}
                   maxLength={20}
                 />
               </div>
@@ -349,8 +458,9 @@ const ApplicationForm = () => {
             <div className="">
               <CommonNextButton
                 title="Continue to KYC"
+                disable={buttonDisable}
                 width="md:w-[26rem] w-full max-[320px]:w-[280px] max-sm:w-[343px]"
-                handleSubmit={() => setScreenStepper(1)}
+                handleSubmit={() => handlSubmitClick()}
               />
             </div>
           </div>

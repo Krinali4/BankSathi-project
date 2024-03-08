@@ -9,41 +9,6 @@ import FullName from "../../Common/CommonInputComponents/FullName";
 import { dateFormatRegex, getName } from "@/commonUtils/util";
 import moment from "moment";
 
-export const etbData = {
-  CUSTOMER_ID: "XXXXX7419",
-  ACCOUNTID: "XXXXXXXXXX8266",
-  SOURCE_ID: "FINWARE",
-  FW_CUST_ID: "",
-  FW_ACCNT_NUM: "XXXXXXXXXX8266",
-  V_D_CUST_FIRST_NAME: "",
-  V_D_CUST_MIDDLE_NAME: "",
-  V_D_CUST_LAST_NAME: "",
-  D_D_CUST_DATE_OF_BIRTH: "1986-06-02 00:00:00",
-  V_D_CUST_GENDER: "M",
-  V_D_CUST_ADD1: "$160/2 VENKATESHWARA APARTMENT",
-  V_D_CUST_ADD2: "NEXT TO *RANGANATHALAYOUT",
-  V_D_CUST_ADD3: "OUTER # RING ROAD MAHADEVAPURA",
-  V_D_CUST_ZIP_CODE: "403705",
-  V_D_CUST_ADD4: "",
-  V_D_CUST_CITY: "PANAJI",
-  V_D_CUST_STATE: "GOA",
-  V_D_CUST_EMAIL_ADD: "EAFCCE@EFFDF.com",
-  V_D_CUST_MOBILE_PHONE: "918908849306",
-  V_D_CUST_IT_NBR: "LSNPD4704T",
-  V_D_CUST_FULL_NAME: "Smith",
-  V_D_CUST_NAME_SHORT: "James",
-  V_D_CUST_TYPE: "I",
-  MASKED_CARD_NO: "",
-  BRANCH_CODE: "3782",
-};
-export const userData = {
-  firstName: "Ravi",
-  middleName: "KUMAR",
-  lastName: "REDDY",
-  mobile: "8908849306",
-  pan_no: "LSNPD4704T",
-};
-
 const PersonalForm = ({
   userInputData,
   handleChange,

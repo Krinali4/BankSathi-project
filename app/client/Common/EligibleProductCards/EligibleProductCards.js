@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
-import { mockData } from "../../HdfcEligibleProducts/data";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import ApplyNowButton from "../ApplyNowButton/ApplyNowButton";
-import { useState } from "react";
 import accordionArrow from "../../../../public/assets/accordion.svg";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 import { getCookieValue } from "@/commonUtils/util";
 import axios from "axios";
 import { BASE_URL, USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
+import Loader from "../Loader/Loader";
 
 const EligibleProductCards = () => {
   const headers = {
@@ -22,7 +21,7 @@ const EligibleProductCards = () => {
   const [productList, setProductList] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [featuresAccordionOpen, setFeaturesAccordionOpen] = useState(true);
-  const [welcomeOfferAccordionOpen, setWelcomOfferAccordionOpen] =
+  const [welcomeOfferAccordionOpen, setWelcomeOfferAccordionOpen] =
     useState(true);
 
   const size = useWindowSize();
@@ -77,7 +76,6 @@ const EligibleProductCards = () => {
   };
 
   const getProductLimit = (i) => {
-    console.log(productInfo?.creditLimits);
     if (Array.isArray(productInfo?.creditLimits)) {
       if (productInfo?.creditLimits?.length > 1)
         return productInfo?.creditLimits?.[i];
@@ -101,10 +99,9 @@ const EligibleProductCards = () => {
     }
   }, []);
 
-  console.log(productList);
-
   return (
     <>
+      {showLoader && <Loader />}
       <div className="max-sm:mx-[20px] md:mx-[12px] text-neutral-800 text-3xl max-sm:text-[24px] max-sm:leading-[28.8px] font-semibold font-['Faktum'] leading-9 mt-[18px]">
         {productList?.length > 1
           ? "You are eligible for these products"
@@ -147,7 +144,7 @@ const EligibleProductCards = () => {
                   </div>
                 </div>
                 <div>
-                  <ApplyNowButton />
+                  <ApplyNowButton productCode={item?.fi_product_code} />
                 </div>
               </div>
               <div className="border border-gray-100 border-l-0 text-[#212529] mt-[30px]" />
@@ -212,7 +209,7 @@ const EligibleProductCards = () => {
                       </button>
                       <button
                         onClick={() =>
-                          setWelcomOfferAccordionOpen(
+                          setWelcomeOfferAccordionOpen(
                             !welcomeOfferAccordionOpen
                           )
                         }

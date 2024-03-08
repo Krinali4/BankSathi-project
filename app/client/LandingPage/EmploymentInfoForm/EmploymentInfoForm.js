@@ -6,7 +6,7 @@ import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 import CommonInputLabel from "../../Common/CommonInputComponents/CommonInputLabel";
 import axios from "axios";
 import { BASE_URL, USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
-import { getName } from "@/commonUtils/util";
+import { getName, removeSpecialCharacters } from "@/commonUtils/util";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -70,10 +70,10 @@ const EmploymentInfoForm = ({
         if (typeof window !== "undefined") {
           const objToStore = { productIds: filler1, creditLimits: filler6 };
           localStorage.setItem("productsInfo", JSON.stringify(objToStore));
+          localStorage.setItem("customerData", JSON.stringify(userInputData));
         }
         const hasProducts =
           filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
-
         setLoginStepper(4);
         // in response - there will be 3 scenarios - to check on the basis of res data
         if (ipaRes === "Y") setRejectionScreen(true);
@@ -85,10 +85,6 @@ const EmploymentInfoForm = ({
         setShowLoaderModal(false);
         console.log("error in api interface api", error);
       });
-  };
-
-  const removeSpecialCharacters = (str) => {
-    return str?.replace(/[^\w\s]/gi, "");
   };
 
   // EXECUTE INTERFACE API CALL
@@ -120,6 +116,13 @@ const EmploymentInfoForm = ({
       pan_no: etbCustomerData?.V_D_CUST_IT_NBR || userInputData?.pan_no,
       device_id: deviceId,
       jwt_token: token,
+      office_address_line_1: '',
+      office_address_line_2: '',
+      office_address_line_3: '',
+      office_address_city: '',
+      office_address_state: '',
+      office_address_pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code,
+      office_address_email: '',
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {

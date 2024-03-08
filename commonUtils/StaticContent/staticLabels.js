@@ -31,7 +31,7 @@ export const staticLabels = {
   joiningFee: "Joining Fees",
   features: "Features",
   welcome: "Welcome Offer",
-  officeAddress: "Office Address",
+  officeAddress: "Office Email- Address",
   aadharCard: "Aadhaar Card",
   panCard: "PAN Card",
   personalDetails: "Personal Details",

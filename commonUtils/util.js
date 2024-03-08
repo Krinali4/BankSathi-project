@@ -176,3 +176,6 @@ export const getName = (userInputData) => {
     )?.toUpperCase();
   }
 };
+export const removeSpecialCharacters = (str) => {
+  return str?.replace(/[^\w\s]/gi, "");
+};
