@@ -34,7 +34,7 @@ const PersonalForm = ({
   const hasGender = male || female || others;
   const hasNumber = userInputData?.mobile && userInputData?.mobile !== "";
   const date = etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || userInputData?.dob;
-  const dob = date ? moment(date).format("DD-MM-YYYY") : false;
+  const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const name = getName(userInputData);
 
   const disable = !hasGender || !dob || !hasNumber || !name;

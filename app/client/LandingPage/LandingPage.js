@@ -36,6 +36,8 @@ import HdfcCheckAgree from "../Common/HdfcCheckAgree/HdfcCheckAgree";
 import InfoModal from "../Common/Modal/InfoModal";
 import IncomeVerification from "../IncomeVerification/IncomeVerification";
 import EVerifyIncome from "../EVerifyIncome/EVerifyIncome";
+import {DeviceUUID} from 'device-uuid';
+import { useRouter } from "next/navigation";
 
 export const ErrorComponent = ({ errorTitle }) => {
   return <p className="text-[12px] text-[#FF000F] font-no">{errorTitle}</p>;
@@ -69,11 +71,36 @@ const LandingPage = ({ ipAddress }) => {
   const [panData, setPanData] = useState([]);
   const [showCongratScreen, setShowCongratsScreen] = useState(false);
   const [rejectionScreen, setRejectionScreen] = useState(false);
+  const router = useRouter();
   const [additionalDetailsStepper, setAdditionalDetailsStepper] =
     useState(1000);
   const [additionalAgree, setAdditionalAgree] = useState(true);
 
-  //CONST
+  var du = new DeviceUUID().parse();
+  var dua = [
+      du.language,
+      du.platform,
+      du.os,
+      du.cpuCores,
+      du.isAuthoritative,
+      du.silkAccelerated,
+      du.isKindleFire,
+      du.isDesktop,
+      du.isMobile,
+      du.isTablet,
+      du.isWindows,
+      du.isLinux,
+      du.isLinux64,
+      du.isMac,
+      du.isiPad,
+      du.isiPhone,
+      du.isiPod,
+      du.isSmartTV,
+      du.pixelDepth,
+      du.isTouchScreen
+  ];
+  var uuid = du.hashMD5(dua.join(':'));
+
 
   const deviceId = getCookieValue("deviceId");
 
@@ -81,7 +108,7 @@ const LandingPage = ({ ipAddress }) => {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
-
+ 
   // ---------------------------------- INITIATE-COMMON INTERNAL API CALL ------------------//
   const initiateInternalApiCall = async () => {
     setShowLoader(true);
@@ -90,12 +117,12 @@ const LandingPage = ({ ipAddress }) => {
       pan_no: userInputData?.pan_no?.toUpperCase(),
       full_name: name,
       mobile_no: String(userInputData?.mobile),
-      device_id: deviceId,
+      device_id: uuid,
     };
     await axios
       .post(BASE_URL + INTERNAL_INITIATE_API.initiate, params, {
         headers: headers,
-      })
+      })  
       .then((response) => {
         setPanData(response?.data?.data);
         setShowLoader(false);
@@ -153,7 +180,7 @@ const LandingPage = ({ ipAddress }) => {
     const params = {
       pan_no: userInputData?.pan_no?.toUpperCase(),
       mobile_no: String(userInputData?.mobile),
-      device_id: deviceId,
+      device_id: uuid,
     };
     setShowLoader(true);
     await axios
@@ -186,7 +213,7 @@ const LandingPage = ({ ipAddress }) => {
     const params = {
       pan_no: String(userInputData?.pan_no?.toUpperCase()),
       mobile_no: String(userInputData?.mobile),
-      device_id: deviceId,
+      device_id: uuid,
       otp: otp,
       offer_available: "N",
       existing_customer: "N",
@@ -203,6 +230,7 @@ const LandingPage = ({ ipAddress }) => {
           response?.data?.data?.FintechDemographicDetailsResponse
             ?.FintechDemographicDetails?.[0]?.CIFResponse;
         setEtbCustomerData(etbRes);
+        console.log(response,"responseresponseresponseresponse");
         if (typeof window !== "undefined") {
           if (etbRes)
             localStorage.setItem("etbCustomerData", JSON.stringify(etbRes));
@@ -533,6 +561,11 @@ const LandingPage = ({ ipAddress }) => {
     setShowPanNotMatchModal(false);
     setUserInputData({});
   };
+  
+  const handleClick = (e) => {
+    e.preventDefault()
+    router.push("/IncomeVerification")
+  }
   const additionalInfo = () => {
     return (
       <div className="px-4 flex flex-col items-center justify-center mt-10 md:mt-20">
@@ -554,7 +587,8 @@ const LandingPage = ({ ipAddress }) => {
         <div className="mt-[30px] max-sm:mb-4 text-left w-full md:w-[443px]">
           <button
             type="submit"
-            onClick={() => setAdditionalDetailsStepper(1)}
+            onClick={handleClick}
+            // onClick={() => setAdditionalDetailsStepper(1)}
             className={`w-full text-[15px]items-center cursor-pointer font-semibold font-['Faktum'] leading-normal text-neutral-800 max-[280px]:text-[15px] max-[771px]:text-[16px] px-5 py-[15px]  bg-[#49D49D] rounded-lg max-[771px]:px-3 `}
           >
             Continue
@@ -668,7 +702,7 @@ const LandingPage = ({ ipAddress }) => {
                       detailsFormStepper={detailsFormStepper}
                       etbCustomerData={etbCustomerData}
                       setDetailsFormStepper={setDetailsFormStepper}
-                      deviceId={deviceId}
+                      deviceId={uuid}
                       ipAddress={ipAddress}
                       setShowLoader={setShowLoader}
                       setEpfNumber={setEpfNumber}
@@ -708,30 +742,32 @@ const LandingPage = ({ ipAddress }) => {
       </div>
       <div className="px-2">
         {(showCongratScreen || rejectionScreen) && (
-          <InfoModal
-            data={{
-              title1: showCongratScreen
-                ? "Congratulations Ameet!"
-                : "Sorry Your Application Got Rejected",
-              title2: showCongratScreen
-                ? "Your credit card application is in process"
-                : "",
-              imageSrc: showCongratScreen
-                ? "/assets/green-tick.svg"
-                : "/assets/rejection-badge.svg",
-              applicationRefNo: showCongratScreen
-                ? "24A25D27654030W1"
-                : "24A25D27654030W1",
-              height: showCongratScreen ? 64 : 73,
-              width: showCongratScreen ? 80 : 73,
-              date: showCongratScreen ? "12-02-2024" : "12-02-2024",
-              buttonTitle: "Thank You",
-            }}
-          />
+          additionalInfo()
+          // <InfoModal
+          //   data={{
+          //     title1: showCongratScreen
+          //       ? "Congratulations Ameet!"
+          //       : "Sorry Your Application Got Rejected",
+          //     title2: showCongratScreen
+          //       ? "Your credit card application is in process"
+          //       : "",
+          //     imageSrc: showCongratScreen
+          //       ? "/assets/green-tick.svg"
+          //       : "/assets/rejection-badge.svg",
+          //     applicationRefNo: showCongratScreen
+          //       ? "24A25D27654030W1"
+          //       : "24A25D27654030W1",
+          //     height: showCongratScreen ? 64 : 73,
+          //     width: showCongratScreen ? 80 : 73,
+          //     date: showCongratScreen ? "12-02-2024" : "12-02-2024",
+          //     buttonTitle: "Thank You",
+          //   }}
+          // />
         )}
       </div>
+      {/* {additionalDetailsStepper === 0 && additionalInfo()} */}
       {additionalDetailsStepper === 0 && additionalInfo()}
-      {additionalDetailsStepper === 1 && (
+      {/* {additionalDetailsStepper === 1 && (
         <IncomeVerification
           setAdditionalDetailsStepper={setAdditionalDetailsStepper}
         />
@@ -741,7 +777,7 @@ const LandingPage = ({ ipAddress }) => {
           setAdditionalDetailsStepper={setAdditionalDetailsStepper}
           additionalDetailsStepper={additionalDetailsStepper}
         />
-      )}
+      )} */}
     </>
   );
 };

@@ -94,7 +94,7 @@ const EmploymentInfoForm = ({
     const params = {
       bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
       adress_edit_flag: "N",
-      customer_id: etbCustomerData?.CUSTOMER_ID,
+      customer_id: etbCustomerData?.CUSTOMER_ID ? etbCustomerData?.CUSTOMER_ID : "",
       auth_mode: etbCustomerData?.CUSTOMER_ID ? "IDCOM" : "OTP",
       address_line_1:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD1) ||
@@ -105,9 +105,9 @@ const EmploymentInfoForm = ({
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
         userInputData?.address3,
-      city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city,
+      city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city || "",
       mobile_no: userInputData?.mobile,
-      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH,
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || userInputData?.dob || "",
       name: name,
       ip: ipAddress,
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || userInputData?.email,
@@ -124,6 +124,7 @@ const EmploymentInfoForm = ({
       office_address_pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code,
       office_address_email: '',
     };
+    console.log(etbCustomerData,userInputData,"userInputDatauserInputData");
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
         headers: headers,
@@ -167,9 +168,8 @@ const EmploymentInfoForm = ({
           <div>
             <label
               htmlFor="salaried"
-              className={`form-radio flex gap-2 items-center ${
-                isSalaried ? "text-[#212529]" : "text-[#808080]"
-              }`}
+              className={`form-radio flex gap-2 items-center ${isSalaried ? "text-[#212529]" : "text-[#808080]"
+                }`}
             >
               <input
                 type="radio"
@@ -186,9 +186,8 @@ const EmploymentInfoForm = ({
           <div>
             <label
               htmlFor="self employed"
-              className={`form-radio flex gap-2 items-center  ${
-                selfEmployed ? "text-[#212529]" : "text-[#808080]"
-              }`}
+              className={`form-radio flex gap-2 items-center  ${selfEmployed ? "text-[#212529]" : "text-[#808080]"
+                }`}
             >
               <input
                 type="radio"

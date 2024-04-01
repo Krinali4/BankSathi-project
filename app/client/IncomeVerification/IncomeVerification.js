@@ -1,9 +1,12 @@
+'use client'
+
 import React, { useState } from "react";
 import CommonInputLabel from "../Common/CommonInputComponents/CommonInputLabel";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 import { DropdownList } from "react-widgets";
 import Image from "next/image";
 import CommonNextButton from "../Common/Button/Button";
+import { useRouter } from "next/navigation";
 
 export const mockBanks = [
   {
@@ -42,10 +45,13 @@ const IncomeVerification = ({ setAdditionalDetailsStepper }) => {
   const [activeBank, setActiveBank] = useState("HDFC Bank");
   const [states, setStates] = useState("Hdfc");
   const [banksList, setBanksList] = useState(["HDFC", "ICICI"]);
-
+const route = useRouter();
   const handleClick = (item) => {
     setActiveBank(item?.name);
   };
+  const handleNextClick = () => {
+  route.push("/eVerifyIncome")
+  }
   return (
     <div className="container mx-auto md:px-12 px-4">
       <div className="flex flex-col md:items-center items-center justify-center">
@@ -106,7 +112,7 @@ const IncomeVerification = ({ setAdditionalDetailsStepper }) => {
           <CommonNextButton
             title="Continue"
             width="md:w-[550px] max-[320px]:w-[280px] max-sm:w-[343px]"
-            handleSubmit={() => setAdditionalDetailsStepper(2)}
+            handleSubmit={handleNextClick}
           />
         </div>
       </div>
