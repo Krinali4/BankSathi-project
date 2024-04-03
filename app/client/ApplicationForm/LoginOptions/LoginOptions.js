@@ -1,9 +1,62 @@
+import axios from 'axios';
+import { USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
 import Image from "next/image";
 import React from "react";
+import toast from "react-hot-toast";
+import {
+  getCookieValue
+} from "@/commonUtils/util";
 
-const LoginOptions = () => {
+const LoginOptions = ({handleSubmit}) => {
+  const headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
+  const deviceId = getCookieValue("deviceId");
+  const token = typeof window !== "undefined" && localStorage.getItem("token");
+  const  handleSubmitClick = async() => {
+    console.log("dasdasd")
+    const UserPan = JSON.parse(localStorage.getItem("userPanData"));
+    console.log(UserPan,"UserPanUserPan");
+    const params = {
+      pan_no: "AZVFX5739I",
+      product_code: "string",
+      mobile_no:UserPan?.mobile_no,
+      device_id: deviceId,
+      jwt_token: token
+    }
+    try {
+      const response = await axios.post(BASE_URL + USERINFO.fetchAuthcodeIdcom, params, { headers: headers });
+      console.log(response.data, "response");
+      // setShowLoader(false);
+    } catch (error) {
+      // setShowLoader(false);
+      toast.error(error?.message || error?.response?.data?.detail);
+    }
+  };
+  //  async function handleSubmitClick () {
+  //   console.log("dasdasd")
+  //   const UserPan = JSON.parse(localStorage.getItem("userPanData"));
+  //   console.log(UserPan?.mobile_no,"UserPanUserPan");
+  //   const params = {
+  //     pan_no: "AZVFX5739I",
+  //     product_code: "string",
+  //     mobile_no: "7854108786",
+  //     device_id: deviceId,
+  //     jwt_token: token
+  //   }
+  //   try {
+  //     const response = await axios.post(BASE_URL + USERINFO.fetchAuthcodeIdcom, params, { headers: headers });
+  //     console.log(response.data, "response");
+  //     // setShowLoader(false);
+  //   } catch (error) {
+  //     // setShowLoader(false);
+  //     toast.error(error?.message || error?.response?.data?.detail);
+  //   }
+  // };
+
   return (
-    <div className="mt-20 container mx-auto px-4 xl:px-12 flex flex-col items-center justify-center">
+    <div className="mt-20 container mx-auto px-4 xl:px-12 flex flex-col items-center justify-center" >
       <div className="w-[340px] text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] max-sm:text-center">
         Login
         <br className="max-sm:hidden" />
@@ -18,7 +71,7 @@ const LoginOptions = () => {
             width={48}
           />
           <div className="flex flex-col items-start justify-center">
-            <div className="text-black text-[15px] font-semibold font-['Faktum']">
+            <div className="text-black text-[15px] font-semibold font-['Faktum']" >
               Net Banking
             </div>
             <div className="text-black text-xs font-normal font-['Poppins']">
@@ -27,14 +80,17 @@ const LoginOptions = () => {
               ID & Password
             </div>
           </div>
-          <Image
-            src="/assets/right_arrow.svg"
-            alt="arrow"
-            height={24}
-            width={24}
-            className="md:ml-10"
-          />
-        </div>
+          <div className="md:ml-10" onClick={handleSubmitClick()}>
+              <Image
+                src="/assets/right_arrow.svg"
+                alt="arrow"
+                height={24}
+                width={24}
+                className="md:ml-10"
+                // handleSubmit={handleSubmitClick()}
+              />
+              </div>
+          </div>
         <div className="mt-[19px] flex flex-row items-center justify-center gap-x-[10px]">
           <Image src="/assets/line.svg" width={63} height={1} alt="border" />
           <div className="text-zinc-950 text-[15px] font-normal font-['Poppins']">
@@ -71,3 +127,5 @@ const LoginOptions = () => {
 };
 
 export default LoginOptions;
+
+

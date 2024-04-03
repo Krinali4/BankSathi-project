@@ -2,7 +2,7 @@ import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
 import { removeNonAlphaNumeric } from "@/commonUtils/util";
 import React from "react";
 
-const FullName = ({ userInfo, hasFullName, fullName }) => {
+const FullName = ({userInputData, userInfo, hasFullName, fullName }) => {
   return (
     <div className="mt-[20px]">
       <label
@@ -26,7 +26,7 @@ const FullName = ({ userInfo, hasFullName, fullName }) => {
           placeholder="Enter your name"
           className="border-none outline-none"
           pattern="^[A-Za-z]+(?: [A-Za-z]+)*$"
-          value={fullName}
+          value={userInputData?.name}
           onInput={(e) => {
             e.target.value = removeNonAlphaNumeric(e);
           }}

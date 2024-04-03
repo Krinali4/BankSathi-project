@@ -8,7 +8,7 @@ const CommonNextButton = ({
   mobileWidth,
 }) => {
   return (
-    <div className="mt-[30px] max-sm:mb-4 text-left w-full">
+    <div className="mt-[30px] max-sm:mb-4 text-center w-full">
       <button
         type="submit"
         disabled={disable}

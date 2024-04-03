@@ -36,8 +36,11 @@ import HdfcCheckAgree from "../Common/HdfcCheckAgree/HdfcCheckAgree";
 import InfoModal from "../Common/Modal/InfoModal";
 import IncomeVerification from "../IncomeVerification/IncomeVerification";
 import EVerifyIncome from "../EVerifyIncome/EVerifyIncome";
-import {DeviceUUID} from 'device-uuid';
+import { DeviceUUID } from 'device-uuid';
 import { useRouter } from "next/navigation";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 export const ErrorComponent = ({ errorTitle }) => {
   return <p className="text-[12px] text-[#FF000F] font-no">{errorTitle}</p>;
@@ -58,7 +61,11 @@ const LandingPage = ({ ipAddress }) => {
     lastName: "",
     aadharAddress: "Yes",
     occupationType: "Salaried",
+    date_of_birth: ""
+
   });
+  const date =  userInputData?.date_of_birth;
+  const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const [time, setTime] = useState(60);
   const [resendOtp, setResendOtp] = useState(false);
   const [loginStepper, setLoginStepper] = useState(0);
@@ -72,32 +79,33 @@ const LandingPage = ({ ipAddress }) => {
   const [showCongratScreen, setShowCongratsScreen] = useState(false);
   const [rejectionScreen, setRejectionScreen] = useState(false);
   const router = useRouter();
+  const [startDate, setStartDate] = useState(null);
   const [additionalDetailsStepper, setAdditionalDetailsStepper] =
     useState(1000);
   const [additionalAgree, setAdditionalAgree] = useState(true);
 
   var du = new DeviceUUID().parse();
   var dua = [
-      du.language,
-      du.platform,
-      du.os,
-      du.cpuCores,
-      du.isAuthoritative,
-      du.silkAccelerated,
-      du.isKindleFire,
-      du.isDesktop,
-      du.isMobile,
-      du.isTablet,
-      du.isWindows,
-      du.isLinux,
-      du.isLinux64,
-      du.isMac,
-      du.isiPad,
-      du.isiPhone,
-      du.isiPod,
-      du.isSmartTV,
-      du.pixelDepth,
-      du.isTouchScreen
+    du.language,
+    du.platform,
+    du.os,
+    du.cpuCores,
+    du.isAuthoritative,
+    du.silkAccelerated,
+    du.isKindleFire,
+    du.isDesktop,
+    du.isMobile,
+    du.isTablet,
+    du.isWindows,
+    du.isLinux,
+    du.isLinux64,
+    du.isMac,
+    du.isiPad,
+    du.isiPhone,
+    du.isiPod,
+    du.isSmartTV,
+    du.pixelDepth,
+    du.isTouchScreen
   ];
   var uuid = du.hashMD5(dua.join(':'));
 
@@ -108,8 +116,42 @@ const LandingPage = ({ ipAddress }) => {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
- 
-  // ---------------------------------- INITIATE-COMMON INTERNAL API CALL ------------------//
+  // const date_obj = new Date();
+
+  // const formatted_date_of_birth = `${date_obj.getDate()}/${date_obj.getMonth() + 1}/${date_obj.getFullYear()}`;
+
+  // function formatDate(dateString) {
+  //   const parts = dateString.split('-');
+  //   const formattedDate = `${parts[0]}/${parts[1]}/${parts[2]}`;
+  //   return formattedDate;
+  // }
+  // const dateOfBirth = "02-04-2024";
+  // // const formattedDateOfBirth = formatDate(dateOfBirth);
+  // const handleDateChange = (date) => {
+  //   const dateConvert = moment(date).format("DD-MM-YYYY");
+  //   if (dateConvert) {
+  //     const isValid = dateFormatRegex.test(dateConvert);
+  //     if (isValid) {
+  //       setStartDate(date);
+  //       setUserInputData({ ...userInputData, dob: date });
+  //     }
+  //   }
+  // };
+  const handleDateChange = (date) => {
+    // Update the date_of_birth field with the selected date
+    setUserInputData({
+      ...userInputData,
+      date_of_birth: date
+    });
+  };
+  const formattedDateOfBirth = userInputData?.date_of_birth
+  ? userInputData.date_of_birth.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
+  : "";
+
   const initiateInternalApiCall = async () => {
     setShowLoader(true);
     const name = getName(userInputData);
@@ -118,13 +160,16 @@ const LandingPage = ({ ipAddress }) => {
       full_name: name,
       mobile_no: String(userInputData?.mobile),
       device_id: uuid,
+      date_of_birth: formattedDateOfBirth
     };
     await axios
       .post(BASE_URL + INTERNAL_INITIATE_API.initiate, params, {
         headers: headers,
-      })  
+      })
       .then((response) => {
+        console.log(response,"responseresponse111111");
         setPanData(response?.data?.data);
+        localStorage.setItem(JSON.stringify("userPanData",response?.data?.data ))
         setShowLoader(false);
         // CHECK ON the basis of responses
         if (response?.data?.data === "OTP sent") {
@@ -230,7 +275,7 @@ const LandingPage = ({ ipAddress }) => {
           response?.data?.data?.FintechDemographicDetailsResponse
             ?.FintechDemographicDetails?.[0]?.CIFResponse;
         setEtbCustomerData(etbRes);
-        console.log(response,"responseresponseresponseresponse");
+        console.log(response, "responseresponseresponseresponse");
         if (typeof window !== "undefined") {
           if (etbRes)
             localStorage.setItem("etbCustomerData", JSON.stringify(etbRes));
@@ -344,7 +389,8 @@ const LandingPage = ({ ipAddress }) => {
       !userInputData?.mobile ||
       userInputData?.mobile?.length !== 10 ||
       !userInputData?.pan_no ||
-      userInputData?.pan_no?.length !== 10;
+      userInputData?.pan_no?.length !== 10||
+      !userInputData?.date_of_birth ;
     return (
       <>
         <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[10px]">
@@ -486,6 +532,39 @@ const LandingPage = ({ ipAddress }) => {
                   loginStepper={loginStepper}
                 />
               </div>
+              <div className="datepicker mt-[20px]">
+                <label
+                  className="text-[13px] font-normal text-[#212529] "
+                  htmlFor="date"
+                >
+                  {staticLabels?.dob}
+                </label>
+                <div className="">
+                <DatePicker
+  type="text"
+  showYearDropdown
+  dropdownMode="select"
+  dateFormat="dd-MM-yyyy"
+  placeholderText="DD-MM-YYYY"
+  name="dob"
+  id="dob"
+  className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${
+    userInputData?.date_of_birth
+      ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
+      : "bg-white text-[#212529]"
+  }`}
+  selected={userInputData?.date_of_birth} // Enable selected date
+  onChange={(date) => {
+    handleDateChange(date);
+  }}
+  // disabled={!!userInputData?.date_of_birth} // Enable disabled logic
+  maxDate={startDate}
+  required
+  todayButton={"Today"}
+  showIcon
+/>
+                </div>
+              </div>
             </div>
             <div className="text-black text-[13px] font-semibold font-['Faktum'] leading-[24px] mb-[18px] md:mt-[20px]">
               I provide my express consent to HDFC Bank Limited ("Bank") and
@@ -508,9 +587,8 @@ const LandingPage = ({ ipAddress }) => {
                 disabled={disable}
                 onClick={handleSendOtp}
                 type="submit"
-                className={`head-text cursor-pointer font-[faktum] w-[200px] max-sm:w-[160px] rounded-lg text-center ${
-                  disable ? "bg-[#E6ECF1]" : "bg-[#49D49D]"
-                } !text-[#212529] px-[24px] py-[14.5px] max-sm:py-[12px] text-[15px] mx-auto flex items-center justify-center md:text-[12px]`}
+                className={`head-text cursor-pointer font-[faktum] w-[200px] max-sm:w-[160px] rounded-lg text-center ${disable ? "bg-[#E6ECF1]" : "bg-[#49D49D]"
+                  } !text-[#212529] px-[24px] py-[14.5px] max-sm:py-[12px] text-[15px] mx-auto flex items-center justify-center md:text-[12px]`}
               >
                 Send OTP
               </button>
@@ -561,7 +639,7 @@ const LandingPage = ({ ipAddress }) => {
     setShowPanNotMatchModal(false);
     setUserInputData({});
   };
-  
+
   const handleClick = (e) => {
     e.preventDefault()
     router.push("/IncomeVerification")
@@ -624,9 +702,8 @@ const LandingPage = ({ ipAddress }) => {
   return (
     <>
       <div
-        className={`flex flex-col items-center justify-center h-full max-sm:w-full max-sm:px-[20px] container mx-auto w-full md:px-20 lg:px-14 ${
-          loginStepper >= 2 ? "" : "md:mt-14"
-        }`}
+        className={`flex flex-col items-center justify-center h-full max-sm:w-full max-sm:px-[20px] container mx-auto w-full md:px-20 lg:px-14 ${loginStepper >= 2 ? "" : "md:mt-14"
+          }`}
       >
         {showLoader && <Loader />}
         {showPanNotMatchModal && (

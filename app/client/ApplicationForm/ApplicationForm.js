@@ -28,6 +28,7 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import Loader from "../Common/Loader/Loader";
+import VkyConsentScreen from "../VkyConsentScreen/VkyConsentScreen";
 
 const ApplicationForm = ({ ipAddress }) => {
   const headers = {
@@ -177,31 +178,33 @@ const ApplicationForm = ({ ipAddress }) => {
 
   const handlSubmitClick = async () => {
     setShowLoader(true);
+    const UserPan = JSON.parse(localStorage.getItem("userPanData"));
+    console.log(UserPan?.dob,"UserPanUserPan");
     const params = {
       bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
       adress_edit_flag: "N",
-      customer_id: etbCustomerData?.CUSTOMER_ID,
+      customer_id: etbCustomerData?.CUSTOMER_ID || customerData?.customer_id || "",
       auth_mode: etbCustomerData?.CUSTOMER_ID ? "IDCOM" : "OTP",
       address_line_1:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD1) ||
-        customerData?.address1,
+        customerData?.address1 || "",
       address_line_2:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD2) ||
-        customerData?.address2,
+        customerData?.address2 || "",
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
-        customerData?.address3,
-      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city,
-      mobile_no: customerData?.mobile,
-      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH,
-      name: name,
-      ip: ipAddress,
-      email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email,
-      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || customerData?.pin_code,
-      company_name: customerData?.companyName,
-      pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no,
+        customerData?.address3 || "",
+      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "",
+      mobile_no: customerData?.mobile || UserPan?.mobile_no || "",
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || UserPan?.dob || "",
+      name: name || "",
+      ip: ipAddress || "",
+      email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email || "",
+      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || customerData?.pin_code || "",
+      company_name: customerData?.companyName || "",
+      pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no ||UserPan?.pan_no|| "",
       device_id: deviceId,
-      jwt_token: token,
+      jwt_token: token || '',
       office_address_line_1: address1,
       office_address_line_2: address2,
       office_address_line_3: address3,
@@ -215,6 +218,7 @@ const ApplicationForm = ({ ipAddress }) => {
         headers: headers,
       })
       .then((response) => {
+        console.log(response,"responseresponse");
         setShowLoader(false);
       })
       .catch((error) => {
@@ -248,7 +252,7 @@ const ApplicationForm = ({ ipAddress }) => {
       {screensStepper === 0 && (
         <div className="container mx-auto md:px-12 px-4 flex flex-col items-center justify-center mt-20">
           <div className="mt-10 bg-white lg:w-[48rem] px-[40px] h-auto p-[20px] !rounded-xl shadow-md flex items-center flex-col">
-            <div className="flex flex-row !justify-between gap-4 lg:gap-40 items-center">
+            <div className="flex flex-row !justify-between gap-4 lg:gap-40 items-center w-full">
               <div className="text-neutral-700 text-base font-medium font-['Poppins'] leading-snug">
                 Additional Details
               </div>
@@ -258,6 +262,13 @@ const ApplicationForm = ({ ipAddress }) => {
             </div>
             <div className="flex flex-col items-start justify-center mt-4 w-full">
               <CommonInputLabel labelTitle={staticLabels?.nameOnCard} />
+              <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
+                <DropdownList
+                  value={banks}
+                  onChange={(nextValue) => setBanks(nextValue)}
+                  data={banksList}
+                />
+              </div>  
               <div className="mt-[19px] w-full grid grid-cols-1 gap-4">
                 <FullName
                   setUserInputData={setCustomerData}
@@ -266,13 +277,7 @@ const ApplicationForm = ({ ipAddress }) => {
                   fullName={name}
                 />
               </div>
-              {/* <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
-                <DropdownList
-                  value={banks}
-                  onChange={(nextValue) => setBanks(nextValue)}
-                  data={banksList}
-                />
-              </div>   ------- TO BE USED IN FUTURE WHEN THERE WILL BE MULTIPLE COMBINATIONS OF NAMES */}
+             
             </div>
             <div className="text-zinc-950 text-xs font-normal font-['Poppins'] mt-[19px]">
               limit exceed 19 Character
@@ -469,11 +474,13 @@ const ApplicationForm = ({ ipAddress }) => {
       {screensStepper === 1 && (
         <KycCommonScreen
           data={{ heading: "START YOUR Digital-KYC", list: ekycList }}
-          handleSubmit={() => setScreenStepper(2)}
+          // handleSubmit={() => setScreenStepper(2)}
         />
       )}
       {screensStepper === 2 && getOtpComp()}
-      {screensStepper === 3 && <LoginOptions />}
+      {screensStepper === 3 && <LoginOptions onClick={ () => setScreenStepper(2)}/>}
+      {screensStepper === 4 && <VkyConsentScreen  data={{ heading: "VKY Consent & Next Steps", list: ekycList }}
+          handleSubmit={() => setScreenStepper(3)}/>}
     </>
   );
 };

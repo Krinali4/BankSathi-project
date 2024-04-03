@@ -1,21 +1,18 @@
 
 'use client'
+
 import Image from "next/image";
 import React, { useState } from "react";
 import CommonInputLabel from "../Common/CommonInputComponents/CommonInputLabel";
 import { consentMessages } from "@/commonUtils/StaticContent/consentMessages";
 import CommonCheckAgree from "../Common/CommonCheckAgree/CommonCheckAgree";
 import CommonNextButton from "../Common/Button/Button";
-import { USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
-import {
-  getCookieValue,
 
-} from "@/commonUtils/util";
-const KycCommonScreen = ({ data, handleSubmit }) => {
+const VkyConsentScreen = ({ data, handleSubmit }) => {
   const [aadharNumber, setAadharNumber] = useState("");
   const [error, setError] = useState("");
   const [isAgree, setIsAgree] = useState(true);
-  const deviceId = getCookieValue("deviceId");
+
   const handleChange = (e) => {
     const inputValue = e.target.value;
     if (/^\d{12}$/.test(inputValue)) {
@@ -25,36 +22,18 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
       setError("Please enter a valid Aadhar number");
     }
   };
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  };
-  const token = typeof window !== "undefined" && localStorage.getItem("token");
-  const handlSubmitClick = async () => {
-    const UserPan = JSON.parse(localStorage.getItem("userPanData"));
-    const params = {
-      mobile_no: "7900445351",
-      jwt_token: token,
-      device_id: deviceId,
-      kyc_type: "string"
-    };
-    await axios
-      .post(BASE_URL + USERINFO.iniate_ekyc, params, {
-        headers: headers,
-      })
-      .then((response) => {
-        console.log(response, "responseresponse");
-      })
-      .catch((error) => {
-        // toast.error(error?.message || error?.res?.data?.detail);
-      });
-  };
+  console.log(data,"datadatatatt");
   return (
     <div className="container mx-auto md:px-12 px-4 flex flex-col gap-1 items-center justify-center mt-14 h-auto">
       <div className="text-center text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
-        {data?.heading}
+        {/* {data?.heading}  */}
+        VKY Consent & Next Steps
       </div>
-      <div className="h-[60px] w-[60px] bg-white relative top-[40px] flex items-center justify-center rounded-full p-[10px]">
+    <div className="mt-5">
+    <div className="text-[#000000] text-sm font-semibold ">Slot Time is :-  10 AM to 12 AM</div>
+        <div className="text-[#000000] text-sm font-semibold ">on all days Except National Holidays </div>
+    </div>
+      <div className="h-[60px] w-[60px] bg-white relative z-50 top-[25px] flex items-center justify-center rounded-full p-[10px]">
         <Image
           src="/assets/ekyc.svg"
           height={40}
@@ -63,7 +42,7 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
           alt="ekyc"
         />
       </div>
-      <div className="min-[375px]:w-[350px] max-[320px]:w-[300px] h-auto mt-[60px] flex flex-col items-center justify-center bg-[#fcfaf9] rounded-2xl p-10 relative bottom-7">
+      <div className="min-[375px]:w-[350px] max-[320px]:w-[300px] h-auto mt-[20px] flex flex-col items-center justify-center bg-[#fcfaf9] rounded-2xl p-10 relative bottom-7">
         <div className="text-center text-neutral-500 text-base font-semibold font-['Poppins'] leading-tight">
           To complete Your E-KYC Please ensure the followings:
         </div>
@@ -82,22 +61,19 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
               </li>
             );
           })}
-          <div className="mt-[25px]">
-            <CommonInputLabel labelTitle="Enter Aadhar Card Number" />
-            <input
-              type="text"
-              id="aadhar"
-              name="aadhar"
-              // value={aadharNumber}
-              onChange={handleChange}
-              placeholder="XXXX XXXX XXXX"
-              className={`shadow border rounded-lg w-[306px] py-4 px-4 text-[#212529] leading-tight text-[12px] focus:outline-none focus:shadow-outline mt-1 border-[#C2CACF]`}
-            />
-            {error && <div style={{ color: "red" }}>{error}</div>}
+          <div className=" mx-5">
+     <ul className="text-[#9E9E9E]">
+        <li className="list-disc mt-1">Presence in India</li>
+        <li className="list-disc mt-1">Availability of PAN Card</li>
+        <li className="list-disc mt-1">Video  Call enabled on Device</li>
+        <li className="list-disc mt-1">Enable GPS location on Device</li>
+        <li className="list-disc mt-1">Internet connectivity</li>
+        <li className="list-disc mt-1">Blank paper and pen</li>
+     </ul>
           </div>
         </ul>
       </div>
-      <div className="w-[530px] max-[320px]:w-[300px] relative bottom-10">
+      <div className="w-[400px] max-[320px]:w-[300px] relative bottom-10">
         <CommonCheckAgree
           isAgree={isAgree}
           setIsAgree={setIsAgree}
@@ -105,9 +81,9 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
         />
         <div className="mt-[25px]">
           <CommonNextButton
-            title="Continue"
-            width="md:w-[32rem] w-full max-[320px]:w-[280px] max-sm:w-[343px]"
-            handleSubmit={() => handlSubmitClick()}
+            title="Start KYC"
+            width=" w-full max-[320px]:w-[280px] max-sm:w-[343px]"
+            handleSubmit={() => handleSubmit()}
           />
         </div>
       </div>
@@ -115,4 +91,4 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
   );
 };
 
-export default KycCommonScreen;
+export default VkyConsentScreen;
