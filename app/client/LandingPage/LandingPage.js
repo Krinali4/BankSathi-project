@@ -64,7 +64,7 @@ const LandingPage = ({ ipAddress }) => {
     date_of_birth: ""
 
   });
-  const date =  userInputData?.date_of_birth;
+  const date = userInputData?.date_of_birth;
   const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const [time, setTime] = useState(60);
   const [resendOtp, setResendOtp] = useState(false);
@@ -145,12 +145,12 @@ const LandingPage = ({ ipAddress }) => {
     });
   };
   const formattedDateOfBirth = userInputData?.date_of_birth
-  ? userInputData.date_of_birth.toLocaleDateString("en-GB", {
+    ? userInputData.date_of_birth.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     })
-  : "";
+    : "";
 
   const initiateInternalApiCall = async () => {
     setShowLoader(true);
@@ -167,12 +167,11 @@ const LandingPage = ({ ipAddress }) => {
         headers: headers,
       })
       .then((response) => {
-        console.log(response,"responseresponse111111");
         setPanData(response?.data?.data);
-        localStorage.setItem(JSON.stringify("userPanData",response?.data?.data ))
+        localStorage.setItem("userPanData", JSON.stringify(response?.data?.data))
         setShowLoader(false);
         // CHECK ON the basis of responses
-        if (response?.data?.data === "OTP sent") {
+        if (response?.data?.data?.OTPSEND == true) {
           toast.success(apiMessages?.otpsentsuccessfully);
           setTime(60);
           setLoginStepper(1);
@@ -389,14 +388,14 @@ const LandingPage = ({ ipAddress }) => {
       !userInputData?.mobile ||
       userInputData?.mobile?.length !== 10 ||
       !userInputData?.pan_no ||
-      userInputData?.pan_no?.length !== 10||
-      !userInputData?.date_of_birth ;
+      userInputData?.pan_no?.length !== 10 ||
+      !userInputData?.date_of_birth;
     return (
       <>
         <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[10px]">
           Hey, Please enter your details to login
         </div>
-        <div className="mt-[20px] max-sm:mt-[15px] w-[50vw] mb-[200px] max-sm:w-full">
+        <div className="mt-[20px] max-sm:mt-[15px] w-[50vw] sm:w-full mb-[200px] max-sm:w-full">
           <form method="post" id="hdfcyForm" action="/" onSubmit={handleSubmit}>
             <div className="grid lg:grid-cols-3 grid-cols-1 gap-[20px]">
               <div className="mt-0">
@@ -532,7 +531,7 @@ const LandingPage = ({ ipAddress }) => {
                   loginStepper={loginStepper}
                 />
               </div>
-              <div className="datepicker mt-[20px]">
+              <div className="datepicker">
                 <label
                   className="text-[13px] font-normal text-[#212529] "
                   htmlFor="date"
@@ -540,29 +539,28 @@ const LandingPage = ({ ipAddress }) => {
                   {staticLabels?.dob}
                 </label>
                 <div className="">
-                <DatePicker
-  type="text"
-  showYearDropdown
-  dropdownMode="select"
-  dateFormat="dd-MM-yyyy"
-  placeholderText="DD-MM-YYYY"
-  name="dob"
-  id="dob"
-  className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${
-    userInputData?.date_of_birth
-      ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
-      : "bg-white text-[#212529]"
-  }`}
-  selected={userInputData?.date_of_birth} // Enable selected date
-  onChange={(date) => {
-    handleDateChange(date);
-  }}
-  // disabled={!!userInputData?.date_of_birth} // Enable disabled logic
-  maxDate={startDate}
-  required
-  todayButton={"Today"}
-  showIcon
-/>
+                  <DatePicker
+                    type="text"
+                    showYearDropdown
+                    dropdownMode="select"
+                    dateFormat="dd-MM-yyyy"
+                    placeholderText="DD-MM-YYYY"
+                    name="dob"
+                    id="dob"
+                    className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+                        ? ""
+                        : "bg-white text-[#212529]"
+                      }`}
+                    selected={userInputData?.date_of_birth} // Enable selected date
+                    onChange={(date) => {
+                      handleDateChange(date);
+                    }}
+                    // disabled={!!userInputData?.date_of_birth} // Enable disabled logic
+                    maxDate={startDate}
+                    required
+                    todayButton={"Today"}
+                    showIcon
+                  />
                 </div>
               </div>
             </div>
@@ -644,37 +642,37 @@ const LandingPage = ({ ipAddress }) => {
     e.preventDefault()
     router.push("/IncomeVerification")
   }
-  const additionalInfo = () => {
-    return (
-      <div className="px-4 flex flex-col items-center justify-center mt-10 md:mt-20">
-        <div className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
-          We need additional details to provide you an offer
-        </div>
-        <div className="flex items-center mt-[24px] max-sm:mt-[30px] gap-2">
-          <input
-            className="mr-1 w-4 h-4  max-sm:w-8 max-sm:h-8 text-white accent-[#49D49D] "
-            type="checkbox"
-            checked={additionalAgree}
-            required
-            onChange={(e) => setAdditionalAgree(e.target?.checked)}
-          />
-          <p className="text-[15px] text-[#212529] font-normal max-[479px]:text-[14px] max-[375px]:text-[13px]">
-            {consentMessages?.additionalAgree}
-          </p>
-        </div>
-        <div className="mt-[30px] max-sm:mb-4 text-left w-full md:w-[443px]">
-          <button
-            type="submit"
-            onClick={handleClick}
-            // onClick={() => setAdditionalDetailsStepper(1)}
-            className={`w-full text-[15px]items-center cursor-pointer font-semibold font-['Faktum'] leading-normal text-neutral-800 max-[280px]:text-[15px] max-[771px]:text-[16px] px-5 py-[15px]  bg-[#49D49D] rounded-lg max-[771px]:px-3 `}
-          >
-            Continue
-          </button>
-        </div>
-      </div>
-    );
-  };
+  // const additionalInfo = () => {
+  //   return (
+  //     <div className="px-4 flex flex-col items-center justify-center mt-10 md:mt-20">
+  //       <div className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
+  //         We need additional details to provide you an offer
+  //       </div>
+  //       <div className="flex items-center mt-[24px] max-sm:mt-[30px] gap-2">
+  //         <input
+  //           className="mr-1 w-4 h-4  max-sm:w-8 max-sm:h-8 text-white accent-[#49D49D] "
+  //           type="checkbox"
+  //           checked={additionalAgree}
+  //           required
+  //           onChange={(e) => setAdditionalAgree(e.target?.checked)}
+  //         />
+  //         <p className="text-[15px] text-[#212529] font-normal max-[479px]:text-[14px] max-[375px]:text-[13px]">
+  //           {consentMessages?.additionalAgree}
+  //         </p>
+  //       </div>
+  //       <div className="mt-[30px] max-sm:mb-4 text-left w-full md:w-[443px]">
+  //         <button
+  //           type="submit"
+  //           onClick={handleClick}
+  //           // onClick={() => setAdditionalDetailsStepper(1)}
+  //           className={`w-full text-[15px]items-center cursor-pointer font-semibold font-['Faktum'] leading-normal text-neutral-800 max-[280px]:text-[15px] max-[771px]:text-[16px] px-5 py-[15px]  bg-[#49D49D] rounded-lg max-[771px]:px-3 `}
+  //         >
+  //           Continue
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
     if (loginStepper === 1) {
@@ -819,7 +817,8 @@ const LandingPage = ({ ipAddress }) => {
       </div>
       <div className="px-2">
         {(showCongratScreen || rejectionScreen) && (
-          additionalInfo()
+          <></>
+          // additionalInfo()
           // <InfoModal
           //   data={{
           //     title1: showCongratScreen
@@ -843,7 +842,7 @@ const LandingPage = ({ ipAddress }) => {
         )}
       </div>
       {/* {additionalDetailsStepper === 0 && additionalInfo()} */}
-      {additionalDetailsStepper === 0 && additionalInfo()}
+      {/* {additionalDetailsStepper === 0 && additionalInfo()} */}
       {/* {additionalDetailsStepper === 1 && (
         <IncomeVerification
           setAdditionalDetailsStepper={setAdditionalDetailsStepper}

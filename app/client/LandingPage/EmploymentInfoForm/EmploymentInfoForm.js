@@ -41,18 +41,19 @@ const EmploymentInfoForm = ({
   const department = isSalaried ? userInputData?.department : true;
 
   const employmentDisable = !incomeValue || !department;
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  // const token = localStorage.getItem("token") ;
+  const token = typeof window !== "undefined" && localStorage.getItem("token");
+console.log(token,"tokentoken");
 
   const [showLoaderModal, setShowLoaderModal] = useState(false);
 
-  const inPrincipleApprovalApi = (id, refNo, token) => {
+  const inPrincipleApprovalApi = (id, refNo) => {
     setShowLoaderModal(true);
     const enpoint = BASE_URL + USERINFO?.inPrincipleApproval;
     const params = {
       application_reference_number: String(refNo),
       e_ref_num: String(id),
-      customer_id: etbCustomerData?.CUSTOMER_ID,
+      customer_id: etbCustomerData?.CUSTOMER_ID || "",
       device_id: deviceId,
       jwt_token: token,
     };
@@ -63,7 +64,7 @@ const EmploymentInfoForm = ({
         const resObj =
           res?.data?.data?.executeIPARequestResponse?.executeIPARequestReturn;
         const ipaRes = resObj?.APS_IPA_RESULT;
-
+console.log(res?.date?.message,"resresresresres");
         const filler1 = resObj?.FILLER1; // OR ["HDFCREG", "HDFCREGB"]; // to use - dynamic:  resObj?.FILLER1
         const filler6 = resObj?.FILLER6; // OR "resObj?.FILLER6"; // to use - dynamic:  resObj?.FILLER6 which will have array of credit limits
 
@@ -75,10 +76,11 @@ const EmploymentInfoForm = ({
         const hasProducts =
           filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
         setLoginStepper(4);
+        router.push("/additionalInfo");
         // in response - there will be 3 scenarios - to check on the basis of res data
         if (ipaRes === "Y") setRejectionScreen(true);
         if (ipaRes === "N" && hasProducts)
-          router.push("/hdfc/eligible-products");
+          router.push("/additionalInfo");
         if (ipaRes === "N") setShowCongratsScreen(true);
       })
       .catch((error) => {
@@ -86,7 +88,13 @@ const EmploymentInfoForm = ({
         console.log("error in api interface api", error);
       });
   };
-
+  const formattedDateOfBirth = userInputData?.dob
+  ? userInputData?.dob.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
+  : "";
   // EXECUTE INTERFACE API CALL
   const handleSubmitForm = async () => {
     const name = getName(userInputData);
@@ -107,7 +115,7 @@ const EmploymentInfoForm = ({
         userInputData?.address3,
       city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city || "",
       mobile_no: userInputData?.mobile,
-      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || userInputData?.dob || "",
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || formattedDateOfBirth || "",
       name: name,
       ip: ipAddress,
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || userInputData?.email,
@@ -121,8 +129,10 @@ const EmploymentInfoForm = ({
       office_address_line_3: '',
       office_address_city: '',
       office_address_state: '',
-      office_address_pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code,
+      office_address_pincode: (etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code)?.toString(),
       office_address_email: '',
+      pan_name_match_flag: "",
+      pan_dob_match_flag: ""
     };
     console.log(etbCustomerData,userInputData,"userInputDatauserInputData");
     await axios
@@ -138,6 +148,7 @@ const EmploymentInfoForm = ({
           response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_APPL_REF_NUM;
         const token = response?.data?.data?.token;
+        console.log( response?.data,"response?.data");
         setApplicationRefNo(
           response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_APPL_REF_NUM

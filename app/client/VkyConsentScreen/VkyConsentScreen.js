@@ -25,11 +25,11 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
   console.log(data,"datadatatatt");
   return (
     <div className="container mx-auto md:px-12 px-4 flex flex-col gap-1 items-center justify-center mt-14 h-auto">
-      <div className="text-center text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
+      <div className="md:text-center text-start text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] md:w-auto w-full ">
         {/* {data?.heading}  */}
         VKY Consent & Next Steps
       </div>
-    <div className="mt-5">
+    <div className="mt-5 md:w-auto w-full">
     <div className="text-[#000000] text-sm font-semibold ">Slot Time is :-  10 AM to 12 AM</div>
         <div className="text-[#000000] text-sm font-semibold ">on all days Except National Holidays </div>
     </div>
@@ -53,7 +53,7 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
           alt="border"
           className="mt-[25px]"
         />
-        <ul class="list-disc mt-[20px] w-[306px] flex flex-col items-start justify-start gap-[20px]">
+        <ul class="list-disc mt-[20px] w-[306px] flex flex-col items-start justify-start gap-[20px] md:p-0 p-5">
           {data?.list?.map((item) => {
             return (
               <li className="text-[#8b8a8a] text-base font-normal font-['Poppins'] leading-tight">
@@ -73,7 +73,7 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
           </div>
         </ul>
       </div>
-      <div className="w-[400px] max-[320px]:w-[300px] relative bottom-10">
+      <div className="md:w-[400px] w-full max-[320px]:w-[300px] relative bottom-10">
         <CommonCheckAgree
           isAgree={isAgree}
           setIsAgree={setIsAgree}

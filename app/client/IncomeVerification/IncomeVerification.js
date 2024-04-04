@@ -54,10 +54,10 @@ const route = useRouter();
   }
   return (
     <div className="container mx-auto md:px-12 px-4">
-      <div className="flex flex-col md:items-center items-center justify-center">
-        <p className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
+      <div className="flex flex-col sm:items-center items-start justify-center">
+      <div>  <h2 className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
           Income Verification
-        </p>
+        </h2></div>
         <div className="md:w-[750px] w-full h-auto p-[25px] rounded-2xl mt-[20px] bg-white shadow-lg">
           <div className="flex flex-col">
             <CommonInputLabel labelTitle={staticLabels?.selectBank} />
@@ -108,7 +108,7 @@ const route = useRouter();
             </div>
           </div>
         </div>
-        <div className="mb-20 flex items-center">
+        <div className="flex  md:items-start items-center w-full">
           <CommonNextButton
             title="Continue"
             width="md:w-[550px] max-[320px]:w-[280px] max-sm:w-[343px]"

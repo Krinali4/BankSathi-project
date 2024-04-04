@@ -24,10 +24,10 @@ const EVerifyIncome = ({
   };
   const getAccountFields = () => {
     return (
-      <div className="mt-4">
+      <div className="mt-4 w-full md:w-auto">
         <CommonInputLabel labelTitle={staticLabels?.selectedAggregator} />
         <div
-          className={`shadow border rounded-lg w-[300px] h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
+          className={`shadow border rounded-lg md:w-[300px] w-full h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
         >
           <input
             id="account_aggregator"
@@ -46,7 +46,7 @@ const EVerifyIncome = ({
         <div className="mt-4">
           <CommonInputLabel labelTitle={staticLabels?.registeredNo} />
           <div
-            className={`shadow border rounded-lg w-[300px] h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
+            className={`shadow border rounded-lg md:w-[300px] w-full h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
           >
             <input
               id="mobile_no"
@@ -128,16 +128,16 @@ const EVerifyIncome = ({
 
   return (
     <div className="container mx-auto md:px-12 px-4">
-      <div className="flex flex-col md:items-center items-center justify-center">
-        <p className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
+      <div className="flex flex-col md:items-center items-center justify-center  ">
+        <p className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] sm:w-auto w-full">
           E-Verify Your Income
         </p>
-        <p className="text-zinc-500 text-sm font-normal font-['Poppins'] mt-[20px]">
+        <p className="text-zinc-500 text-sm font-normal font-['Poppins'] mt-[20px] sm:w-auto w-full">
           Or from the option below
         </p>
-        <div className="flex items-center flex-col">
+        <div className="flex items-start flex-col sm:item-center w-full md:w-auto ">
           <div
-            className="md:w-[300px] w-[142px] h-auto border border-neutral-300 rounded-md flex flex-col p-[13px] cursor-pointer mt-[20px]"
+            className="md:w-[300px] w-[142px] h-auto border border-neutral-300 rounded-md flex flex-col p-[13px] cursor-pointer mt-[20px] sm:w-auto "
             onClick={() => {}}
           >
             <div className="flex flex-row !justify-between">
@@ -162,7 +162,7 @@ const EVerifyIncome = ({
             </div>
           </div>
           {!isBank && (
-            <div className="md:w-[300px] text-black text-sm font-normal font-['Poppins'] mt-[15px] text-center">
+            <div className="md:w-[300px] text-black text-sm font-normal font-['Poppins'] mt-[15px] sm:text-center items-start">
               Please select one of the options available to proceed with your
               income verification
             </div>
@@ -171,7 +171,7 @@ const EVerifyIncome = ({
         {!isBank && (
           <>
             <div
-              className="w-[343px] h-auto mt-[20px] bg-white rounded-lg border border-neutral-300 flex items-center gap-[20px] justify-center px-[15px] py-[20px]"
+              className="md:w-[343px] w-full h-auto mt-[20px] bg-white rounded-lg border border-neutral-300 flex items-center gap-[20px] justify-center px-[15px] py-[20px]"
               onClick={() => setSelectedIncome(account)}
             >
               <Image
@@ -202,10 +202,10 @@ const EVerifyIncome = ({
               height={30}
               width={118}
               alt="recommended"
-              className="relative left-[112px] bottom-[105px]"
+              className="relative md:left-[112px]  md:bottom-[105px] bottom-[125px] left-[85px]"
             />
             <div
-              className="w-[343px] h-auto bg-white rounded-lg border border-neutral-300 flex items-center gap-[10px] justify-center px-[15px] py-[20px]"
+              className="md:w-[343px] w-full h-auto bg-white rounded-lg border border-neutral-300 flex items-center gap-[10px] justify-center px-[15px] py-[20px]"
               onClick={() => setSelectedIncome(netBanking)}
             >
               <Image

@@ -18,7 +18,6 @@ import KycCommonScreen from "../KycCommonScreen/KycCommonScreen";
 import { ekycList } from "@/commonUtils/staticInfos";
 import OTPInput from "react-otp-input";
 import { errorMessages } from "@/commonUtils/StaticContent/errorMessages";
-import LoginOptions from "./LoginOptions/LoginOptions";
 import FullName from "../Common/CommonInputComponents/FullName";
 import {
   getCookieValue,
@@ -29,6 +28,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Loader from "../Common/Loader/Loader";
 import VkyConsentScreen from "../VkyConsentScreen/VkyConsentScreen";
+import LoginOptions from "../LoginOptions/LoginOptions";
 
 const ApplicationForm = ({ ipAddress }) => {
   const headers = {
@@ -175,11 +175,19 @@ const ApplicationForm = ({ ipAddress }) => {
       </div>
     );
   };
+  // const formattedDateOfBirth = UserPan?.dob
+  // ? UserPan?.dob.toLocaleDateString("en-GB", {
+  //     day: "2-digit",
+  //     month: "2-digit",
+  //     year: "numeric",
+  //   })
+  // : "";
 
   const handlSubmitClick = async () => {
     setShowLoader(true);
-    const UserPan = JSON.parse(localStorage.getItem("userPanData"));
-    console.log(UserPan?.dob,"UserPanUserPan");
+    const UserPan = JSON.parse(localStorage.getItem("customerData"));
+   
+    console.log(UserPan,"UserPanUserPan");
     const params = {
       bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
       adress_edit_flag: "N",
@@ -195,8 +203,8 @@ const ApplicationForm = ({ ipAddress }) => {
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
         customerData?.address3 || "",
       city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "",
-      mobile_no: customerData?.mobile || UserPan?.mobile_no || "",
-      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || UserPan?.dob || "",
+      mobile_no: customerData?.mobile || UserPan?.mobile || "",
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH  || UserPan?.dob || "",
       name: name || "",
       ip: ipAddress || "",
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email || "",
@@ -210,8 +218,10 @@ const ApplicationForm = ({ ipAddress }) => {
       office_address_line_3: address3,
       office_address_city: city,
       office_address_state: state,
-      office_address_pincode: pincode,
+      office_address_pincode: pincode?.toString(),
       office_address_email: customerData?.office_email_address,
+      pan_name_match_flag: "",
+      pan_dob_match_flag: ""
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
@@ -250,8 +260,8 @@ const ApplicationForm = ({ ipAddress }) => {
     <>
       {showLoader && <Loader />}
       {screensStepper === 0 && (
-        <div className="container mx-auto md:px-12 px-4 flex flex-col items-center justify-center mt-20">
-          <div className="mt-10 bg-white lg:w-[48rem] px-[40px] h-auto p-[20px] !rounded-xl shadow-md flex items-center flex-col">
+        <div className="container mx-auto md:px-12 px-4 flex flex-col items-center justify-center mt-8">
+          <div className=" bg-white lg:w-[48rem] md:w-[40rem] w-full px-[40px] h-auto p-[20px] !rounded-xl shadow-md flex items-center flex-col">
             <div className="flex flex-row !justify-between gap-4 lg:gap-40 items-center w-full">
               <div className="text-neutral-700 text-base font-medium font-['Poppins'] leading-snug">
                 Additional Details
@@ -478,7 +488,7 @@ const ApplicationForm = ({ ipAddress }) => {
         />
       )}
       {screensStepper === 2 && getOtpComp()}
-      {screensStepper === 3 && <LoginOptions onClick={ () => setScreenStepper(2)}/>}
+      {screensStepper === 3 && <LoginOptions />}
       {screensStepper === 4 && <VkyConsentScreen  data={{ heading: "VKY Consent & Next Steps", list: ekycList }}
           handleSubmit={() => setScreenStepper(3)}/>}
     </>
