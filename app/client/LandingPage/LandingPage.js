@@ -39,8 +39,10 @@ import EVerifyIncome from "../EVerifyIncome/EVerifyIncome";
 import { DeviceUUID } from 'device-uuid';
 import { useRouter } from "next/navigation";
 import moment from "moment";
-
+import { DatePicker } from "@mui/lab";
 import { TextField } from "@mui/material";
+import CommonDatepicker from "@/app/CommonDatepicker";
+import dayjs from 'dayjs';
 
 export const ErrorComponent = ({ errorTitle }) => {
   return <p className="text-[12px] text-[#FF000F] font-no">{errorTitle}</p>;
@@ -61,9 +63,10 @@ const LandingPage = ({ ipAddress }) => {
     lastName: "",
     aadharAddress: "Yes",
     occupationType: "Salaried",
-    date_of_birth: ""
+    date_of_birth: null
 
   });
+  console.log("userInputData", userInputData);
   const date = userInputData?.date_of_birth;
   const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const [time, setTime] = useState(60);
@@ -137,12 +140,19 @@ const LandingPage = ({ ipAddress }) => {
   //     }
   //   }
   // };
+  const formatDate = (date) => {
+    return date ? dayjs(date).format("DD-MM-YYYY") : "";
+  };
+  
   const handleDateChange = (event) => {
+    console.log("event", event);
+    const dayjsDate = dayjs(event.$d);
     setUserInputData({
-        ...userInputData,
-        date_of_birth: event.target.value, // Assuming you're passing the new date value from the TextField
+      ...userInputData,
+      date_of_birth: dayjsDate.isValid() ? dayjsDate : "",
     });
-};
+  };
+
   const formattedDateOfBirth = userInputData?.date_of_birth
     ? new Date(userInputData?.date_of_birth).toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -388,8 +398,8 @@ const LandingPage = ({ ipAddress }) => {
       !userInputData?.mobile ||
       userInputData?.mobile?.length !== 10 ||
       !userInputData?.pan_no ||
-      userInputData?.pan_no?.length !== 10 ||
-      !userInputData?.date_of_birth;
+      userInputData?.pan_no?.length !== 10
+    !userInputData?.date_of_birth;
     return (
       <>
         <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[10px]">
@@ -532,12 +542,12 @@ const LandingPage = ({ ipAddress }) => {
                 />
               </div>
               <div className="datepicker">
-                <label
+                {/* <label
                   className="text-[13px] font-normal text-[#212529] "
                   htmlFor="date"
                 >
                   {staticLabels?.dob}
-                </label>
+                </label> */}
                 <div className="">
                   {/* <DatePicker
                     type="text"
@@ -561,9 +571,9 @@ const LandingPage = ({ ipAddress }) => {
                     todayButton={"Today"}
                     showIcon
                   /> */}
- 
 
-                  <TextField
+
+                  {/* <TextField
                     id="dob"
                     // label="dob"
                     variant="outlined"
@@ -575,18 +585,23 @@ const LandingPage = ({ ipAddress }) => {
                     inputProps={{
                       min: userInputData?.date_of_birth,
                     }}
-                    className={`shadow  rounded-lg w-full  py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+                    className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
                       ? ""
                       : "bg-white text-[#212529]"
-                      }`}
-                    value={userInputData?.date_of_birth || ""} 
+                      } bg-white `}
+                    value={userInputData?.date_of_birth || ""}
                     onChange={(date) => {
                       handleDateChange(date);
                     }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
+            <CommonDatepicker variant="outlined" value={userInputData?.date_of_birth}  onChange={handleDateChange} className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+              ? ""
+              : "bg-white text-[#212529]"
+              } bg-white `} />
+
             <div className="text-black text-[13px] font-semibold font-['Faktum'] leading-[24px] mb-[18px] md:mt-[20px]">
               I provide my express consent to HDFC Bank Limited ("Bank") and
               BankSathi for collecting, disclosing, sharing, displaying and

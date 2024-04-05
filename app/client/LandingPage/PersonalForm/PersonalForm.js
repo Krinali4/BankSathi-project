@@ -8,6 +8,8 @@ import PanInput from "../../Common/CommonInputComponents/PanInput";
 import FullName from "../../Common/CommonInputComponents/FullName";
 import { dateFormatRegex, getName } from "@/commonUtils/util";
 import moment from "moment";
+import { TextField } from "@mui/material";
+import dayjs from "dayjs";
 
 const PersonalForm = ({
   userInputData,
@@ -37,7 +39,7 @@ const PersonalForm = ({
   const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const name = getName(userInputData);
 
-  const disable = !hasGender || !dob || !hasNumber || !name;
+  const disable = !hasGender || !hasNumber || !name;
 
   const handlePersonalSubmit = () => {
     setDetailsFormStepper(1);
@@ -54,6 +56,19 @@ const PersonalForm = ({
     }
   };
 
+  const data = localStorage.getItem("customerData")
+  const dateData = JSON.parse(data)
+  console.log("data", dateData);
+
+  const formattedDateOfBirth = dateData?.date_of_birth
+    ? new Date(dateData?.date_of_birth).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
+    : "";
+    console.log("formattedDateOfBirth", formattedDateOfBirth);
+
   useEffect(() => {
     if (male || female || others) {
       if (hasNumber && dob && name !== "") {
@@ -61,6 +76,13 @@ const PersonalForm = ({
       }
     }
   }, [etbCustomerData, userInputData]);
+  const formatDate = (date) => {
+    return date ? dayjs(date).format("DD-MM-YYYY") : "";
+  };
+  const formattedDate = userInputData?.date_of_birth
+    ? formatDate(userInputData.date_of_birth.toDate())
+    : "";
+
   return (
     <>
       <div className="mb-4">
@@ -83,9 +105,8 @@ const PersonalForm = ({
           <div>
             <label
               htmlFor="gender"
-              className={`form-radio flex gap-2 items-center ${
-                male ? "text-[#212529]" : "text-[#808080]"
-              }`}
+              className={`form-radio flex gap-2 items-center ${male ? "text-[#212529]" : "text-[#808080]"
+                }`}
             >
               <input
                 type="radio"
@@ -106,9 +127,8 @@ const PersonalForm = ({
           <div>
             <label
               htmlFor="gender"
-              className={`form-radio flex gap-2 items-center  ${
-                female ? "text-[#212529]" : "text-[#808080]"
-              }`}
+              className={`form-radio flex gap-2 items-center  ${female ? "text-[#212529]" : "text-[#808080]"
+                }`}
             >
               <input
                 type="radio"
@@ -129,9 +149,8 @@ const PersonalForm = ({
           <div>
             <label
               htmlFor="gender"
-              className={`form-radio flex gap-2 items-center ${
-                others ? "text-[#212529]" : "text-[#808080]"
-              } `}
+              className={`form-radio flex gap-2 items-center ${others ? "text-[#212529]" : "text-[#808080]"
+                } `}
             >
               <input
                 type="radio"
@@ -168,7 +187,7 @@ const PersonalForm = ({
             name="dob"
             id="dob"
             className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${
-              dob
+              formattedDateOfBirth
                 ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
                 : "bg-white text-[#212529]"
             }`}
@@ -176,16 +195,41 @@ const PersonalForm = ({
             onChange={(date) => {
               handleDateChange(date);
             }}
-            // disabled={!!dob}
+            // disabled={formattedDateOfBirth}
+            // disabled={disabled}
             maxDate={startDate}
-            value={dob}
+            value={formattedDateOfBirth}
             required
             todayButton={"Today"}
             showIcon
           />
+
+
+          {/* <TextField
+            id="dob"
+            // label="dob"
+            variant="outlined"
+            // fullWidth
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            disabled
+            inputProps={{
+              min: formattedDateOfBirth,
+            }}
+            className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+              ? ""
+              : "bg-white text-[#212529]"
+              } bg-white `}
+            value={formattedDateOfBirth}
+            onChange={(date) => {
+              handleDateChange(date);
+            }}
+          /> */}
         </div>
       </div>
-      <div className="">
+      <div className="mt-5">
         <CommonEmailInput
           value={etbCustomerData?.V_D_CUST_EMAIL_ADD}
           handleChange={handleChange}
@@ -200,11 +244,10 @@ const PersonalForm = ({
           {staticLabels?.mobileNumber}
         </label>
         <div
-          className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] flex items-center focus:outline-none focus:shadow-outline ${
-            hasNumber
-              ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
-              : "bg-white text-[#212529]"
-          }`}
+          className={`shadow border rounded-lg w-full py-4 px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] flex items-center focus:outline-none focus:shadow-outline ${hasNumber
+            ? "border-[#C2CACF] cursor-not-allowed bg-[#EFEFEF] text-[#8D9CA5]"
+            : "bg-white text-[#212529]"
+            }`}
         >
           <p className="text-[12px]">+91-</p>
           <input

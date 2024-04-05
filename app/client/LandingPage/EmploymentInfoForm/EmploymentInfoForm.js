@@ -26,7 +26,7 @@ const EmploymentInfoForm = ({
   setLoginStepper,
 }) => {
   const router = useRouter();
-
+console.log(userInputData,"userInputDatauserInputData");
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
@@ -42,7 +42,7 @@ const EmploymentInfoForm = ({
 
   const employmentDisable = !incomeValue || !department;
   // const token = localStorage.getItem("token") ;
-  const token = typeof window !== "undefined" && localStorage.getItem("token");
+  const token =  localStorage.getItem("token");
   console.log(token,"tokentoken");
 
   const [showLoaderModal, setShowLoaderModal] = useState(false);
@@ -55,7 +55,7 @@ const EmploymentInfoForm = ({
       e_ref_num: String(id),
       customer_id: etbCustomerData?.CUSTOMER_ID || "",
       device_id: deviceId,
-      jwt_token: tokenValue,
+      jwt_token: token,
     };
     axios
       .post(enpoint, params, { header: headers })
@@ -65,9 +65,9 @@ const EmploymentInfoForm = ({
           res?.data?.data?.executeIPARequestResponse?.executeIPARequestReturn;
         const ipaRes = resObj?.APS_IPA_RESULT;
         console.log(res?.date?.message, "resresresresres");
-        const filler1 = resObj?.FILLER1; // OR ["HDFCREG", "HDFCREGB"]; // to use - dynamic:  resObj?.FILLER1
-        const filler6 = resObj?.FILLER6; // OR "resObj?.FILLER6"; // to use - dynamic:  resObj?.FILLER6 which will have array of credit limits
-
+        const filler1 = resObj?.FILLER1;
+        const filler6 = resObj?.FILLER6;
+            console.log(res,"resObjresObj");
         if (typeof window !== "undefined") {
           const objToStore = { productIds: filler1, creditLimits: filler6 };
           localStorage.setItem("productsInfo", JSON.stringify(objToStore));
@@ -88,8 +88,10 @@ const EmploymentInfoForm = ({
         console.log("error in api interface api", error);
       });
   };
-  const formattedDateOfBirth = userInputData?.dob
-    ? userInputData?.dob.toLocaleDateString("en-GB", {
+  console.log(userInputData?.dob,"userInputData?.dob")
+
+    const formattedDateOfBirth = userInputData?.date_of_birth
+    ? new Date(userInputData?.date_of_birth).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -157,8 +159,9 @@ const EmploymentInfoForm = ({
           response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_E_REF_NUM
         );
+       
         // CALL IN PRINCIPLE INTERFACE API
-        inPrincipleApprovalApi(epf, applicationRef, token);
+        inPrincipleApprovalApi(epf, applicationRef);
       })
       .catch((error) => {
         setShowLoader(false);
