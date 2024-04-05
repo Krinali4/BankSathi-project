@@ -38,9 +38,9 @@ import IncomeVerification from "../IncomeVerification/IncomeVerification";
 import EVerifyIncome from "../EVerifyIncome/EVerifyIncome";
 import { DeviceUUID } from 'device-uuid';
 import { useRouter } from "next/navigation";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+
+import { TextField } from "@mui/material";
 
 export const ErrorComponent = ({ errorTitle }) => {
   return <p className="text-[12px] text-[#FF000F] font-no">{errorTitle}</p>;
@@ -137,15 +137,14 @@ const LandingPage = ({ ipAddress }) => {
   //     }
   //   }
   // };
-  const handleDateChange = (date) => {
-    // Update the date_of_birth field with the selected date
+  const handleDateChange = (event) => {
     setUserInputData({
-      ...userInputData,
-      date_of_birth: date
+        ...userInputData,
+        date_of_birth: event.target.value, // Assuming you're passing the new date value from the TextField
     });
-  };
+};
   const formattedDateOfBirth = userInputData?.date_of_birth
-    ? userInputData.date_of_birth.toLocaleDateString("en-GB", {
+    ? new Date(userInputData?.date_of_birth).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -172,12 +171,13 @@ const LandingPage = ({ ipAddress }) => {
         setShowLoader(false);
         // CHECK ON the basis of responses
         if (response?.data?.data?.OTPSEND == true) {
-          toast.success(apiMessages?.otpsentsuccessfully);
+          toast.success(response?.data?.message);
           setTime(60);
           setLoginStepper(1);
         }
-        if (response?.data?.data === "OTP not sent")
-          toast.error("Something Went Wrong!");
+        // toast.error(response?.data?.message);
+        if (response?.data?.message === "failed")
+          toast.error(response?.data?.message);
         if (response?.data?.data?.message === responses?.nameMatchFail) {
           setShowPanNotMatchModal(true);
         }
@@ -185,7 +185,7 @@ const LandingPage = ({ ipAddress }) => {
       .catch((error) => {
         console.log("error log IN COMMON INITIATE API", error);
         setShowLoader(false);
-        toast.error(apiMessages?.internalServerError);
+        toast.error(response?.data?.message);
       });
   };
   // ------------------------------------------ GENERATE OTP CALL ----------------------------------//
@@ -247,7 +247,7 @@ const LandingPage = ({ ipAddress }) => {
       .catch((error) => {
         console.log("error log IN EXECUTE DEDUPE API", error);
         setShowLoader(false);
-        toast.error(apiMessages?.internalServerError);
+        toast.error(response?.data?.message);
         // add other condition
       });
   };
@@ -283,7 +283,7 @@ const LandingPage = ({ ipAddress }) => {
         }
         setShowLoader(false);
         setTime(0);
-        toast.success(apiMessages?.verifyotp);
+        toast.success(response?.data?.message);
         if (
           response?.data?.data?.FintechDemographicDetailsResponse
             ?.CIF_RespDesc === "No Data Found"
@@ -539,7 +539,7 @@ const LandingPage = ({ ipAddress }) => {
                   {staticLabels?.dob}
                 </label>
                 <div className="">
-                  <DatePicker
+                  {/* <DatePicker
                     type="text"
                     showYearDropdown
                     dropdownMode="select"
@@ -548,8 +548,8 @@ const LandingPage = ({ ipAddress }) => {
                     name="dob"
                     id="dob"
                     className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
-                        ? ""
-                        : "bg-white text-[#212529]"
+                      ? ""
+                      : "bg-white text-[#212529]"
                       }`}
                     selected={userInputData?.date_of_birth} // Enable selected date
                     onChange={(date) => {
@@ -560,6 +560,29 @@ const LandingPage = ({ ipAddress }) => {
                     required
                     todayButton={"Today"}
                     showIcon
+                  /> */}
+ 
+
+                  <TextField
+                    id="dob"
+                    // label="dob"
+                    variant="outlined"
+                    // fullWidth
+                    type="date"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      min: userInputData?.date_of_birth,
+                    }}
+                    className={`shadow  rounded-lg w-full  py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+                      ? ""
+                      : "bg-white text-[#212529]"
+                      }`}
+                    value={userInputData?.date_of_birth || ""} 
+                    onChange={(date) => {
+                      handleDateChange(date);
+                    }}
                   />
                 </div>
               </div>
@@ -591,8 +614,8 @@ const LandingPage = ({ ipAddress }) => {
                 Send OTP
               </button>
             </div>
-          </form>
-        </div>
+          </form >
+        </div >
       </>
     );
   };

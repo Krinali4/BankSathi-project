@@ -43,11 +43,11 @@ const EmploymentInfoForm = ({
   const employmentDisable = !incomeValue || !department;
   // const token = localStorage.getItem("token") ;
   const token = typeof window !== "undefined" && localStorage.getItem("token");
-console.log(token,"tokentoken");
+  console.log(token,"tokentoken");
 
   const [showLoaderModal, setShowLoaderModal] = useState(false);
 
-  const inPrincipleApprovalApi = (id, refNo) => {
+  const inPrincipleApprovalApi = (id, refNo, tokenValue) => {
     setShowLoaderModal(true);
     const enpoint = BASE_URL + USERINFO?.inPrincipleApproval;
     const params = {
@@ -55,7 +55,7 @@ console.log(token,"tokentoken");
       e_ref_num: String(id),
       customer_id: etbCustomerData?.CUSTOMER_ID || "",
       device_id: deviceId,
-      jwt_token: token,
+      jwt_token: tokenValue,
     };
     axios
       .post(enpoint, params, { header: headers })
@@ -64,7 +64,7 @@ console.log(token,"tokentoken");
         const resObj =
           res?.data?.data?.executeIPARequestResponse?.executeIPARequestReturn;
         const ipaRes = resObj?.APS_IPA_RESULT;
-console.log(res?.date?.message,"resresresresres");
+        console.log(res?.date?.message, "resresresresres");
         const filler1 = resObj?.FILLER1; // OR ["HDFCREG", "HDFCREGB"]; // to use - dynamic:  resObj?.FILLER1
         const filler6 = resObj?.FILLER6; // OR "resObj?.FILLER6"; // to use - dynamic:  resObj?.FILLER6 which will have array of credit limits
 
@@ -89,12 +89,12 @@ console.log(res?.date?.message,"resresresresres");
       });
   };
   const formattedDateOfBirth = userInputData?.dob
-  ? userInputData?.dob.toLocaleDateString("en-GB", {
+    ? userInputData?.dob.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     })
-  : "";
+    : "";
   // EXECUTE INTERFACE API CALL
   const handleSubmitForm = async () => {
     const name = getName(userInputData);
@@ -113,7 +113,7 @@ console.log(res?.date?.message,"resresresresres");
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
         userInputData?.address3,
-      city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city || "",
+      city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city || "surat",
       mobile_no: userInputData?.mobile,
       dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || formattedDateOfBirth || "",
       name: name,
@@ -134,7 +134,7 @@ console.log(res?.date?.message,"resresresresres");
       pan_name_match_flag: "",
       pan_dob_match_flag: ""
     };
-    console.log(etbCustomerData,userInputData,"userInputDatauserInputData");
+    console.log(etbCustomerData, userInputData, "userInputDatauserInputData");
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
         headers: headers,
@@ -148,7 +148,7 @@ console.log(res?.date?.message,"resresresresres");
           response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_APPL_REF_NUM;
         const token = response?.data?.data?.token;
-        console.log( response?.data,"response?.data");
+        console.log(response?.data, "response?.data");
         setApplicationRefNo(
           response?.data?.data?.executeInterfaceRequestResponse
             ?.executeInterfaceRequestReturn?.APS_APPL_REF_NUM
