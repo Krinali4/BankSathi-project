@@ -86,7 +86,16 @@ body {
   background-color: #fff !important;
   border: 5px solid #49d49d !important;
 }
-.datepicker .react-datepicker-wrapper {
+.datepicker .css-5rcoci-MuiStack-root{
+  width: 100%;
+}
+.datepicker .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 49px;
+  overflow-y: hidden;
+  
+}
+
+.datepicker .react-datepicker-wrapper { 
   width: 100%;
 }
 .datepicker .react-datepicker__input-container {

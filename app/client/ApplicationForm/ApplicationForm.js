@@ -29,6 +29,7 @@ import toast from "react-hot-toast";
 import Loader from "../Common/Loader/Loader";
 import VkyConsentScreen from "../VkyConsentScreen/VkyConsentScreen";
 import LoginOptions from "../LoginOptions/LoginOptions";
+import { useRouter } from "next/navigation";
 
 const ApplicationForm = ({ ipAddress }) => {
   const headers = {
@@ -185,6 +186,7 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
     year: "numeric",
   })
   : "";
+  const router = useRouter()
   const newPincode = pincode !== undefined ? pincode.toString() : '';
   const handlSubmitClick = async () => {
     setShowLoader(true);
@@ -232,7 +234,8 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
       .then((response) => {
         console.log(response,"responseresponse");
         setShowLoader(false);
-        setScreenStepper(1);
+        // setScreenStepper(1);
+        router.push("/kycMethodPage")
       })
       .catch((error) => {
         setShowLoader(false);

@@ -9,7 +9,6 @@ import { BASE_URL, USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
 import { getName, removeSpecialCharacters } from "@/commonUtils/util";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import InfoModal from "../../Common/Modal/InfoModal";
 
 const EmploymentInfoForm = ({
   userInputData,
@@ -354,8 +353,6 @@ const EmploymentInfoForm = ({
             handleButtonClick={() => setDetailsFormStepper(4)}
           />
         )}
-
-
       </div>
     </>
   );

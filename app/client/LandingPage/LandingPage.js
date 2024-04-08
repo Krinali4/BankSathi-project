@@ -283,7 +283,7 @@ console.log("userInputData", userInputData);
           response?.data?.data?.FintechDemographicDetailsResponse
             ?.FintechDemographicDetails?.[0]?.CIFResponse;
         setEtbCustomerData(etbRes);
-        console.log(etbRes, "responseresponseresponseresponse");
+        console.log(response, "responseresponseresponseresponse");
         if (typeof window !== "undefined") {
           if (etbRes)
             localStorage.setItem("etbCustomerData", JSON.stringify(etbRes));
@@ -551,14 +551,13 @@ console.log("userInputData", userInputData);
                   loginStepper={loginStepper}
                 />
               </div>
-              <div className="datepicker">
+              <div className="datepicker w-full">
                 {/* <label
                   className="text-[13px] font-normal text-[#212529] "
                   htmlFor="date"
                 >
                   {staticLabels?.dob}
                 </label> */}
-                <div className="">
             
 
                   {/* <TextField
@@ -582,13 +581,13 @@ console.log("userInputData", userInputData);
                       handleDateChange(date);
                     }}
                   /> */}
-                </div>
-              </div>
-            </div>
-            <CommonDatepicker variant="outlined"  value={userInputData?.date_of_birth}  onChange={handleDateChange} className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+                  <CommonDatepicker variant="outlined"  value={userInputData?.date_of_birth}  onChange={handleDateChange} className={`shadow rounded-lg !w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
               ? ""
               : "bg-white text-[#212529]"
               } bg-white `} />
+              </div>
+            </div>
+           
 
             <div className="text-black text-[13px] font-semibold font-['Faktum'] leading-[24px] mb-[18px] md:mt-[20px]">
               I provide my express consent to HDFC Bank Limited ("Bank") and
@@ -843,29 +842,28 @@ console.log("userInputData", userInputData);
       </div>
       <div className="px-2">
         {(showCongratScreen || rejectionScreen) && (
-          <>
-          {/* additionalInfo() */}
-          <InfoModal
-            data={{
-              title1: showCongratScreen
-                ? "Congratulations Ameet!"
-                : "Sorry Your Application Got Rejected",
-              title2: showCongratScreen
-                ? "Your credit card application is in process"
-                : "",
-              imageSrc: showCongratScreen
-                ? "/assets/green-tick.svg"
-                : "/assets/rejection-badge.svg",
-              applicationRefNo: showCongratScreen
-                ? "24A25D27654030W1"
-                : "24A25D27654030W1",
-              height: showCongratScreen ? 64 : 73,
-              width: showCongratScreen ? 80 : 73,
-              date: showCongratScreen ? "12-02-2024" : "12-02-2024",
-              buttonTitle: "Thank You",
-            }}
-          />
-          </>
+          <></>
+          // additionalInfo()
+          // <InfoModal
+            //   data={{
+              //     title1: showCongratScreen
+                //       ? "Congratulations Ameet!"
+                //       : "Sorry Your Application Got Rejected",
+              //     title2: showCongratScreen
+                //       ? "Your credit card application is in process"
+                //       : "",
+              //     imageSrc: showCongratScreen
+                //       ? "/assets/green-tick.svg"
+                //       : "/assets/rejection-badge.svg",
+              //     applicationRefNo: showCongratScreen
+                //       ? "24A25D27654030W1"
+                //       : "24A25D27654030W1",
+              //     height: showCongratScreen ? 64 : 73,
+              //     width: showCongratScreen ? 80 : 73,
+              //     date: showCongratScreen ? "12-02-2024" : "12-02-2024",
+              //     buttonTitle: "Thank You",
+            //   }}
+          // />
         )}
       </div>
       {/* {additionalDetailsStepper === 0 && additionalInfo()} */}
