@@ -66,7 +66,7 @@ const LandingPage = ({ ipAddress }) => {
     date_of_birth: null
 
   });
-  console.log("userInputData", userInputData);
+console.log("userInputData", userInputData);
   const date = userInputData?.date_of_birth;
   const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const [time, setTime] = useState(60);
@@ -145,7 +145,6 @@ const LandingPage = ({ ipAddress }) => {
   };
   
   const handleDateChange = (event) => {
-    console.log("event", event);
     const dayjsDate = dayjs(event.$d);
     setUserInputData({
       ...userInputData,
@@ -284,7 +283,7 @@ const LandingPage = ({ ipAddress }) => {
           response?.data?.data?.FintechDemographicDetailsResponse
             ?.FintechDemographicDetails?.[0]?.CIFResponse;
         setEtbCustomerData(etbRes);
-        console.log(response, "responseresponseresponseresponse");
+        console.log(etbRes, "responseresponseresponseresponse");
         if (typeof window !== "undefined") {
           if (etbRes)
             localStorage.setItem("etbCustomerData", JSON.stringify(etbRes));
@@ -382,7 +381,17 @@ const LandingPage = ({ ipAddress }) => {
       </div>
     );
   };
-
+  const formatDates = (date,event) => {
+ console.log(event,"eventevent");
+    if (!date || !(date instanceof Date)) return ''; // Check if date is provided and is a valid Date object
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  
+  // Format the date of birth
+  const formattedDateOfBirths = formatDates(userInputData?.date_of_birth);
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -399,7 +408,8 @@ const LandingPage = ({ ipAddress }) => {
       userInputData?.mobile?.length !== 10 ||
       !userInputData?.pan_no ||
       userInputData?.pan_no?.length !== 10
-    !userInputData?.date_of_birth;
+      // !userInputData?.date_of_birth;
+      !formattedDateOfBirths;
     return (
       <>
         <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[10px]">
@@ -549,29 +559,7 @@ const LandingPage = ({ ipAddress }) => {
                   {staticLabels?.dob}
                 </label> */}
                 <div className="">
-                  {/* <DatePicker
-                    type="text"
-                    showYearDropdown
-                    dropdownMode="select"
-                    dateFormat="dd-MM-yyyy"
-                    placeholderText="DD-MM-YYYY"
-                    name="dob"
-                    id="dob"
-                    className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[#212529] text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
-                      ? ""
-                      : "bg-white text-[#212529]"
-                      }`}
-                    selected={userInputData?.date_of_birth} // Enable selected date
-                    onChange={(date) => {
-                      handleDateChange(date);
-                    }}
-                    // disabled={!!userInputData?.date_of_birth} // Enable disabled logic
-                    maxDate={startDate}
-                    required
-                    todayButton={"Today"}
-                    showIcon
-                  /> */}
-
+            
 
                   {/* <TextField
                     id="dob"
@@ -597,7 +585,7 @@ const LandingPage = ({ ipAddress }) => {
                 </div>
               </div>
             </div>
-            <CommonDatepicker variant="outlined" value={userInputData?.date_of_birth}  onChange={handleDateChange} className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+            <CommonDatepicker variant="outlined"  value={userInputData?.date_of_birth}  onChange={handleDateChange} className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
               ? ""
               : "bg-white text-[#212529]"
               } bg-white `} />
@@ -855,28 +843,29 @@ const LandingPage = ({ ipAddress }) => {
       </div>
       <div className="px-2">
         {(showCongratScreen || rejectionScreen) && (
-          <></>
-          // additionalInfo()
-          // <InfoModal
-          //   data={{
-          //     title1: showCongratScreen
-          //       ? "Congratulations Ameet!"
-          //       : "Sorry Your Application Got Rejected",
-          //     title2: showCongratScreen
-          //       ? "Your credit card application is in process"
-          //       : "",
-          //     imageSrc: showCongratScreen
-          //       ? "/assets/green-tick.svg"
-          //       : "/assets/rejection-badge.svg",
-          //     applicationRefNo: showCongratScreen
-          //       ? "24A25D27654030W1"
-          //       : "24A25D27654030W1",
-          //     height: showCongratScreen ? 64 : 73,
-          //     width: showCongratScreen ? 80 : 73,
-          //     date: showCongratScreen ? "12-02-2024" : "12-02-2024",
-          //     buttonTitle: "Thank You",
-          //   }}
-          // />
+          <>
+          {/* additionalInfo() */}
+          <InfoModal
+            data={{
+              title1: showCongratScreen
+                ? "Congratulations Ameet!"
+                : "Sorry Your Application Got Rejected",
+              title2: showCongratScreen
+                ? "Your credit card application is in process"
+                : "",
+              imageSrc: showCongratScreen
+                ? "/assets/green-tick.svg"
+                : "/assets/rejection-badge.svg",
+              applicationRefNo: showCongratScreen
+                ? "24A25D27654030W1"
+                : "24A25D27654030W1",
+              height: showCongratScreen ? 64 : 73,
+              width: showCongratScreen ? 80 : 73,
+              date: showCongratScreen ? "12-02-2024" : "12-02-2024",
+              buttonTitle: "Thank You",
+            }}
+          />
+          </>
         )}
       </div>
       {/* {additionalDetailsStepper === 0 && additionalInfo()} */}

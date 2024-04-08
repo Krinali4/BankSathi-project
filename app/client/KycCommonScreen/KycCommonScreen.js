@@ -6,11 +6,12 @@ import CommonInputLabel from "../Common/CommonInputComponents/CommonInputLabel";
 import { consentMessages } from "@/commonUtils/StaticContent/consentMessages";
 import CommonCheckAgree from "../Common/CommonCheckAgree/CommonCheckAgree";
 import CommonNextButton from "../Common/Button/Button";
-import { USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
+import { BASE_URL, USERINFO } from "@/commonUtils/ApiEndPoints/ApiEndPoints";
 import {
   getCookieValue,
 
 } from "@/commonUtils/util";
+import axios from "axios";
 const KycCommonScreen = ({ data, handleSubmit }) => {
   const [aadharNumber, setAadharNumber] = useState("");
   const [error, setError] = useState("");

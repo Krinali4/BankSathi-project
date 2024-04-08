@@ -64,7 +64,7 @@ const ApplicationForm = ({ ipAddress }) => {
   const state = customerData?.office_address_state || stateCity?.state;
   const city = customerData?.office_address_city || stateCity?.city;
   const pincode = customerData?.office_address_pincode;
-
+console.log(customerData?.office_address_pincode,'customerData?.office_address_pincode')
   const buttonDisable =
     !address1 || !address2 || !address3 || !state || !city || !pinCode;
 
@@ -175,18 +175,20 @@ const ApplicationForm = ({ ipAddress }) => {
       </div>
     );
   };
-  // const formattedDateOfBirth = UserPan?.dob
-  // ? UserPan?.dob.toLocaleDateString("en-GB", {
-  //     day: "2-digit",
-  //     month: "2-digit",
-  //     year: "numeric",
-  //   })
-  // : "";
 
+  const UserPan = JSON.parse(localStorage.getItem("customerData"));
+   
+  const formattedDateOfBirth = UserPan?.date_of_birth
+  ? new Date(UserPan?.date_of_birth).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+  : "";
+  const newPincode = pincode !== undefined ? pincode.toString() : '';
   const handlSubmitClick = async () => {
     setShowLoader(true);
-    const UserPan = JSON.parse(localStorage.getItem("customerData"));
-   
+    // const UserPan = JSON.parse(localStorage.getItem("customerData"));
     console.log(UserPan,"UserPanUserPan");
     const params = {
       bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
@@ -204,7 +206,7 @@ const ApplicationForm = ({ ipAddress }) => {
         customerData?.address3 || "",
       city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "",
       mobile_no: customerData?.mobile || UserPan?.mobile || "",
-      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH  || UserPan?.dob || "",
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH  ||formattedDateOfBirth || "",
       name: name || "",
       ip: ipAddress || "",
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email || "",
@@ -218,7 +220,7 @@ const ApplicationForm = ({ ipAddress }) => {
       office_address_line_3: address3,
       office_address_city: city,
       office_address_state: state,
-      office_address_pincode: pincode?.toString(),
+      office_address_pincode: newPincode,
       office_address_email: customerData?.office_email_address,
       pan_name_match_flag: "",
       pan_dob_match_flag: ""
@@ -230,6 +232,7 @@ const ApplicationForm = ({ ipAddress }) => {
       .then((response) => {
         console.log(response,"responseresponse");
         setShowLoader(false);
+        setScreenStepper(1);
       })
       .catch((error) => {
         setShowLoader(false);
@@ -484,7 +487,7 @@ const ApplicationForm = ({ ipAddress }) => {
       {screensStepper === 1 && (
         <KycCommonScreen
           data={{ heading: "START YOUR Digital-KYC", list: ekycList }}
-          // handleSubmit={() => setScreenStepper(2)}
+          handleSubmit={() => setScreenStepper(2)}
         />
       )}
       {screensStepper === 2 && getOtpComp()}
