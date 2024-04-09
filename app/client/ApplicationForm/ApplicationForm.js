@@ -225,21 +225,25 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
       office_address_pincode: newPincode,
       office_address_email: customerData?.office_email_address,
       pan_name_match_flag: "",
-      pan_dob_match_flag: ""
+      pan_dob_match_flag: "",
+      product_code:""
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
         headers: headers,
       })
       .then((response) => {
-        console.log(response,"responseresponse");
-        setShowLoader(false);
-        // setScreenStepper(1);
-        router.push("/kycMethodPage")
+        if(response?.status == 200) {
+          toast.success(response?.data?.message)
+          setShowLoader(false);
+          // setScreenStepper(1);
+          router.push("/kycMethodPage")
+        }
+        
       })
       .catch((error) => {
         setShowLoader(false);
-        toast.error(error?.message || error?.res?.data?.detail);
+        toast.error(response?.data?.message);
       });
   };
 

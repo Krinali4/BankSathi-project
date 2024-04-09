@@ -140,10 +140,8 @@ console.log("userInputData", userInputData);
   //     }
   //   }
   // };
-  const formatDate = (date) => {
-    return date ? dayjs(date).format("DD-MM-YYYY") : "";
-  };
   
+
   const handleDateChange = (event) => {
     const dayjsDate = dayjs(event.$d);
     setUserInputData({
@@ -381,17 +379,6 @@ console.log("userInputData", userInputData);
       </div>
     );
   };
-  const formatDates = (date,event) => {
- console.log(event,"eventevent");
-    if (!date || !(date instanceof Date)) return ''; // Check if date is provided and is a valid Date object
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-  
-  // Format the date of birth
-  const formattedDateOfBirths = formatDates(userInputData?.date_of_birth);
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -407,9 +394,8 @@ console.log("userInputData", userInputData);
       !userInputData?.mobile ||
       userInputData?.mobile?.length !== 10 ||
       !userInputData?.pan_no ||
-      userInputData?.pan_no?.length !== 10
-      // !userInputData?.date_of_birth;
-      !formattedDateOfBirths;
+      userInputData?.pan_no?.length !== 10 ||
+      userInputData?.date_of_birth == null ;
     return (
       <>
         <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[10px]">

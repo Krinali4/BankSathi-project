@@ -16,12 +16,12 @@ const CustomImageButton = ({ src, alt, width, height }) => {
     const token = typeof window !== "undefined" && localStorage.getItem("token");
     const handleSubmitClick = async () => {
         // const datas = typeof window !== "undefined" ? localStorage.getItem("userPanData") : undefined;
-        const UserPan = JSON.parse(typeof window !== "undefined" && localStorage.getItem("userPanData"));
+        const UserPan = JSON.parse(typeof window !== "undefined" && localStorage.getItem("customerData"));
         console.log(UserPan, "UserPanUserPan");
         const params = {
-            pan_no: "AZVFX5739I",
-            product_code: "string",
-            mobile_no: UserPan?.mobile_no || "",
+            pan_no: UserPan?.pan_no || "",
+            product_code: "",
+            mobile_no: UserPan?.mobile || "",
             device_id: deviceId,
             jwt_token: token
         }

@@ -80,8 +80,8 @@ const EmploymentInfoForm = ({
           const hasRejectedProduct = !hasNoProduct && !hasProducts;
         setLoginStepper(4);
         // in response - there will be 3 scenarios - to check on the basis of res data
-        if (ipaRes === "Y" && hasRejectedProduct) setRejectionScreen(true);
-        // router.push("/infomodal")
+        if (ipaRes === "N" && hasRejectedProduct) setRejectionScreen(true);
+        router.push("/infomodal")
         if (ipaRes === "N" && hasProducts)
           router.push("/bankOfBoard/eligible-products");
         if (ipaRes === "N" && hasNoProduct) {
@@ -140,7 +140,8 @@ const EmploymentInfoForm = ({
       office_address_pincode: (etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code)?.toString(),
       office_address_email: '',
       pan_name_match_flag: "",
-      pan_dob_match_flag: ""
+      pan_dob_match_flag: "",
+      product_code:""
     };
     console.log(etbCustomerData, userInputData, "userInputDatauserInputData");
     await axios

@@ -63,9 +63,9 @@ const LoginOptions = () => {
     // };
 
 
-function handleclick() {
-    console.log('first')
-}
+    function handleclick() {
+        console.log('first')
+    }
 
     return (
         <div className="mt-5 container mx-auto px-4 xl:px-12 flex flex-col items-center justify-center" >
@@ -92,11 +92,11 @@ function handleclick() {
                     </div>
                     {/* <div  onClick={handleSubmitClick()}> */}
                     <CustomImageButton
-    src="/assets/right_arrow.svg"
-    alt="arrow"
-    width={24}
-    height={24}
-/>
+                        src="/assets/right_arrow.svg"
+                        alt="arrow"
+                        width={24}
+                        height={24}
+                    />
                     {/* <Image
                         src="/assets/right_arrow.svg"
                         alt="arrow"
@@ -122,7 +122,7 @@ function handleclick() {
                         width={48}
                     />
                     <div className="flex flex-col items-start justify-center">
-                        <div  className="text-black text-[15px] font-semibold font-['Faktum']">
+                        <div className="text-black text-[15px] font-semibold font-['Faktum']">
                             Debit / ATM Card
                         </div>
                         <div className="text-black text-xs font-normal font-['Poppins']">
