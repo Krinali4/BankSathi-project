@@ -189,7 +189,7 @@ const EmploymentInfoForm = ({
           <div>
             <label
               htmlFor="salaried"
-              className={`form-radio flex gap-2 items-center ${isSalaried ? "text-[#212529]" : "text-[#808080]"
+              className={`text-[14px] form-radio flex gap-2 items-center ${isSalaried ? "text-[#212529]" : "text-[#808080]"
                 }`}
             >
               <input
@@ -207,7 +207,7 @@ const EmploymentInfoForm = ({
           <div>
             <label
               htmlFor="self employed"
-              className={`form-radio flex gap-2 items-center  ${selfEmployed ? "text-[#212529]" : "text-[#808080]"
+              className={`text-[14px] form-radio flex gap-2 items-center  ${selfEmployed ? "text-[#212529]" : "text-[#808080]"
                 }`}
             >
               <input

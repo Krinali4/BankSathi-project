@@ -12,8 +12,8 @@ export const USERINFO = {
   executeInterface: "api/v1/hdfc/execute_interface",
   inPrincipleApproval: "api/v1/hdfc/in_principle_approval",
   productDetailsApi: "api/v1/hdfc/get_product_details_on_hdfc_code",
-  iniate_ekyc :"/api/v1/hdfc/iniate_ekyc",
-  fetchAuthcodeIdcom : "/api/v1/hdfc/fetch_auth_code_idcom"
+  iniate_ekyc :"api/v1/hdfc/iniate_ekyc",
+  fetchAuthcodeIdcom : "api/v1/hdfc/fetch_auth_code_idcom"
 };
 export const BS_COMMON = {
   panVerify: "api/v1/common/pan_verify",

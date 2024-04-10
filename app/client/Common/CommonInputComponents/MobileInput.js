@@ -62,7 +62,7 @@ const MobileInput = ({
           name="mobile"
           id="mobile"
           pattern="[0-9]*"
-          className="text-[#212529] border-none text-[12px] outline-none "
+          className="text-[#212529] border-none text-[12px] outline-none w-full"
           placeholder="Enter Your Number"
           onChange={(e) => handleChangeNumber(e)}
           value={mobile || userInputData?.mobile}

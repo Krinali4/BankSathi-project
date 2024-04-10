@@ -79,7 +79,7 @@ const EVerifyIncome = ({
       <div className="mt-4">
         <CommonInputLabel labelTitle={staticLabels?.customerId} />
         <div
-          className={`shadow border rounded-lg w-[300px] h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
+          className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
         >
           <input
             id="customer_id"
@@ -98,7 +98,7 @@ const EVerifyIncome = ({
         <div className="mt-4">
           <CommonInputLabel labelTitle={staticLabels?.password} />
           <div
-            className={`shadow border rounded-lg w-[300px] h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
+            className={`shadow border rounded-lg w-full h-[50px] py-[14px] px-4 text-[12px] leading-tight border-[#C2CACF] focus:outline-none focus:shadow-outline bg-[#F4F8FB] text-[#212529] first-letter`}
           >
             <input
               id="password"
@@ -171,7 +171,7 @@ const EVerifyIncome = ({
         {!isBank && (
           <>
             <div
-              className="md:w-[343px] w-full h-auto mt-[20px] bg-white rounded-lg border border-neutral-300 flex items-center gap-[20px] justify-center px-[15px] py-[20px]"
+              className="md:w-[343px] w-full  h-auto mt-[20px] bg-white rounded-lg border border-neutral-300 flex items-center gap-[20px] justify-center px-[15px] py-[30px] relative"
               onClick={() => setSelectedIncome(account)}
             >
               <Image
@@ -196,16 +196,16 @@ const EVerifyIncome = ({
                   What is an account aggregator ?
                 </div>
               </div>
-            </div>
             <Image
               src="/assets/recommended.svg"
               height={30}
               width={118}
               alt="recommended"
-              className="relative md:left-[112px]  md:bottom-[105px] bottom-[125px] left-[85px]"
+              className="absolute right-0 top-0"
             />
+            </div>
             <div
-              className="md:w-[343px] w-full h-auto bg-white rounded-lg border border-neutral-300 flex items-center gap-[10px] justify-center px-[15px] py-[20px]"
+              className="mt-[26px] md:w-[343px] w-full h-auto bg-white rounded-lg border border-neutral-300 flex items-center gap-[10px] justify-center px-[15px] py-[20px]"
               onClick={() => setSelectedIncome(netBanking)}
             >
               <Image

@@ -68,14 +68,15 @@ const LoginOptions = () => {
     }
 
     return (
-        <div className="mt-5 container mx-auto px-4 xl:px-12 flex flex-col items-center justify-center" >
-            <div className="w-full sm:w-[385px] text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] max-sm:text-start text-start">
+        <div className=" container mx-auto px-4 xl:px-12 flex flex-col items-center justify-center" >
+            <div className="mt-8">
+            <div className="w-full  text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] max-sm:text-start text-start">
                 Login
                 <br className="" />
                 to HDFC Banks
             </div>
-            <div className="mt-10">
-                <div className="w-full md:w-[400px] bg-white shadow-lg rounded-xl h-[103px] flex  px-[35px] py-[21px] gap-[18px]">
+              <div className='mt-8'>
+              <div className="w-full  bg-white shadow-lg rounded-xl h-auto flex  px-[35px] py-[21px] gap-[18px]">
                     <Image
                         src="/assets/netbanking.svg"
                         alt="netbanking"
@@ -114,7 +115,7 @@ const LoginOptions = () => {
                     </div>
                     <Image src="/assets/line.svg" width={63} height={1} alt="border" />
                 </div>
-                <div className="w-full md:w-[400px] bg-white shadow-lg rounded-xl h-[103px] flex  px-[35px] py-[21px] gap-[18px]">
+                <div className="w-full  bg-white shadow-lg rounded-xl h-auto flex  px-[35px] py-[21px] gap-[18px] mt-3">
                     <Image
                         src="/assets/debit.svg"
                         alt="netbanking"
@@ -137,6 +138,7 @@ const LoginOptions = () => {
                         className="md:ml-10"
                     />
                 </div>
+              </div>
             </div>
         </div>
     );

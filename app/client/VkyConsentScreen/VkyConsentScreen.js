@@ -24,7 +24,7 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
   };
   console.log(data,"datadatatatt");
   return (
-    <div className="container mx-auto md:px-12 px-4 flex flex-col gap-1 items-center justify-center mt-14 h-auto">
+    <div className="container mx-auto md:px-12 px-4 flex flex-col gap-1 items-center justify-center mt-10 h-auto">
       <div className="md:text-center text-start text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] md:w-auto w-full ">
         {/* {data?.heading}  */}
         VKY Consent & Next Steps
@@ -42,7 +42,7 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
           alt="ekyc"
         />
       </div>
-      <div className="min-[375px]:w-[350px] max-[320px]:w-[300px] h-auto mt-[20px] flex flex-col items-center justify-center bg-[#fcfaf9] rounded-2xl p-10 relative bottom-7">
+      <div className="min-[375px]:w-[350px] max-[320px]:w-[300px]   h-auto mt-[20px] flex flex-col items-center justify-center bg-[#fcfaf9] rounded-2xl p-10 relative bottom-7">
         <div className="text-center text-neutral-500 text-base font-semibold font-['Poppins'] leading-tight">
           To complete Your E-KYC Please ensure the followings:
         </div>
@@ -53,7 +53,7 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
           alt="border"
           className="mt-[25px]"
         />
-        <ul class="list-disc mt-[20px] w-[306px] flex flex-col items-start justify-start gap-[20px] md:p-0 p-5">
+        <ul class="list-disc mt-[20px] w-[306px] flex flex-col items-start justify-start gap-[20px] md:px-0 px-5">
           {data?.list?.map((item) => {
             return (
               <li className="text-[#8b8a8a] text-base font-normal font-['Poppins'] leading-tight">
@@ -63,12 +63,12 @@ const VkyConsentScreen = ({ data, handleSubmit }) => {
           })}
           <div className=" mx-5">
      <ul className="text-[#9E9E9E]">
-        <li className="list-disc mt-1">Presence in India</li>
-        <li className="list-disc mt-1">Availability of PAN Card</li>
-        <li className="list-disc mt-1">Video  Call enabled on Device</li>
-        <li className="list-disc mt-1">Enable GPS location on Device</li>
-        <li className="list-disc mt-1">Internet connectivity</li>
-        <li className="list-disc mt-1">Blank paper and pen</li>
+        <li className="list-disc mt-1 text-base	">Presence in India</li>
+        <li className="list-disc mt-1 text-base	">Availability of PAN Card</li>
+        <li className="list-disc mt-1 text-base	">Video  Call enabled on Device</li>
+        <li className="list-disc mt-1 text-base	">Enable GPS location on Device</li>
+        <li className="list-disc mt-1 text-base	">Internet connectivity</li>
+        <li className="list-disc mt-1 text-base	">Blank paper and pen</li>
      </ul>
           </div>
         </ul>

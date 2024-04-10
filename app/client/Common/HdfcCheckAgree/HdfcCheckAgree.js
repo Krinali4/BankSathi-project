@@ -3,9 +3,9 @@ import React from "react";
 const HdfcCheckAgree = ({ setCheckAgree, checkAgree, setTermsModal }) => {
   return (
     <div>
-      <div className="flex items-center mt-[24px] max-sm:mt-0 gap-2">
+      <div className="flex items-start mt-[24px] max-sm:mt-0 gap-2">
         <input
-          className="mr-1  w-4 h-4  max-sm:w-8 max-sm:h-8 text-white accent-[#49D49D] "
+          className="mr-1 mt-[5px]  w-5 h-5 max-md:min-w-4 max-md:min-h-4 max-lg:w-10 max-lg:min-h-10 	 text-white accent-[#49D49D] "
           type="checkbox"
           checked={checkAgree}
           required

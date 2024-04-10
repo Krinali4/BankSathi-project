@@ -18,7 +18,7 @@ const PanInput = ({ setUserInputData, userInputData, loginStepper }) => {
 
   return (
     <>
-      <div>
+      <div className=" max-md:ml-0 max-lg:ml-0">
         <label
           className="text-[13px] font-normal text-[#212529] "
           htmlFor="email"

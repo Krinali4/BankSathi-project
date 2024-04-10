@@ -12,7 +12,9 @@ import {
 
 } from "@/commonUtils/util";
 import axios from "axios";
+import { ekycList } from "@/commonUtils/staticInfos";
 const KycCommonScreen = ({ data, handleSubmit }) => {
+  console.log("🚀 ~ KycCommonScreen ~ data:", ekycList)
   const [aadharNumber, setAadharNumber] = useState("");
   const [error, setError] = useState("");
   const [isAgree, setIsAgree] = useState(true);
@@ -53,7 +55,7 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
   return (
     <div className="container mx-auto md:px-12 px-4 flex flex-col gap-1 items-center justify-center mt-14 h-auto">
       <div className="text-center  text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px] md:w-auto w-full">
-        {data?.heading}
+        {data?.title}
         START YOUR Digital-KYC
       </div>
       <div className="h-[60px] w-[60px] bg-white relative top-[35px] flex items-center justify-center rounded-full p-[10px] z-50">
@@ -77,7 +79,7 @@ const KycCommonScreen = ({ data, handleSubmit }) => {
           className="mt-[25px]"
         />
         <ul class="list-disc mt-[20px] w-[306px] flex flex-col items-start justify-start gap-[20px] md:p-0 p-5">
-          {data?.list?.map((item) => {
+          {ekycList?.map((item) => {
             return (
               <li className="text-[#8b8a8a] text-base font-normal font-['Poppins'] leading-tight">
                 {item?.title}

@@ -66,7 +66,7 @@ const LandingPage = ({ ipAddress }) => {
     date_of_birth: null
 
   });
-console.log("userInputData", userInputData);
+  console.log("userInputData", userInputData);
   const date = userInputData?.date_of_birth;
   const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const [time, setTime] = useState(60);
@@ -140,7 +140,7 @@ console.log("userInputData", userInputData);
   //     }
   //   }
   // };
-  
+
 
   const handleDateChange = (event) => {
     const dayjsDate = dayjs(event.$d);
@@ -395,13 +395,13 @@ console.log("userInputData", userInputData);
       userInputData?.mobile?.length !== 10 ||
       !userInputData?.pan_no ||
       userInputData?.pan_no?.length !== 10 ||
-      userInputData?.date_of_birth == null ;
+      userInputData?.date_of_birth == null;
     return (
       <>
         <div className="text-center text-neutral-800 text-[13px] font-semibold font-['Poppins'] leading-[20.80px] max-sm:mt-[10px]">
           Hey, Please enter your details to login
         </div>
-        <div className="mt-[20px] max-sm:mt-[15px] w-[50vw] sm:w-full mb-[200px] max-sm:w-full">
+        <div className="mt-[20px] max-sm:mt-[15px] w-[50vw] sm:w-full mb-[20px] max-sm:w-full">
           <form method="post" id="hdfcyForm" action="/" onSubmit={handleSubmit}>
             <div className="grid lg:grid-cols-3 grid-cols-1 gap-[20px]">
               <div className="mt-0">
@@ -521,8 +521,9 @@ console.log("userInputData", userInputData);
                 )}
               </div>
             </div>
-            <div className="grid lg:grid-cols-2 grid-cols-1 gap-[20px]">
-              <div className="mt-[20px] max-sm:mt-[20px]">
+            <div className="grid lg:grid-cols-2 grid-cols-1 ">
+             <div>
+             <div className="mt-[20px] max-sm:mt-[20px]">
                 <MobileInput
                   mobile={mobile}
                   setMobile={setMobile}
@@ -530,59 +531,53 @@ console.log("userInputData", userInputData);
                   userInputData={userInputData}
                 />
               </div>
-              <div className="mt-[20px] max-sm:mt-[0px] max-sm:mb-[30px]">
+              <div className="datepicker w-full mt-[10px] ">
+             
+             <CommonDatepicker variant="outlined" value={userInputData?.date_of_birth} onChange={handleDateChange} className={`shadow rounded-lg !w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+               ? ""
+               : "bg-white text-[#212529]"
+               } bg-white `} />
+           </div>
+              
+             </div>
+             <div className="mt-[20px] ml-5 max-md:ml-0 max-lg:ml-0">
                 <PanInput
                   setUserInputData={setUserInputData}
                   userInputData={userInputData}
                   loginStepper={loginStepper}
                 />
               </div>
-              <div className="datepicker w-full">
-                {/* <label
-                  className="text-[13px] font-normal text-[#212529] "
-                  htmlFor="date"
-                >
-                  {staticLabels?.dob}
-                </label> */}
-            
-
-                  {/* <TextField
-                    id="dob"
-                    // label="dob"
-                    variant="outlined"
-                    // fullWidth
-                    type="date"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    inputProps={{
-                      min: userInputData?.date_of_birth,
-                    }}
-                    className={`shadow rounded-lg w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
-                      ? ""
-                      : "bg-white text-[#212529]"
-                      } bg-white `}
-                    value={userInputData?.date_of_birth || ""}
-                    onChange={(date) => {
-                      handleDateChange(date);
-                    }}
-                  /> */}
-                  <CommonDatepicker variant="outlined"  value={userInputData?.date_of_birth}  onChange={handleDateChange} className={`shadow rounded-lg !w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
-              ? ""
-              : "bg-white text-[#212529]"
-              } bg-white `} />
-              </div>
             </div>
-           
 
-            <div className="text-black text-[13px] font-semibold font-['Faktum'] leading-[24px] mb-[18px] md:mt-[20px]">
-              I provide my express consent to HDFC Bank Limited ("Bank") and
-              BankSathi for collecting, disclosing, sharing, displaying and
-              transferring my personal, demographic information for my credit
-              card application. I authorize the Bank to approach me for
-              providing information/services/ marketing offers and I am aware
-              that this consent marketin overrides any registration for
-              DNC/NDNC. override
+            <div className="flex items-start mt-6 gap-2">
+              <div>
+                 <input
+                className="mr-1 mt-[5px] w-4 h-4  max-sm:w-4 max-sm:h-4 text-white accent-[#49D49D] "
+                type="checkbox"
+                checked={checkAgree}
+                required
+                onChange={(e) => {
+                  setCheckAgree(e.target?.checked);
+                  if (
+                    checkAgree === false ||
+                    checkAgree === null ||
+                    checkAgree === undefined
+                  ) {
+                    setTermsModal(true);
+                  }
+                }}
+              />
+              </div>
+              <div className="text-black text-[13px] font-semibold font-['Faktum'] leading-[24px] mb-[18px] mt-20px md:mt-0">
+
+                I provide my express consent to HDFC Bank Limited ("Bank") and
+                BankSathi for collecting, disclosing, sharing, displaying and
+                transferring my personal, demographic information for my credit
+                card application. I authorize the Bank to approach me for
+                providing information/services/ marketing offers and I am aware
+                that this consent marketin overrides any registration for
+                DNC/NDNC. override
+              </div>
             </div>
             <div className="mt-[24px] max-sm:mt-0">
               <HdfcCheckAgree
@@ -611,7 +606,7 @@ console.log("userInputData", userInputData);
   // ------------------------------------------------------  FORMS  -------------------------------------------------- //
   const getFormTitle = () => {
     if (detailsFormStepper === 0) {
-      return "Enter your Personal Details";
+      return "Your Personal Details";
     }
     if (detailsFormStepper === 1) {
       return "Enter your Address Details";
@@ -711,7 +706,7 @@ console.log("userInputData", userInputData);
   return (
     <>
       <div
-        className={`flex flex-col items-center justify-center h-full max-sm:w-full max-sm:px-[20px] container mx-auto w-full md:px-20 lg:px-14 ${loginStepper >= 2 ? "" : "md:mt-14"
+        className={`flex flex-col items-center justify-center h-full max-sm:w-full max-sm:px-[20px] container mx-auto w-full md:px-20 lg:px-14 ${loginStepper >= 2 ? "" : "md:mt-5"
           }`}
       >
         {showLoader && <Loader />}
@@ -738,7 +733,7 @@ console.log("userInputData", userInputData);
           />
         )}
         {loginStepper === 2 && (
-          <div className="lg:w-[52vw] w-auto mx-auto h-auto bg-white rounded-[14px] shadow-sm max-[576px]:shadow-none mt-[60px] max-sm:mt-[20px] pt-[40px] px-[60px] pb-[40px] max-[1024px]:px-[50px] max-[834px]:p-[30px] max-[479px]:py-[20px] max-sm:px-[20px]">
+          <div className="lg:w-[52vw] w-auto mx-auto h-auto bg-white rounded-[14px] shadow-sm max-[576px]:shadow-none mt-[20px] max-sm:mt-[20px] pt-[40px] px-[60px] pb-[40px] max-[1024px]:px-[50px] max-[479px]:py-[20px] max-sm:px-[20px]">
             <div className="flex flex-col">
               <div className="text-center max-sm:pt-[20px]text-neutral-800 text-2xl font-medium font-['Poppins'] mb-[20px] max-sm:mb-0 max-sm:text-[18px]">
                 {getFormTitle()}
@@ -831,24 +826,24 @@ console.log("userInputData", userInputData);
           <></>
           // additionalInfo()
           // <InfoModal
-            //   data={{
-              //     title1: showCongratScreen
-                //       ? "Congratulations Ameet!"
-                //       : "Sorry Your Application Got Rejected",
-              //     title2: showCongratScreen
-                //       ? "Your credit card application is in process"
-                //       : "",
-              //     imageSrc: showCongratScreen
-                //       ? "/assets/green-tick.svg"
-                //       : "/assets/rejection-badge.svg",
-              //     applicationRefNo: showCongratScreen
-                //       ? "24A25D27654030W1"
-                //       : "24A25D27654030W1",
-              //     height: showCongratScreen ? 64 : 73,
-              //     width: showCongratScreen ? 80 : 73,
-              //     date: showCongratScreen ? "12-02-2024" : "12-02-2024",
-              //     buttonTitle: "Thank You",
-            //   }}
+          //   data={{
+          //     title1: showCongratScreen
+          //       ? "Congratulations Ameet!"
+          //       : "Sorry Your Application Got Rejected",
+          //     title2: showCongratScreen
+          //       ? "Your credit card application is in process"
+          //       : "",
+          //     imageSrc: showCongratScreen
+          //       ? "/assets/green-tick.svg"
+          //       : "/assets/rejection-badge.svg",
+          //     applicationRefNo: showCongratScreen
+          //       ? "24A25D27654030W1"
+          //       : "24A25D27654030W1",
+          //     height: showCongratScreen ? 64 : 73,
+          //     width: showCongratScreen ? 80 : 73,
+          //     date: showCongratScreen ? "12-02-2024" : "12-02-2024",
+          //     buttonTitle: "Thank You",
+          //   }}
           // />
         )}
       </div>

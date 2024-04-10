@@ -2,6 +2,7 @@
 import { consentMessages } from '@/commonUtils/StaticContent/consentMessages';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import HdfcHeader from '../client/LandingPage/HdfcHeader/HdfcHeader';
 
 export default function page() {
     const [additionalAgree, setAdditionalAgree] = useState(true);
@@ -11,13 +12,15 @@ const router = useRouter()
         router.push("/IncomeVerification")
       }
   return (
+    <>
+    <HdfcHeader />
     <div className="px-4 flex flex-col items-center justify-center mt-10 md:mt-20">
     <div className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
       We need additional details to provide you an offer
     </div>
-    <div className="flex items-center mt-[24px] max-sm:mt-[30px] gap-2">
+    <div className="flex md:items-center items-start mt-[24px] max-sm:mt-[30px] gap-2">
       <input
-        className="mr-1 w-4 h-4  max-sm:w-8 max-sm:h-8 text-white accent-[#49D49D] "
+        className="mr-1 w-4 h-4  max-sm:w-6 max-sm:h-6 text-white accent-[#49D49D] "
         type="checkbox"
         checked={additionalAgree}
         required
@@ -38,5 +41,6 @@ const router = useRouter()
       </button>
     </div>
   </div>
+  </>
   )
 }

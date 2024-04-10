@@ -94,6 +94,10 @@ body {
   overflow-y: hidden;
   
 }
+/* .datepicker .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root:focus {
+  border:gray;
+
+} */
 
 .datepicker .react-datepicker-wrapper { 
   width: 100%;
@@ -107,8 +111,8 @@ body {
   .react-datepicker__input-container
   .react-datepicker__calendar-icon {
   position: relative;
-  top: 44px;
-  left: 92%;
+  top: 40px;
+  left: 95%;
 }
 .dropdown .rw-dropdown-list-input {
   padding: 15px;
@@ -131,12 +135,32 @@ body {
 }
 
 /* ....................................... MOBILE SCREENS  --- FOR 576PX    .................................................. */
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
   .datepicker
     .react-datepicker__input-container
     .react-datepicker__calendar-icon {
     position: relative;
-    top: 44px;
-    left: 84%;
+    top: 40px;
+    left: 88%;
+  }
+} */
+@media (max-width: 1440px) {
+  .datepicker
+    .react-datepicker__input-container
+    .react-datepicker__calendar-icon {
+    position: relative;
+    top: 40px;
+    left: 92%;
   }
 }
+@media (max-width: 768px) {
+  .datepicker
+    .react-datepicker__input-container
+    .react-datepicker__calendar-icon {
+    position: relative;
+    top: 40px;
+    left: 87%;
+  }
+}
+
+

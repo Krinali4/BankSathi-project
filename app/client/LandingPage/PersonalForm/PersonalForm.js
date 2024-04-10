@@ -67,21 +67,21 @@ const PersonalForm = ({
       year: "numeric",
     })
     : "";
-    console.log("formattedDateOfBirth", formattedDateOfBirth);
-
-  useEffect(() => {
-    if (male || female || others) {
-      if (hasNumber && dob && name !== "") {
-        setButtonDisable(false);
+    
+    useEffect(() => {
+      if (male || female || others) {
+        if (hasNumber && dob && name !== "") {
+          setButtonDisable(false);
+        }
       }
-    }
-  }, [etbCustomerData, userInputData]);
-  const formatDate = (date) => {
-    return date ? dayjs(date).format("DD-MM-YYYY") : "";
-  };
-  const formattedDate = userInputData?.date_of_birth
+    }, [etbCustomerData, userInputData]);
+    const formatDate = (date) => {
+      return date ? dayjs(date).format("DD-MM-YYYY") : "";
+    };
+    const formattedDate = userInputData?.date_of_birth
     ? formatDate(userInputData.date_of_birth.toDate())
     : "";
+    console.log("formattedDate", formattedDate);
 
   return (
     <>
@@ -204,7 +204,6 @@ const PersonalForm = ({
             showIcon
           />
 
-
           {/* <TextField
             id="dob"
             // label="dob"
@@ -229,7 +228,7 @@ const PersonalForm = ({
           /> */}
         </div>
       </div>
-      <div className="mt-5">
+      <div className="mt-0 max-md:mt-0 max-lg:mt-0">
         <CommonEmailInput
           value={etbCustomerData?.V_D_CUST_EMAIL_ADD}
           handleChange={handleChange}

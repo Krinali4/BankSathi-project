@@ -58,7 +58,7 @@ const route = useRouter();
       <div>  <h2 className="text-neutral-800 text-2xl font-semibold font-['Faktum'] leading-[28.80px]">
           Income Verification
         </h2></div>
-        <div className="md:w-[750px] w-full h-auto p-[25px] rounded-2xl mt-[20px] bg-white shadow-lg">
+        <div className=" w-full h-auto p-[25px] rounded-2xl mt-[20px] bg-white shadow-lg">
           <div className="flex flex-col">
             <CommonInputLabel labelTitle={staticLabels?.selectBank} />
             <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">

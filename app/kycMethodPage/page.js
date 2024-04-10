@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 const kycMethodPage = () => {
     const [kycOtp, setOtpKyc] = useState([])
     const [formShown, setFormShown] = useState(false);
-    
+
     const headers = {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -82,7 +82,7 @@ const kycMethodPage = () => {
                 // }
             }
         } catch (error) {
-            console.log(error,"errorerror");
+            console.log(error, "errorerror");
             toast.error(error?.message);
         }
     };
@@ -98,12 +98,19 @@ const kycMethodPage = () => {
                     <br className="" />
                     KYC Method
                 </div>
-                <div className="mt-10">
+                <div className="">
                     <div className='relative' >
-                        <div className='bg-[#F3F7FA] rounded-[90px] text-xs h-5 absolute z-50 top-[19%] left-[69%] px-3' >
-                            3 to 5 Minutes
-                        </div>
-                        <div className="w-full h-[115px] md:w-[400px] bg-white shadow-lg rounded-xl flex  px-[30px] py-[21px] gap-[18px] relative">
+                        <div className="w-full h-[135px] mt-[24px] md:w-[400px] bg-white shadow-lg rounded-xl flex  px-[30px] py-[21px] gap-[18px] relative">
+                            <Image
+                                src="/assets/recommended.svg"
+                                height={30}
+                                width={118}
+                                alt="recommended"
+                                className="absolute left-[-10px] bottom-[7.5rem] z-40 rounded-2xl	"
+                            />
+                            <div className='bg-[#F3F7FA] rounded-[90px] text-xs h-5 absolute z-50 px-[10px] py-[2px] right-[10px] top-[12px]' >
+                                3 to 5 Minutes
+                            </div>
                             <Image
                                 src="/assets/digitalKyc.svg"
                                 alt="digitalKyci"
@@ -120,26 +127,26 @@ const kycMethodPage = () => {
                                 </div>
                             </div>
 
-                        </div>
-                        <form id="hiddenForm" method="POST" target="_blank" >
-                            <div className='w-full justify-center flex absolute top-[76%] left-0' >
-                                <button type="button" className='rounded-lg	bg-[#49D49D]  w-fit justify-center flex items-center h-[48px] px-5' onClick={() => handlSubmitClick("OTP")}>
+                        <form id="hiddenForm" method="POST" target="_blank" name ="DigitalAadhaarRequest" >
+                            <div className='w-full justify-center flex absolute top-[78%] left-0' >
+                                <button type="button" className='rounded-lg	bg-[#49D49D]  w-fit justify-center flex items-center h-[48px] px-5 ' onClick={() => handlSubmitClick("OTP")}>
                                     E-KYC AADHAR VERIFICATION
                                 </button>
+
                                 {formShown && (
                                     <div className='grid gap-2 justify-center mt-7'>
                                         <label className='text-gray'> Id-token-jwt :</label>
-                                        <input type="Id-token-jwt" name="Id-token-jwt" placeholder="Enter Id-token-jwt" className='border border-gray-400 rounded-lg p-2' value={kycOtp['Id-token-jwt']} />
+                                        <input type="hidden" name="Id-token-jwt" placeholder="Enter Id-token-jwt" className='border border-gray-400 rounded-lg p-2' value={kycOtp['Id-token-jwt']} />
                                         <label className='text-gray'> OAuthTokenValue :</label>
                                         <input type="OAuthTokenValue" name="OAuthTokenValue" placeholder="Enter OAuthTokenValue" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.OAuthTokenValue || ""} />
-                                        <label className='text-gray'> RequestEncryptedValue :</label>
-                                        <input type="RequestEncryptedValue" name="RequestEncryptedValue" placeholder="Enter RequestEncryptedValue" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.RequestEncryptedValue} />
                                         <label className='text-gray'> Scope :</label>
                                         <input type="Scope" name="Scope" placeholder="Enter Scope" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.Scope} />
-                                        <label className='text-gray'> SymmetricKeyEncryptedValue :</label>
-                                        <input type="SymmetricKeyEncryptedValue" name="SymmetricKeyEncryptedValue" placeholder="Enter SymmetricKeyEncryptedValue" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.SymmetricKeyEncryptedValue} />
                                         <label className='text-gray'> TransactionId :</label>
                                         <input type="TransactionId" name="TransactionId" placeholder="Enter TransactionId" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.TransactionId} />
+                                        <label className='text-gray'> encRequestData :</label>
+                                        <input type="encRequestData" name="encRequestData" placeholder="Enter encRequestData" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.encRequestData} />
+                                        <label className='text-gray'> encSessionKey :</label>
+                                        <input type="encSessionKey" name="encSessionKey" placeholder="Enter encSessionKey" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.encSessionKey} />
                                         <label className='text-gray'> url :</label>
                                         <input type="url" name="url" placeholder="Enter url" className='border border-gray-400 rounded-lg p-2' value={kycOtp?.url} />
 
@@ -150,20 +157,21 @@ const kycMethodPage = () => {
                                 )}
                             </div>
                         </form>
+                        </div>
                     </div>
                     <div className='relative'>
 
-                        <div className="my-10 flex flex-row items-center justify-center gap-x-[10px]">
+                        <div className="mt-10 flex flex-row items-center justify-center gap-x-[10px]">
                             <Image src="/assets/line.svg" width={63} height={1} alt="border" />
                             <div className="text-zinc-950 text-[15px] font-normal font-['Poppins']">
                                 OR
                             </div>
                             <Image src="/assets/line.svg" width={63} height={1} alt="border" />
                         </div>
-                        <div className='bg-[#F3F7FA] rounded-[90px] text-xs h-5 absolute z-50 left-[70%] top-[45%] px-3'>
-                            3 to 5 Minutes
-                        </div>
-                        <div className="w-full h-[115px] md:w-[400px] bg-white shadow-lg rounded-xl flex  px-[30px] py-[21px] gap-[18px] relative">
+                        <div className="w-full h-[115px] md:w-[400px] mt-[24px] bg-white shadow-lg rounded-xl flex  px-[30px] py-[21px] gap-[18px] relative">
+                            <div className='bg-[#F3F7FA] rounded-[90px] text-xs h-5 absolute z-50 px-[10px] py-[2px] right-[10px] top-[12px]'>
+                                3 to 5 Minutes
+                            </div>
                             <Image
                                 src="/assets/BiomatriKyc.svg"
                                 alt="BiomatriKyc"
