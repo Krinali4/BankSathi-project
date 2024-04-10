@@ -65,7 +65,6 @@ const ApplicationForm = ({ ipAddress }) => {
   const state = customerData?.office_address_state || stateCity?.state;
   const city = customerData?.office_address_city || stateCity?.city;
   const pincode = customerData?.office_address_pincode;
-console.log(customerData?.office_address_pincode,'customerData?.office_address_pincode')
   const buttonDisable =
     !address1 || !address2 || !address3 || !state || !city || !pinCode;
 
@@ -178,22 +177,22 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
   };
 
   const UserPan = JSON.parse(localStorage.getItem("customerData"));
-   
+
   const formattedDateOfBirth = UserPan?.date_of_birth
-  ? new Date(UserPan?.date_of_birth).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  })
-  : "";
+    ? new Date(UserPan?.date_of_birth).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
+    : "";
   const router = useRouter()
   const newPincode = pincode !== undefined ? pincode.toString() : '';
   const handlSubmitClick = async () => {
     setShowLoader(true);
     // const UserPan = JSON.parse(localStorage.getItem("customerData"));
-    console.log(UserPan,"UserPanUserPan");
+    console.log(UserPan, "UserPanUserPan");
     const params = {
-      bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
+      bank_account_number: etbCustomerData?.FW_ACCNT_NUM ? String(etbCustomerData?.FW_ACCNT_NUM) : "",
       adress_edit_flag: "N",
       customer_id: etbCustomerData?.CUSTOMER_ID || customerData?.customer_id || "",
       auth_mode: etbCustomerData?.CUSTOMER_ID ? "IDCOM" : "OTP",
@@ -206,15 +205,15 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
         customerData?.address3 || "",
-      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "",
+      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "surat"||city,
       mobile_no: customerData?.mobile || UserPan?.mobile || "",
-      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH  ||formattedDateOfBirth || "",
+      dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || formattedDateOfBirth || "",
       name: name || "",
       ip: ipAddress || "",
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email || "",
       pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || customerData?.pin_code || "",
       company_name: customerData?.companyName || "",
-      pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no ||UserPan?.pan_no|| "",
+      pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no || UserPan?.pan_no || "",
       device_id: deviceId,
       jwt_token: token || '',
       office_address_line_1: address1,
@@ -226,20 +225,20 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
       office_address_email: customerData?.office_email_address,
       pan_name_match_flag: "",
       pan_dob_match_flag: "",
-      product_code:""
+      product_code: ""
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
         headers: headers,
       })
       .then((response) => {
-        if(response?.status == 200) {
+        if (response?.status == 200) {
           toast.success(response?.data?.message)
           setShowLoader(false);
           // setScreenStepper(1);
           router.push("/kycMethodPage")
         }
-        
+
       })
       .catch((error) => {
         setShowLoader(false);
@@ -288,7 +287,7 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
                   onChange={(nextValue) => setBanks(nextValue)}
                   data={banksList}
                 />
-              </div>  
+              </div>
               <div className="mt-[19px] w-full grid grid-cols-1 gap-4">
                 <FullName
                   setUserInputData={setCustomerData}
@@ -297,7 +296,7 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
                   fullName={name}
                 />
               </div>
-             
+
             </div>
             <div className="text-zinc-950 text-xs font-normal font-['Poppins'] mt-[19px]">
               limit exceed 19 Character
@@ -499,8 +498,8 @@ console.log(customerData?.office_address_pincode,'customerData?.office_address_p
       )}
       {screensStepper === 2 && getOtpComp()}
       {screensStepper === 3 && <LoginOptions />}
-      {screensStepper === 4 && <VkyConsentScreen  data={{ heading: "VKY Consent & Next Steps", list: ekycList }}
-          handleSubmit={() => setScreenStepper(3)}/>}
+      {screensStepper === 4 && <VkyConsentScreen data={{ heading: "VKY Consent & Next Steps", list: ekycList }}
+        handleSubmit={() => setScreenStepper(3)} />}
     </>
   );
 };

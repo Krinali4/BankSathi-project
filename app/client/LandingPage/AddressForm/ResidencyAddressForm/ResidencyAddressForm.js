@@ -1,7 +1,7 @@
 import CommonInputLabel from "@/app/client/Common/CommonInputComponents/CommonInputLabel";
 import PincodeInput from "@/app/client/Common/CommonInputComponents/PinCodeInput";
 import { staticLabels } from "@/commonUtils/StaticContent/staticLabels";
-import React from "react";
+import React, { useRef } from "react";
 
 const ResidencyAddressForm = ({
   userInputData,
@@ -15,6 +15,7 @@ const ResidencyAddressForm = ({
   setVisibility,
   visibility,
 }) => {
+  const wrapperRef=useRef()
   return (
     <div>
       <div className="mt-[20px]">

@@ -65,8 +65,8 @@ const EmploymentInfoForm = ({
           res?.data?.data?.executeIPARequestResponse?.executeIPARequestReturn;
         const ipaRes = resObj?.APS_IPA_RESULT;
         console.log(res?.date?.message, "resresresresres");
-        const filler1 = resObj?.FILLER1;
-        const filler6 = resObj?.FILLER6;
+        const filler1 = "LBVPT";
+        const filler6 = "500000";
         console.log(res,"resObjresObj");
         if (typeof window !== "undefined") {
           const objToStore = { productIds: filler1, creditLimits: filler6 };
@@ -75,13 +75,11 @@ const EmploymentInfoForm = ({
         }
         const hasNoProduct = filler1 && filler1 == "" && filler6 && filler6 == "";
         
-        const hasProducts =
-          filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
-          const hasRejectedProduct = !hasNoProduct && !hasProducts;
+        const hasProducts =filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
         setLoginStepper(4);
         // in response - there will be 3 scenarios - to check on the basis of res data
-        if (ipaRes === "N" && hasRejectedProduct) setRejectionScreen(true);
-        router.push("/infomodal")
+        if (ipaRes === "Y") setRejectionScreen(true);
+        // router.push("/infomodal")
         if (ipaRes === "N" && hasProducts)
           router.push("/bankOfBoard/eligible-products");
         if (ipaRes === "N" && hasNoProduct) {
