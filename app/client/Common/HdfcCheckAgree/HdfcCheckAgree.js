@@ -1,6 +1,18 @@
-import React from "react";
+import { useRouter } from "next/navigation";
+import { Router } from "next/router";
+import React, { useState } from "react";
 
 const HdfcCheckAgree = ({ setCheckAgree, checkAgree, setTermsModal }) => {
+  const router = useRouter()
+  const [termsModalVisible, setTermsModalVisible] = useState(false);
+
+  const handleContentTerms = () => {
+    // Navigate to terms and conditions page
+    router.push("/consentConditions");
+    // Open the modal
+    setTermsModalVisible(true);
+  };
+
   return (
     <div>
       <div className="flex items-start mt-[24px] max-sm:mt-0 gap-2">
@@ -24,7 +36,17 @@ const HdfcCheckAgree = ({ setCheckAgree, checkAgree, setTermsModal }) => {
           <span className="text-neutral-800 text-xs font-normal font-['Poppins'] leading-tight">
             By clicking on submit, I am agreeing to{" "}
           </span>
-          <span className="text-neutral-800 text-xs font-normal font-['Poppins'] underline leading-tight">
+          {termsModalVisible && (
+            <div className="modal">
+              <div className="modal-content">
+                <span className="close" onClick={() => setTermsModalVisible(false)}>
+                 
+                </span>
+                
+              </div>
+            </div>
+          )}
+          <span className="text-neutral-800 text-xs font-normal font-['Poppins'] underline leading-tight" onClick={handleContentTerms}>
             Consent Terms and General Terms & Conditions
           </span>
           <span className="text-neutral-800 text-xs font-normal font-['Poppins'] leading-tight">

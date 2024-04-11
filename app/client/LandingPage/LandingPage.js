@@ -606,13 +606,13 @@ const LandingPage = ({ ipAddress }) => {
   // ------------------------------------------------------  FORMS  -------------------------------------------------- //
   const getFormTitle = () => {
     if (detailsFormStepper === 0) {
-      return "Your Personal Details";
+      return "Enter your Personal Details";
     }
     if (detailsFormStepper === 1) {
-      return "Enter your Address Details";
+      return "Enter your Current Address";
     }
     if (detailsFormStepper === 2) {
-      return "Enter your Employment Details";
+      return "Employment Details";
     }
     if (detailsFormStepper === 5) {
       return "Provide your ITR Details";
@@ -624,6 +624,13 @@ const LandingPage = ({ ipAddress }) => {
       ...userInputData,
       [event?.target?.name]: event?.target?.value,
     });
+  };
+  const handleclick = () => {
+    setUserInputData({
+      companyName: "",
+      designation: "",
+    });
+    console.log("xcvxvxcvxvxcvxv", userInputData);
   };
   const handleOTPSubmit = () => {
     // what to do when otp is validated will come here
@@ -791,6 +798,7 @@ const LandingPage = ({ ipAddress }) => {
                       setRejectionScreen={setRejectionScreen}
                       setShowCongratsScreen={setShowCongratsScreen}
                       setLoginStepper={setLoginStepper}
+                      handleclick={handleclick}
                     />
                   </div>
                 )}

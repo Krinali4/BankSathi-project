@@ -76,8 +76,14 @@ const AddressForm = ({
   const pincode = etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code;
 
   const addressDisable =
-    !address1 || !address2 || !address3 || !state || !city || !pincode;
-
+  (!address1 || !address2 || !address3 || !state || !city || !pincode) &&
+  (!userInputData.residencyAddress1 ||
+  !userInputData.residencyAddress2 ||
+  !userInputData.residencyAddress3 ||
+  !userInputData.residencyState ||
+  !userInputData.residencyCity ||
+  !userInputData.residency_pin_code);
+  console.log(userInputData,"userInputData.residencyAddress1");
     useEffect(() => {
     if (userInputData?.pin_code?.length === 6) {
       getPinCodeList();
@@ -316,7 +322,7 @@ const AddressForm = ({
       )}
       <div className="mt-[30px]">
         <CommonNextButton
-          title="Save Aadhaar Address"
+          title="Continue"
           width="w-[222px]"
           mobileWidth="max-sm:w-full"
           disable={addressDisable}

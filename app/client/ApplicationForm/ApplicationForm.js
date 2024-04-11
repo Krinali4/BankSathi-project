@@ -225,7 +225,12 @@ const ApplicationForm = ({ ipAddress }) => {
       office_address_email: customerData?.office_email_address,
       pan_name_match_flag: "",
       pan_dob_match_flag: "",
-      product_code: ""
+      product_code: "",
+      permanent_address_line_1: "",
+      permanent_address_line_2: "",
+      permanent_address_line_3: "",
+      permanent_address_city: "",
+      permanent_address_pincode: "",
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {

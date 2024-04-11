@@ -24,15 +24,18 @@ const EmploymentInfoForm = ({
   setRejectionScreen,
   setShowLoader,
   setLoginStepper,
+  handleclick
 }) => {
   const router = useRouter();
-  console.log(userInputData,"userInputDatauserInputData");
+  console.log(userInputData, "userInputDatauserInputData");
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
-  const isSalaried = userInputData?.occupationType === "Salaried";
-  const selfEmployed = userInputData?.occupationType === "Self employed";
+  const isSalaried = userInputData?.occupationType == "Salaried";
+
+  const selfEmployed = userInputData?.occupationType == "Self employed";
+  console.log("🚀 ~ isSalaried:", !isSalaried, "selfEmployed", isSalaried)
 
   const incomeValue = isSalaried
     ? userInputData?.monthly_salary
@@ -42,11 +45,12 @@ const EmploymentInfoForm = ({
 
   const employmentDisable = !incomeValue || !department;
   // const token = localStorage.getItem("token") ;
-  const token =  localStorage.getItem("token");
-  console.log(token,"tokentoken");
+  const token = localStorage.getItem("token");
+  console.log(token, "tokentoken");
 
   const [showLoaderModal, setShowLoaderModal] = useState(false);
-
+  const userPanData = JSON.parse(typeof window !== "undefined" && localStorage.getItem("userPanData"));
+  console.log("🚀 ~ userPanData22222222222", userPanData)
   const inPrincipleApprovalApi = (id, refNo, tokenValue) => {
     setShowLoaderModal(true);
     const enpoint = BASE_URL + USERINFO?.inPrincipleApproval;
@@ -67,19 +71,19 @@ const EmploymentInfoForm = ({
         console.log(res?.date?.message, "resresresresres");
         const filler1 = "LBVPT";
         const filler6 = "500000";
-        console.log(res,"resObjresObj");
+        console.log(res, "resObjresObj");
         if (typeof window !== "undefined") {
           const objToStore = { productIds: filler1, creditLimits: filler6 };
           localStorage.setItem("productsInfo", JSON.stringify(objToStore));
           localStorage.setItem("customerData", JSON.stringify(userInputData));
         }
         const hasNoProduct = filler1 && filler1 == "" && filler6 && filler6 == "";
-        
-        const hasProducts =filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
+
+        const hasProducts = filler1 && filler1 !== "" && filler6 && filler6 !== ""; // to map on the basis of response
         setLoginStepper(4);
         // in response - there will be 3 scenarios - to check on the basis of res data
         if (ipaRes === "Y") setRejectionScreen(true);
-        // router.push("/infomodal")
+        router.push("/infomodal")
         if (ipaRes === "N" && hasProducts)
           router.push("/bankOfBoard/eligible-products");
         if (ipaRes === "N" && hasNoProduct) {
@@ -101,47 +105,55 @@ const EmploymentInfoForm = ({
       year: "numeric",
     })
     : "";
-  // EXECUTE INTERFACE API CALL
+
+  
   const handleSubmitForm = async () => {
     const name = getName(userInputData);
     setShowLoader(true);
     const params = {
-      bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM),
+      bank_account_number: String(etbCustomerData?.FW_ACCNT_NUM || "") || "",
       adress_edit_flag: "N",
       customer_id: etbCustomerData?.CUSTOMER_ID ? etbCustomerData?.CUSTOMER_ID : "",
       auth_mode: etbCustomerData?.CUSTOMER_ID ? "IDCOM" : "OTP",
       address_line_1:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD1) ||
-        userInputData?.address1,
+          userInputData?.address1 ? userInputData?.address1 : "",
       address_line_2:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD2) ||
-        userInputData?.address2,
+          userInputData?.address2 ? userInputData?.address2 : "",
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
-        userInputData?.address3,
+          userInputData?.address3 ? userInputData?.address3 : "",
       city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city || "surat",
       mobile_no: userInputData?.mobile,
       dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || formattedDateOfBirth || "",
-      name: name,
+      name: name ,
       ip: ipAddress,
-      email: etbCustomerData?.V_D_CUST_EMAIL_ADD || userInputData?.email,
+      email: etbCustomerData?.V_D_CUST_EMAIL_ADD || userInputData?.email || "",
       pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code,
       company_name: userInputData?.companyName,
       pan_no: etbCustomerData?.V_D_CUST_IT_NBR || userInputData?.pan_no,
       device_id: deviceId,
       jwt_token: token,
-      office_address_line_1: '',
-      office_address_line_2: '',
-      office_address_line_3: '',
-      office_address_city: '',
-      office_address_state: '',
-      office_address_pincode: (etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.pin_code)?.toString(),
+      office_address_line_1: "",
+      office_address_line_2: "",
+      office_address_line_3: "",
+      office_address_city: "",
+      office_address_state: userInputData?.residencyState || "",
+      office_address_pincode: (etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.residency_pin_code)?.toString() || "",
       office_address_email: '',
-      pan_name_match_flag: "",
-      pan_dob_match_flag: "",
-      product_code:""
+      pan_name_match_flag: userPanData?.pan_api_name_match?.toString(),
+      pan_dob_match_flag: userPanData?.dob_verified?.toString(),
+      product_code: "",
+      permanent_address_line_1: userInputData?.residencyAddress1 || "",
+      permanent_address_line_2: userInputData?.residencyAddress2 || "",
+      permanent_address_line_3: userInputData?.residencyAddress3 || "",
+      permanent_address_city: userInputData?.residencyCity || "",
+      // permanent_address_pincode: (userInputData?.residency_pin_code)?.toString() || "",
+      permanent_address_pincode: userInputData?.residency_pin_code || userInputData?.pin_code,
+
     };
-    console.log(etbCustomerData, userInputData, "userInputDatauserInputData");
+    console.log(userInputData, "userInputDatauserInputData");
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
         headers: headers,
@@ -184,7 +196,7 @@ const EmploymentInfoForm = ({
           {staticLabels?.occupationType}
         </label>
         <div className="flex pt-[10px] gap-4 ">
-          <div>
+          <div >
             <label
               htmlFor="salaried"
               className={`text-[14px] form-radio flex gap-2 items-center ${isSalaried ? "text-[#212529]" : "text-[#808080]"
@@ -197,6 +209,13 @@ const EmploymentInfoForm = ({
                 checked={isSalaried}
                 onChange={(e) => {
                   handleChange(e);
+                  // handleclick()
+                  // setUserInputData({
+                  //   companyName: "",
+                  //   designation: "",
+                  // });
+                  // setUserInputData({...userInputData , companyName : ''})
+
                 }}
               />
               Salaried
@@ -205,6 +224,7 @@ const EmploymentInfoForm = ({
           <div>
             <label
               htmlFor="self employed"
+              onClick={() => setUserInputData({})}
               className={`text-[14px] form-radio flex gap-2 items-center  ${selfEmployed ? "text-[#212529]" : "text-[#808080]"
                 }`}
             >
@@ -215,6 +235,9 @@ const EmploymentInfoForm = ({
                 checked={selfEmployed}
                 onChange={(e) => {
                   handleChange(e);
+                  // setUserInputData({})
+                  // setUserInputData({...userInputData , companyName : ''})
+
                 }}
               />
               Self employed
@@ -244,7 +267,7 @@ const EmploymentInfoForm = ({
                     companyName: e?.target?.value,
                   })
                 }
-                value={userInputData?.companyName}
+                value={userInputData.companyName || ""}
                 maxLength={50}
               />
             </div>
@@ -265,7 +288,7 @@ const EmploymentInfoForm = ({
                       department: e?.target?.value,
                     })
                   }
-                  value={userInputData?.department}
+                  value={userInputData?.department || ""}
                   maxLength={50}
                 />
               </div>
@@ -286,7 +309,7 @@ const EmploymentInfoForm = ({
                     designation: e?.target?.value,
                   })
                 }
-                value={userInputData?.designation}
+                value={userInputData?.designation || ""}
                 maxLength={50}
               />
             </div>

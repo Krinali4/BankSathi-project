@@ -128,7 +128,7 @@ const kycMethodPage = () => {
                             </div>
 
                         <form id="hiddenForm" method="POST" target="_blank" name ="DigitalAadhaarRequest" >
-                            <div className='w-full justify-center flex absolute top-[78%] left-0' >
+                            <div className='w-full justify-center flex absolute top-[82%] left-0' >
                                 <button type="button" className='rounded-lg	bg-[#49D49D]  w-fit justify-center flex items-center h-[48px] px-5 ' onClick={() => handlSubmitClick("OTP")}>
                                     E-KYC AADHAR VERIFICATION
                                 </button>

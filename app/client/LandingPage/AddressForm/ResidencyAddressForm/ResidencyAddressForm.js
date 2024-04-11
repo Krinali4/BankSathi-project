@@ -16,6 +16,7 @@ const ResidencyAddressForm = ({
   visibility,
 }) => {
   const wrapperRef=useRef()
+  console.log(userInputData,"userInputData2222");
   return (
     <div>
       <div className="mt-[20px]">
@@ -112,7 +113,7 @@ const ResidencyAddressForm = ({
                 key={v}
                 onClick={() => {
                   setUserInputData({ ...userInputData, residency_pin_code: i });
-                  setVisibility(!visible);
+                  setVisibility(false);
                 }}
               >
                 {i}
