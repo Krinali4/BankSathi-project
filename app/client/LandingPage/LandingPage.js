@@ -184,15 +184,16 @@ const LandingPage = ({ ipAddress }) => {
         }
         // toast.error(response?.data?.message);
         if (response?.data?.message === "failed")
+        
           toast.error(response?.data?.message);
         if (response?.data?.data?.message === responses?.nameMatchFail) {
           setShowPanNotMatchModal(true);
         }
       })
       .catch((error) => {
-        console.log("error log IN COMMON INITIATE API", error);
+        console.log("error44444", error);
         setShowLoader(false);
-        toast.error(response?.data?.message);
+        // toast.error(response?.data?.message);
       });
   };
   // ------------------------------------------ GENERATE OTP CALL ----------------------------------//
@@ -630,7 +631,6 @@ const LandingPage = ({ ipAddress }) => {
       companyName: "",
       designation: "",
     });
-    console.log("xcvxvxcvxvxcvxv", userInputData);
   };
   const handleOTPSubmit = () => {
     // what to do when otp is validated will come here

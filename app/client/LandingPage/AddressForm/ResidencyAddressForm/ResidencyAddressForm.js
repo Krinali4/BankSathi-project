@@ -16,7 +16,6 @@ const ResidencyAddressForm = ({
   visibility,
 }) => {
   const wrapperRef=useRef()
-  console.log(userInputData,"userInputData2222");
   return (
     <div>
       <div className="mt-[20px]">

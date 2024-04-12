@@ -145,15 +145,14 @@ const EmploymentInfoForm = ({
       pan_name_match_flag: userPanData?.pan_api_name_match?.toString(),
       pan_dob_match_flag: userPanData?.dob_verified?.toString(),
       product_code: "",
-      permanent_address_line_1: userInputData?.residencyAddress1 || "",
-      permanent_address_line_2: userInputData?.residencyAddress2 || "",
-      permanent_address_line_3: userInputData?.residencyAddress3 || "",
+      permanent_address_line_1: userInputData?.residencyAddress1 || userInputData?.address1,
+      permanent_address_line_2: userInputData?.residencyAddress2 || userInputData?.address2,
+      permanent_address_line_3: userInputData?.residencyAddress3 || userInputData?.address3,
       permanent_address_city: userInputData?.residencyCity || "",
       // permanent_address_pincode: (userInputData?.residency_pin_code)?.toString() || "",
       permanent_address_pincode: userInputData?.residency_pin_code || userInputData?.pin_code,
 
     };
-    console.log(userInputData, "userInputDatauserInputData");
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
         headers: headers,

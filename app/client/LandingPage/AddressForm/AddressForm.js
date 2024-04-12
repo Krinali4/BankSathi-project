@@ -83,7 +83,7 @@ const AddressForm = ({
   !userInputData.residencyState ||
   !userInputData.residencyCity ||
   !userInputData.residency_pin_code);
-  console.log(userInputData,"userInputData.residencyAddress1");
+  
     useEffect(() => {
     if (userInputData?.pin_code?.length === 6) {
       getPinCodeList();
