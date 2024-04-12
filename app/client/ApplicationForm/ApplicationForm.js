@@ -38,19 +38,24 @@ const ApplicationForm = ({ ipAddress }) => {
   };
   const token = typeof window !== "undefined" && localStorage.getItem("token");
 
+  
   const wrapperRef = useRef(null);
   const deviceId = getCookieValue("deviceId");
 
   const [activeBank, setActiveBank] = useState("HDFC Bank");
-  const [banks, setBanks] = useState("Name on card");
-  const [banksList, setBanksList] = useState(["HDFC", "ICICI"]);
+  const [banks, setBanks] = useState(null);
   const [otpdata, setOtpdata] = useState([]);
   const [errOtp, setErrorOtp] = useState(false);
   const [pinCode, setPinCode] = useState([]);
   const [visible, setVisible] = useState(false);
   const [pinCodeError, setPinCodeError] = useState(false);
   const [customerData, setCustomerData] = useState({});
-  console.log("🚀 ~ ApplicationForm ~ customerData:", customerData)
+  // const [banksList, setBanksList] = useState([
+  //   { label: 'First Name', value: customerData?.firstName },
+  //   { label: 'Middle Name', value: customerData?.middleName },
+  //   { label: 'Last Name', value: customerData?.lastName }
+  // ]);
+  console.log("🚀pinCode", pinCode)
   const [isAgree, setIsAgree] = useState(true);
   const [screensStepper, setScreenStepper] = useState(0);
   const [time, setTime] = useState(60);
@@ -74,7 +79,9 @@ const ApplicationForm = ({ ipAddress }) => {
   const handlePincodeChange = () => {
     setVisible(true);
   };
-
+useEffect(() => {
+  getPinCodes()
+},[customerData?.pin_code])
   const getPinCodes = async () => {
     let url = BS_BASE_URL + BS_COMMON.pinCodeVerify;
     await axios
@@ -87,13 +94,14 @@ const ApplicationForm = ({ ipAddress }) => {
         { headers: headers }
       )
       .then((response) => {
+        console.log(response,"responseresponse");
         if (response?.data?.message == "success") {
           setStateCity({
             city: response?.data?.data?.pincode_data?.cities?.[0],
             state: response?.data?.data?.pincode_data?.states?.[0],
           });
           setPinCodeError(false);
-          setPinCode(response.data.data.pincode_data?.pincodes);
+          setPinCode(response.data.data.pincode_data?.pincodes?.[0]);
         }
       })
       .catch((error) => {
@@ -101,12 +109,27 @@ const ApplicationForm = ({ ipAddress }) => {
       });
   };
 
+  // const handleChange = (event) => {
+  //   setCustomerData({
+  //     ...customerData,
+  //     [event?.target?.name]: event?.target?.value,
+  //   });
+  // };
+
   const handleChange = (event) => {
     setCustomerData({
       ...customerData,
       [event?.target?.name]: event?.target?.value,
     });
+    if (name === "office_address_pincode") {
+      // Assuming `office_address_pincode` is the field for pin code
+      getPinCodes(value); // Call getPinCodes to fetch city and state data based on pin code
+    }
+
   };
+
+  
+  
 
   const handleOtpChange = (e) => {
     const valueotp = e;
@@ -190,6 +213,7 @@ const ApplicationForm = ({ ipAddress }) => {
   const router = useRouter()
   const newPincode = pincode !== undefined ? pincode.toString() : '';
   const handlSubmitClick = async () => {
+    getPinCodes()
     setShowLoader(true);
     // const UserPan = JSON.parse(localStorage.getItem("customerData"));
     console.log(UserPan, "UserPanUserPan");
@@ -207,13 +231,13 @@ const ApplicationForm = ({ ipAddress }) => {
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
         customerData?.address3 || "",
-      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "surat"||city,
+      city: etbCustomerData?.V_D_CUST_CITY || customerData?.city || "surat" || city,
       mobile_no: customerData?.mobile || UserPan?.mobile || "",
       dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || formattedDateOfBirth || "",
       name: name || "",
       ip: ipAddress || "",
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email || "",
-      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || newPincode || "",
+      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || newPincode || pinCode,
       company_name: customerData?.companyName || "",
       pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no || UserPan?.pan_no || "",
       device_id: deviceId,
@@ -230,9 +254,9 @@ const ApplicationForm = ({ ipAddress }) => {
       product_code: "",
       permanent_address_line_1: address1 || "",
       permanent_address_line_2: address2 || "",
-      permanent_address_line_3: address3 ||  "",
+      permanent_address_line_3: address3 || "",
       permanent_address_city: city || "",
-      permanent_address_pincode: newPincode?.toString(),
+      permanent_address_pincode: newPincode?.toString() || pinCode,
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
@@ -254,10 +278,12 @@ const ApplicationForm = ({ ipAddress }) => {
   };
 
   useEffect(() => {
-    if (customerData?.pin_code?.length === 6) {
+    console.log("useEffect triggered");
+    if (customerData?.pin_code !== "") {
+      console.log("Calling API...");
       getPinCodes();
     }
-  }, [customerData?.pin_code?.length]);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -271,6 +297,16 @@ const ApplicationForm = ({ ipAddress }) => {
       if (user) setCustomerData(user);
     }
   }, []);
+
+  const concatName = [`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`];
+  // const dropdownValue = concatName?.trim()?.split(/\s+/)?.length <= 19;.
+console.log(concatName[0].length,'fdsfsdf')
+// const newConcatName = concatName.map((concatName)=>{
+//   return  concatName.trim().length >= 19;
+// })
+// console.log("🚀 ~ newConcatName ~ newConcatName:", newConcatName)
+// const isnewConcatName = newConcatName.toString()
+
 
   return (
     <>
@@ -289,11 +325,30 @@ const ApplicationForm = ({ ipAddress }) => {
             <div className="flex flex-col items-start justify-center mt-4 w-full">
               <CommonInputLabel labelTitle={staticLabels?.nameOnCard} />
               <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
-                <DropdownList
-                  value={banks}
-                  onChange={(nextValue) => setBanks(nextValue)}
-                  data={banksList}
-                />
+
+              {concatName[0].length < 18 ? (
+                <select
+                className="h-[50px] w-full rounded border-0 border-[#8D9CA5]"
+                  value={`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
+                  onChange={(event) => setBanks(event.target.value)}
+                >
+                  {concatName.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <select
+                  value={`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
+                  onChange={(event) => setBanks(event.target.value)}
+                  className="pointer-events-none h-[50px] w-full rounded border-0 border-[#8D9CA5]"
+                >
+                  <option selected>
+                    {`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
+                  </option>
+                </select>
+              )}
               </div>
               <div className="mt-[19px] w-full grid grid-cols-1 gap-4">
                 <FullName
@@ -454,9 +509,10 @@ const ApplicationForm = ({ ipAddress }) => {
                       office_address_city: e?.target?.value,
                     })
                   }
-                  value={city}
+                  value={city || stateCity?.city}
                   maxLength={20}
                 />
+                
               </div>
               <div className="flex flex-col">
                 <CommonInputLabel labelTitle={staticLabels?.state} />
@@ -474,7 +530,7 @@ const ApplicationForm = ({ ipAddress }) => {
                       office_address_state: e?.target?.value,
                     })
                   }
-                  value={state}
+                  value={state || stateCity?.state}
                   maxLength={20}
                 />
               </div>
