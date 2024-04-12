@@ -65,7 +65,7 @@ const ApplicationForm = ({ ipAddress }) => {
   const address3 = customerData?.office_address_line_3;
   const state = customerData?.office_address_state || stateCity?.state;
   const city = customerData?.office_address_city || stateCity?.city;
-  const pincode = customerData?.office_address_pincode;
+  const pincode = customerData.office_address_pincode ? customerData.office_address_pincode.toString() : '';
   const buttonDisable =
     !address1 || !address2 || !address3 || !state || !city || !pinCode;
 
@@ -213,7 +213,7 @@ const ApplicationForm = ({ ipAddress }) => {
       name: name || "",
       ip: ipAddress || "",
       email: etbCustomerData?.V_D_CUST_EMAIL_ADD || customerData?.email || "",
-      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || customerData?.pin_code || "",
+      pincode: etbCustomerData?.V_D_CUST_ZIP_CODE || newPincode || "",
       company_name: customerData?.companyName || "",
       pan_no: etbCustomerData?.V_D_CUST_IT_NBR || customerData?.pan_no || UserPan?.pan_no || "",
       device_id: deviceId,
