@@ -50,6 +50,7 @@ const ApplicationForm = ({ ipAddress }) => {
   const [visible, setVisible] = useState(false);
   const [pinCodeError, setPinCodeError] = useState(false);
   const [customerData, setCustomerData] = useState({});
+  console.log("🚀 ~ ApplicationForm ~ customerData:", customerData)
   const [isAgree, setIsAgree] = useState(true);
   const [screensStepper, setScreenStepper] = useState(0);
   const [time, setTime] = useState(60);
@@ -175,6 +176,7 @@ const ApplicationForm = ({ ipAddress }) => {
       </div>
     );
   };
+  const userPanData = JSON.parse(typeof window !== "undefined" && localStorage.getItem("userPanData"));
 
   const UserPan = JSON.parse(localStorage.getItem("customerData"));
 
@@ -223,14 +225,14 @@ const ApplicationForm = ({ ipAddress }) => {
       office_address_state: state,
       office_address_pincode: newPincode,
       office_address_email: customerData?.office_email_address,
-      pan_name_match_flag: "",
-      pan_dob_match_flag: "",
+      pan_name_match_flag: userPanData?.pan_api_name_match?.toString(),
+      pan_dob_match_flag: userPanData?.dob_verified?.toString(),
       product_code: "",
-      permanent_address_line_1: "",
-      permanent_address_line_2: "",
-      permanent_address_line_3: "",
-      permanent_address_city: "",
-      permanent_address_pincode: "",
+      permanent_address_line_1: address1 || "",
+      permanent_address_line_2: address2 || "",
+      permanent_address_line_3: address3 ||  "",
+      permanent_address_city: city || "",
+      permanent_address_pincode: newPincode?.toString(),
     };
     await axios
       .post(BASE_URL + USERINFO.executeInterface, params, {
@@ -247,7 +249,7 @@ const ApplicationForm = ({ ipAddress }) => {
       })
       .catch((error) => {
         setShowLoader(false);
-        toast.error(response?.data?.message);
+        // toast.error(response?.data?.message);
       });
   };
 

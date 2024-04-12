@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const EmploymentInfoForm = ({
+  stateCity,
   userInputData,
   handleChange,
   setDetailsFormStepper,
@@ -26,6 +27,8 @@ const EmploymentInfoForm = ({
   setLoginStepper,
   handleclick
 }) => {
+  console.log("🚀 ~ etbCustomerData:", etbCustomerData)
+  console.log("userinputuserinputuserinputuserinput", userInputData);
   const router = useRouter();
   console.log(userInputData, "userInputDatauserInputData");
   const headers = {
@@ -108,6 +111,8 @@ const EmploymentInfoForm = ({
 
   
   const handleSubmitForm = async () => {
+
+    console.log("dfsdfsfsdfsfsfs");
     const name = getName(userInputData);
     setShowLoader(true);
     const params = {
@@ -124,7 +129,7 @@ const EmploymentInfoForm = ({
       address_line_3:
         removeSpecialCharacters(etbCustomerData?.V_D_CUST_ADD3) ||
           userInputData?.address3 ? userInputData?.address3 : "",
-      city: etbCustomerData?.V_D_CUST_CITY || userInputData?.city || "surat",
+      city: etbCustomerData?.V_D_CUST_CITY || stateCity?.city || "surat",
       mobile_no: userInputData?.mobile,
       dob: etbCustomerData?.D_D_CUST_DATE_OF_BIRTH || formattedDateOfBirth || "",
       name: name ,
@@ -139,7 +144,7 @@ const EmploymentInfoForm = ({
       office_address_line_2: "",
       office_address_line_3: "",
       office_address_city: "",
-      office_address_state: userInputData?.residencyState || "",
+      office_address_state: userInputData?.residencyState || stateCity?.city,
       office_address_pincode: (etbCustomerData?.V_D_CUST_ZIP_CODE || userInputData?.residency_pin_code)?.toString() || "",
       office_address_email: '',
       pan_name_match_flag: userPanData?.pan_api_name_match?.toString(),
@@ -148,9 +153,9 @@ const EmploymentInfoForm = ({
       permanent_address_line_1: userInputData?.residencyAddress1 || userInputData?.address1,
       permanent_address_line_2: userInputData?.residencyAddress2 || userInputData?.address2,
       permanent_address_line_3: userInputData?.residencyAddress3 || userInputData?.address3,
-      permanent_address_city: userInputData?.residencyCity || "",
+      permanent_address_city: userInputData?.residencyCity || stateCity?.city,
       // permanent_address_pincode: (userInputData?.residency_pin_code)?.toString() || "",
-      permanent_address_pincode: userInputData?.residency_pin_code || userInputData?.pin_code,
+      permanent_address_pincode: userInputData?.residency_pin_code || userInputData?.pin_code?.toString(),
 
     };
     await axios

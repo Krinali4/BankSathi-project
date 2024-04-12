@@ -16,12 +16,16 @@ const AddressForm = ({
   setDetailsFormStepper,
   setUserInputData,
   etbCustomerData,
+  stateCity,
+  setStateCity
 }) => {
+  console.log("🚀 ~ userInputDataAddressFormAddressForm:", userInputData)
   const wrapperRef = useRef(null);
 
   const [errorPincode, setErrorPinCode] = useState(false);
   const [pincodeNumber, setPincodeNumber] = useState();
-  const [stateCity, setStateCity] = useState({ city: null, state: null });
+  // const [stateCity, setStateCity] = useState({ city: null, state: null });
+  console.log("🚀 ~ stateCity:", stateCity)
   const [pinCodeList, setPinCodeList] = useState([]);
   const [visibility, setVisibility] = useState(false);
   const [pinCodeError, setPinCodeError] = useState(false);

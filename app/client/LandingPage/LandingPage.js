@@ -67,6 +67,7 @@ const LandingPage = ({ ipAddress }) => {
 
   });
   console.log("userInputData", userInputData);
+  const [stateCity, setStateCity] = useState({ city: null, state: null });
   const date = userInputData?.date_of_birth;
   const dob = date ? moment(date).format("DD-MM-YYYY") : "";
   const [time, setTime] = useState(60);
@@ -184,7 +185,7 @@ const LandingPage = ({ ipAddress }) => {
         }
         // toast.error(response?.data?.message);
         if (response?.data?.message === "failed")
-        
+
           toast.error(response?.data?.message);
         if (response?.data?.data?.message === responses?.nameMatchFail) {
           setShowPanNotMatchModal(true);
@@ -523,25 +524,25 @@ const LandingPage = ({ ipAddress }) => {
               </div>
             </div>
             <div className="grid lg:grid-cols-2 grid-cols-1 ">
-             <div>
-             <div className="mt-[20px] max-sm:mt-[20px]">
-                <MobileInput
-                  mobile={mobile}
-                  setMobile={setMobile}
-                  setUserInputData={setUserInputData}
-                  userInputData={userInputData}
-                />
+              <div>
+                <div className="mt-[20px] max-sm:mt-[20px]">
+                  <MobileInput
+                    mobile={mobile}
+                    setMobile={setMobile}
+                    setUserInputData={setUserInputData}
+                    userInputData={userInputData}
+                  />
+                </div>
+                <div className="datepicker w-full mt-[10px] ">
+
+                  <CommonDatepicker variant="outlined" value={userInputData?.date_of_birth} onChange={handleDateChange} className={`shadow rounded-lg !w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
+                    ? ""
+                    : "bg-white text-[#212529]"
+                    } bg-white `} />
+                </div>
+
               </div>
-              <div className="datepicker w-full mt-[10px] ">
-             
-             <CommonDatepicker variant="outlined" value={userInputData?.date_of_birth} onChange={handleDateChange} className={`shadow rounded-lg !w-full py-[14px] px-4 text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline ${userInputData?.date_of_birth
-               ? ""
-               : "bg-white text-[#212529]"
-               } bg-white `} />
-           </div>
-              
-             </div>
-             <div className="mt-[20px] ml-5 max-md:ml-0 max-lg:ml-0">
+              <div className="mt-[20px] ml-5 max-md:ml-0 max-lg:ml-0">
                 <PanInput
                   setUserInputData={setUserInputData}
                   userInputData={userInputData}
@@ -552,22 +553,22 @@ const LandingPage = ({ ipAddress }) => {
 
             <div className="flex items-start mt-6 gap-2">
               <div>
-                 <input
-                className="mr-1 mt-[5px] w-4 h-4  max-sm:w-4 max-sm:h-4 text-white accent-[#49D49D] "
-                type="checkbox"
-                checked={checkAgree}
-                required
-                onChange={(e) => {
-                  setCheckAgree(e.target?.checked);
-                  if (
-                    checkAgree === false ||
-                    checkAgree === null ||
-                    checkAgree === undefined
-                  ) {
-                    setTermsModal(true);
-                  }
-                }}
-              />
+                <input
+                  className="mr-1 mt-[5px] w-4 h-4  max-sm:w-4 max-sm:h-4 text-white accent-[#49D49D] "
+                  type="checkbox"
+                  checked={checkAgree}
+                  required
+                  onChange={(e) => {
+                    setCheckAgree(e.target?.checked);
+                    if (
+                      checkAgree === false ||
+                      checkAgree === null ||
+                      checkAgree === undefined
+                    ) {
+                      setTermsModal(true);
+                    }
+                  }}
+                />
               </div>
               <div className="text-black text-[13px] font-semibold font-['Faktum'] leading-[24px] mb-[18px] mt-20px md:mt-0">
 
@@ -778,12 +779,15 @@ const LandingPage = ({ ipAddress }) => {
                       detailsFormStepper={detailsFormStepper}
                       setDetailsFormStepper={setDetailsFormStepper}
                       etbCustomerData={etbCustomerData}
+                      setStateCity={setStateCity}
+                      stateCity={stateCity}
                     />
                   </div>
                 )}
                 {detailsFormStepper === 2 && (
                   <div className="mt-[30px]">
                     <EmploymentInfoForm
+                      stateCity={stateCity}
                       userInputData={userInputData}
                       setUserInputData={setUserInputData}
                       handleChange={handleChange}

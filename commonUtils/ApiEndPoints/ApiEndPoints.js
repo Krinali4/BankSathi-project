@@ -9,7 +9,7 @@ export const USERINFO = {
   otpGeneration: "api/v1/hdfc/otp_generation_cust_identification",
   otpValidation: "api/v1/hdfc/otp_validation_demo",
   executeDedupe: "api/v1/hdfc/execute_dedupe",
-  executeInterface: "api/v1/hdfc/execute_interface",
+  executeInterface: "api/v2/hdfc/execute_interface",
   inPrincipleApproval: "api/v1/hdfc/in_principle_approval",
   productDetailsApi: "api/v1/hdfc/get_product_details_on_hdfc_code",
   iniate_ekyc :"api/v1/hdfc/iniate_ekyc",
