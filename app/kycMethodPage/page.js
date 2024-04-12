@@ -86,7 +86,9 @@ const kycMethodPage = () => {
             toast.error(error?.message);
         }
     };
-
+const handleformClick = () => {
+    router.push("/newForm")
+}
     return (
         <>
             <HdfcHeader />
@@ -168,7 +170,7 @@ const kycMethodPage = () => {
                             </div>
                             <Image src="/assets/line.svg" width={63} height={1} alt="border" />
                         </div>
-                        <div className="w-full h-[115px] md:w-[400px] mt-[24px] bg-white shadow-lg rounded-xl flex  px-[30px] py-[21px] gap-[18px] relative">
+                        <div className="w-full h-[115px] md:w-[400px] mt-[24px] bg-white shadow-lg rounded-xl flex  px-[30px] py-[21px] gap-[18px] relative" onClick={handleformClick}>
                             <div className='bg-[#F3F7FA] rounded-[90px] text-xs h-5 absolute z-50 px-[10px] py-[2px] right-[10px] top-[12px]'>
                                 3 to 5 Minutes
                             </div>

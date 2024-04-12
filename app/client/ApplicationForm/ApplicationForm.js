@@ -38,7 +38,7 @@ const ApplicationForm = ({ ipAddress }) => {
   };
   const token = typeof window !== "undefined" && localStorage.getItem("token");
 
-  
+
   const wrapperRef = useRef(null);
   const deviceId = getCookieValue("deviceId");
 
@@ -79,9 +79,9 @@ const ApplicationForm = ({ ipAddress }) => {
   const handlePincodeChange = () => {
     setVisible(true);
   };
-useEffect(() => {
-  getPinCodes()
-},[customerData?.pin_code])
+  useEffect(() => {
+    getPinCodes()
+  }, [customerData?.pin_code])
   const getPinCodes = async () => {
     let url = BS_BASE_URL + BS_COMMON.pinCodeVerify;
     await axios
@@ -94,7 +94,7 @@ useEffect(() => {
         { headers: headers }
       )
       .then((response) => {
-        console.log(response,"responseresponse");
+        console.log(response, "responseresponse");
         if (response?.data?.message == "success") {
           setStateCity({
             city: response?.data?.data?.pincode_data?.cities?.[0],
@@ -128,8 +128,8 @@ useEffect(() => {
 
   };
 
-  
-  
+
+
 
   const handleOtpChange = (e) => {
     const valueotp = e;
@@ -277,13 +277,13 @@ useEffect(() => {
       });
   };
 
-  useEffect(() => {
-    console.log("useEffect triggered");
-    if (customerData?.pin_code !== "") {
-      console.log("Calling API...");
-      getPinCodes();
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log("useEffect triggered");
+  //   if (customerData?.pin_code !== "") {
+  //     console.log("Calling API...");
+  //     getPinCodes();
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -300,12 +300,11 @@ useEffect(() => {
 
   const concatName = [`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`];
   // const dropdownValue = concatName?.trim()?.split(/\s+/)?.length <= 19;.
-console.log(concatName[0].length,'fdsfsdf')
-// const newConcatName = concatName.map((concatName)=>{
-//   return  concatName.trim().length >= 19;
-// })
-// console.log("🚀 ~ newConcatName ~ newConcatName:", newConcatName)
-// const isnewConcatName = newConcatName.toString()
+  // const newConcatName = concatName.map((concatName)=>{
+  //   return  concatName.trim().length >= 19;
+  // })
+  // console.log("🚀 ~ newConcatName ~ newConcatName:", newConcatName)
+  // const isnewConcatName = newConcatName.toString()
 
 
   return (
@@ -326,29 +325,31 @@ console.log(concatName[0].length,'fdsfsdf')
               <CommonInputLabel labelTitle={staticLabels?.nameOnCard} />
               <div className="dropdown mt-[5px] shadow rounded-lg w-full text-[#212529] text-[12px] leading-tight focus:outline-none focus:shadow-outline border-[#C2CACF]">
 
-              {concatName[0].length < 18 ? (
-                <select
-                className="h-[50px] w-full rounded border-0 border-[#8D9CA5]"
-                  value={`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
-                  onChange={(event) => setBanks(event.target.value)}
-                >
-                  {concatName.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
+                {concatName[0].length < 18 ? (
+                  <select
+                    className="h-[50px] w-full rounded  border-2 border-gray-300 px-3 text-[#8D9CA5]
+                "
+                    value={`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
+                    onChange={(event) => setBanks(event.target.value)}
+                  >
+                    {concatName.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <select
+                    value={`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
+                    onChange={(event) => setBanks(event.target.value)}
+                    className="pointer-events-none h-[50px] w-full rounded border-2 border-gray-300 text-[#8D9CA5]
+                  px-3"
+                  >
+                    <option selected>
+                      {`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
                     </option>
-                  ))}
-                </select>
-              ) : (
-                <select
-                  value={`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
-                  onChange={(event) => setBanks(event.target.value)}
-                  className="pointer-events-none h-[50px] w-full rounded border-0 border-[#8D9CA5]"
-                >
-                  <option selected>
-                    {`${customerData?.firstName || ''} ${customerData?.middleName || ''} ${customerData?.lastName || ''}`}
-                  </option>
-                </select>
-              )}
+                  </select>
+                )}
               </div>
               <div className="mt-[19px] w-full grid grid-cols-1 gap-4">
                 <FullName
@@ -512,7 +513,7 @@ console.log(concatName[0].length,'fdsfsdf')
                   value={city || stateCity?.city}
                   maxLength={20}
                 />
-                
+
               </div>
               <div className="flex flex-col">
                 <CommonInputLabel labelTitle={staticLabels?.state} />
