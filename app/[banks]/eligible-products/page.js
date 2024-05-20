@@ -5,7 +5,7 @@ import HdfcEligibleProducts from "@/app/client/HdfcEligibleProducts/HdfcEligible
 const page = () => {
   return (
     <div>
-      <HdfcEligibleProducts />
+      <HdfcEligibleProducts  />
     </div>
   );
 };
